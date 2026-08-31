@@ -67,3 +67,118 @@ class Solution:
         return -1
 ```
 
+2. [搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
+
+![搜索插入位置通过记录](./assets/search-insert-position-accepted.png)
+
+```
+class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        left,right = 0 , len(nums)-1
+
+        if nums[right] < target:
+            return right+1
+        elif nums[left] > target:
+            return 0
+
+        while left <= right:
+            middle = (left + right) // 2
+            
+            if nums[middle] > target:
+                right = middle - 1
+            elif nums[middle] < target:
+                left = middle +1
+            else:
+                return middle
+        return left     
+```
+
+3. [在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+![查找首尾位置提交记录](./assets/find-first-last-position-submission.png)
+
+![查找首尾位置通过记录](./assets/find-first-last-position-accepted.png)
+
+这种解法的问题是时间复杂度不满足题目限制，如果数组中所有元素都等于 `target`，寻找左右边界的两段循环最多会遍历整个数组，时间复杂度变成 O(n)，不符合题目要求的 O(log⁡n)。
+
+正确解法：
+
+```
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        #1.target不存在数组中
+        #2.target存在数组中，在数组中间
+        
+        #寻找第一个大于等于value的函数
+        def searchFirst(value: int) -> int:
+            left , right = 0, len(nums)-1
+            while left <= right:
+                middle = (left + right) // 2
+                if nums[middle] < value:
+                    left = middle +1
+                else:
+                    right = middle -1 
+            return left
+        
+        first = searchFirst(target)
+        if first == len(nums) or nums[first] != target:
+            return [-1,-1]
+        last = searchFirst(target+1)-1
+        return [first,last]
+```
+
+```
+nums = [5,7,7,8,8,10] Target=8
+```
+
+第一次查找
+
+```
+L=0
+R=5
+M=2
+nums[M]=7<Target
+说明M左边的数都不可能是Target，所有直接把左区间改为M+1
+```
+
+第二次查找
+
+```
+L=3
+R=5
+M=4
+nums[M]=8=Target
+说明M的左边和右边都可能有Target，但是要找的是第一个大于等于Target的数，而且M不一定是第一个等于Target的数，不知道左边还有几个Target，所以要缩短右区间，right=M-1
+```
+
+第三次查找
+
+```
+L=3
+R=3
+M=3
+nums[M]=8=Target
+说明M的左边和右边都可能有Target，但是要找的是第一个大于等于Target的数，而且M不一定是第一个等于Target的数，不知道左边还有几个Target，所以要缩短右区间，right=M-1
+```
+
+第四次查找
+
+```
+L=3
+R=2
+L>R，循环结束
+说明L是第一个等于或大于Target的数
+```
+
+判断Target是否存在
+
+```
+if first == len(nums) or nums[first] != target:
+    return [-1, -1]
+    
+first == len(nums)目的是判断第一个大于等于Target的下标是否超过数组的下标范围
+nums[first] != target目的是判断第一个大于等于Target的数是大于还是等于，如果是大于，就说明数组不存在target
+要注意的是first == len(nums)必须放在nums[first] != target前面，目的是为了防止下标越界
+
+```
+
