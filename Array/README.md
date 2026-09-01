@@ -11,7 +11,7 @@
 
 - [x] 数组理论基础
 - [x] 二分查找
-- [ ] 移除元素
+- [x] 移除元素
 - [ ] 有序数组的平方
 - [ ] 长度最小的子数组
 - [ ] 螺旋矩阵 II
@@ -228,3 +228,27 @@ class Solution:
 ```
 
 依然是二分查找法（左闭右闭区间），square小于num，就说明平方根在右边，往右查找，就是左区间=middle+1；square大于num，说明平方根在左边，向左查找，就是右区间=middle-1；如果找到了square等于num，说明找到了num的完全平方根，直接返回True；反之在0到num区间里没有square等于num，说明num没有完全平方根，直接返回False；
+
+
+
+#### 移除元素
+
+1. [27. 移除元素](https://leetcode.cn/problems/remove-element/description/)
+
+![移除元素通过记录](./assets/remove-element-accepted.png)
+
+```
+class Solution:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        #双指针解法
+        fastindex,slowindex = 0 , 0
+        for fastindex in range(len(nums)):
+            if nums[fastindex] != val:
+                nums[slowindex] = nums[fastindex]
+                slowindex += 1
+        return slowindex
+```
+
+fastindex指向nums数组中的元素，用fastindex指针寻找不等于val的元素的值
+slowindex指向nums数组中元素的下标，用slowindex指针代表新数组元素的下标
+
