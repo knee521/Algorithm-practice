@@ -182,3 +182,49 @@ nums[first] != target目的是判断第一个大于等于Target的数是大于�
 
 ```
 
+4. [x 的平方根](https://leetcode.cn/problems/sqrtx/)
+
+![x 的平方根通过记录](./assets/sqrtx-accepted.png)
+
+```
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        left = 0
+        right = x
+
+        while left <= right:
+            middle = (left + right)//2
+            squre = middle * middle
+            if squre == x:
+                return middle
+            elif squre < x:
+                left = middle + 1
+            elif squre > x:
+                right = middle - 1
+        return right
+```
+
+还是二分法思路，求k^2在0到x的范围内最大的值，代码中原本没有square变量，导致每次if判断的时候都要计算一次middle的平方，导致运行速度很慢，加入square变量就解决了这个问题。
+
+5. [有效的完全平方数](https://leetcode.cn/problems/valid-perfect-square/description/)
+
+![有效的完全平方数通过记录](./assets/valid-perfect-square-accepted.png)
+
+```
+class Solution:
+    def isPerfectSquare(self, num: int) -> bool:
+            left = 0
+            right = num
+            while left <= right:
+                middle = (left + right) // 2
+                square = middle * middle
+                if square == num:
+                    return True
+                elif square < num:
+                    left = middle + 1
+                elif square > num:
+                    right  = middle - 1
+            return False
+```
+
+依然是二分查找法（左闭右闭区间），square小于num，就说明平方根在右边，往右查找，就是左区间=middle+1；square大于num，说明平方根在左边，向左查找，就是右区间=middle-1；如果找到了square等于num，说明找到了num的完全平方根，直接返回True；反之在0到num区间里没有square等于num，说明num没有完全平方根，直接返回False；
