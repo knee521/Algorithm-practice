@@ -12,7 +12,7 @@
 - [x] 数组理论基础
 - [x] 二分查找
 - [x] 移除元素
-- [ ] 有序数组的平方
+- [x] 有序数组的平方
 - [ ] 长度最小的子数组
 - [ ] 螺旋矩阵 II
 - [ ] 数组总结
@@ -338,3 +338,37 @@ class Solution:
         return True
 ```
 
+#### 有序数组的平方
+
+[题目链接](https://leetcode.cn/problems/squares-of-a-sorted-array/description/)
+
+![有序数组的平方通过记录](./assets/sorted-squares-accepted.png)
+
+```
+class Solution:
+    def sortedSquares(self, nums: List[int]) -> List[int]:
+        result = [0] * len(nums)
+        left = 0
+        right = len(nums) - 1
+        k = len(nums) - 1
+        while left <= right:
+            left_square = nums[left]*nums[left]
+            right_square = nums[right]*nums[right]
+            if left_square < right_square:
+                result[k] = right_square
+                right -=1
+                k -=1
+            else:
+                result[k] = left_square
+                k -=1
+                left +=1
+        return result
+
+```
+
+思路主要是：平方后的元素最大值一定是来自数组两端
+设两个指针，left指向nums左端元素，right指向nums右端元素
+
+每次找到的是当前最大元素的平方，所以要从新数组result末尾开始填写
+
+另外不能直接给空列表赋值，因为空列表里面没有任何位置，所以要创建和原数组长度相同的数组，即result = [0] * len(nums)
