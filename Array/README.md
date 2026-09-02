@@ -250,5 +250,91 @@ class Solution:
 ```
 
 fastindex指向nums数组中的元素，用fastindex指针寻找不等于val的元素的值
-slowindex指向nums数组中元素的下标，用slowindex指针代表新数组元素的下标
+slowindex指向nums数组中元素的下标，用slowindex指针代表新数组元素的下标，slowindex一定指向数组末尾元素的下一个元素下标
+
+2. [26. 删除有序数组中的重复项](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/description/)
+
+![删除有序数组中的重复项通过记录](./assets/remove-duplicates-accepted.png)
+
+```
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        fastindex = 1
+        slowindex = 1
+        for fastindex in range(len(nums)):
+            if nums[fastindex] != nums[slowindex - 1]:
+                nums[slowindex] = nums[fastindex]
+                slowindex += 1
+        return slowindex
+```
+
+删除元素采用双指针法，fastindex指向nums数组中的元素，slowindex指向nums数组元素的下标；
+对于删除重复元素，只需要判断后一个元素是否等于前一个元素即可，也就是判断nums[fastindex]是否等于nums[slowindex-1],如果等于，说明是重复元素，不要放进新数组中，如果不相等，就放进新数组中。
+
+3. [283. 移动零](https://leetcode.cn/problems/move-zeroes/)
+
+![移动零通过记录](./assets/move-zeroes-accepted.png)
+
+```
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        fastindex = 0
+        slowindex = 0
+        k = 0
+        for fastindex in range(len(nums)):
+            if nums[fastindex] != 0:
+                nums[slowindex] = nums[fastindex]
+                slowindex +=1
+        for k in range(slowindex , len(nums)):#range(start, end)是左闭右开区间，包含start，不包含end
+            nums[k] = 0
+```
+
+思路主要是先把目标元素0全部删除，其他元素赋值到新数组中，删除之后得到的slowindex是指向新数组末尾的下一个元素的下标，只需要把slowindex到原数组nums末尾之间的元素原本赋值0就ok了。
+注意range(start, end)是左闭右开区间，比如range（3，5），实际元素只有3和4
+
+4. [844. 比较含退格的字符串](https://leetcode.cn/problems/backspace-string-compare/description/)
+
+![比较含退格的字符串通过记录](./assets/backspace-compare-accepted.png)
+
+```
+class Solution:
+    def backspaceCompare(self, s: str, t: str) -> bool:
+        index_s = len(s) - 1
+        index_t = len(t) - 1
+        
+        while index_s >=0 or index_t >=0:
+            is_jinghaos = 0
+            #寻找s的有效字符
+            while index_s >=0:
+                if s[index_s] == "#":#删除的字符个数要加1，同时index_s要往前移一个元素，判断下一个元素是不是#号
+                    is_jinghaos +=1
+                    index_s -=1
+                elif is_jinghaos >0:#说明当前元素不是#号，但是前面有元素是#号，但是不止一个，所以需要index_s每次向前移动一位，移动is_jinghaos位
+                    is_jinghaos -=1
+                    index_s -= 1
+                else:#说明当前元素不是#号，同时后面也没有#号，说明找到了有效元素
+                    break
+            is_jinghaot = 0
+            #寻找t的有效字符
+            while index_t >=0:
+                if t[index_t] == "#":#删除的字符个数要加1，同时index_t要往前移一个元素，判断下一个元素是不是#号
+                    is_jinghaot +=1
+                    index_t -=1
+                elif is_jinghaot >0:#说明当前元素不是#号，但是前面有元素是#号，但是不止一个，所以需要index_t每次向前移动一位，移动is_jinghaot位
+                    is_jinghaot -=1
+                    index_t -= 1
+                else:#说明当前元素不是#号，同时后面也没有#号，说明找到了有效元素
+                    break
+            if index_s >=0 and index_t>=0:#先判断两个都有有效字符，如果不相等直接返回False
+                if s[index_s]!=t[index_t]:
+                    return False
+            elif index_s>=0 or index_t>=0:#然后判断一个有有效字符一个没有有效字符，也返回False
+                return False
+            index_t -=1 #最后index_t和index_s都有往前移动一位，寻找下一个有效字符
+            index_s -=1
+        return True
+```
 
