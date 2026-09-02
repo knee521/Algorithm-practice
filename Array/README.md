@@ -13,7 +13,7 @@
 - [x] 二分查找
 - [x] 移除元素
 - [x] 有序数组的平方
-- [ ] 长度最小的子数组
+- [x] 长度最小的子数组
 - [ ] 螺旋矩阵 II
 - [ ] 数组总结
 
@@ -372,3 +372,31 @@ class Solution:
 每次找到的是当前最大元素的平方，所以要从新数组result末尾开始填写
 
 另外不能直接给空列表赋值，因为空列表里面没有任何位置，所以要创建和原数组长度相同的数组，即result = [0] * len(nums)
+
+#### 长度最小的子数组
+
+1. [209. 长度最小的子数组](https://leetcode.cn/problems/minimum-size-subarray-sum/description/)
+
+![长度最小的子数组通过记录](./assets/minimum-size-subarray-sum-accepted.png)
+
+```
+class Solution:
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        #滑动窗口思想
+        result = len(nums) + 1 #result 初始值必须是最大长度，这样才能更新最小长度的子数组,必须加1，否则会丢失原数组长度这一个可能
+        left = 0 #起始元素下标
+        sum = 0 #起始位置到终止位置的元素之和
+        sublength = 0 #子数组长度
+        for right in range(len(nums)):
+            sum += nums[right]
+            while sum >= target:
+                sublength = right - left + 1
+                result = min(result,sublength)
+                sum -= nums[left]
+                left += 1
+        if result != len(nums) + 1:
+            return result
+        else:
+            return 0
+```
+
