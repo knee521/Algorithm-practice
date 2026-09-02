@@ -400,3 +400,30 @@ class Solution:
             return 0
 ```
 
+2. [904. 水果成篮](https://leetcode.cn/problems/fruit-into-baskets/description/)
+
+![水果成篮通过记录](./assets/fruit-into-baskets-accepted.png)
+
+```
+from collections import defaultdict
+
+class Solution:
+    def totalFruit(self, fruits: List[int]) -> int:
+        #选择只包含两种数字并且长度最长的子数组
+        #核心思路：扩大窗口 → 窗口不合法就缩小 → 窗口恢复合法 → 更新最大长度
+        left = 0 #左边元素下标
+        fruits_count = defaultdict(int) #定义字典，统计水果种类数，利用字典的键不重复，值可以重复的特性
+        result = 0 
+        for right in range(len(fruits)): #扩大窗口
+            fruits_count[fruits[right]] +=1
+            while len(fruits_count) > 2:#判断字典中键的个数是否大于2  窗口不合法就缩小
+                fruits_count[fruits[left]] -= 1 #把左边的元素减去，也就是左边元素对应的键的值减1
+                if fruits_count[fruits[left]] == 0:
+                    del fruits_count[fruits[left]]
+                left +=1
+            #窗口恢复合法
+            result = max(result , right - left + 1)#不能直接把right - left + 1赋值给result，因为后面长度还可能变长   更新最大长度
+        return result
+```
+
+核心思路：扩大窗口 → 窗口不合法就缩小 → 窗口恢复合法 → 更新最大长度
