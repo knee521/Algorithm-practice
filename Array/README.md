@@ -14,7 +14,7 @@
 - [x] 移除元素
 - [x] 有序数组的平方
 - [x] 长度最小的子数组
-- [ ] 螺旋矩阵 II
+- [x] 螺旋矩阵 II
 - [ ] 数组总结
 
 ## 学习心得
@@ -427,3 +427,146 @@ class Solution:
 ```
 
 核心思路：扩大窗口 → 窗口不合法就缩小 → 窗口恢复合法 → 更新最大长度
+
+3. [76. 最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/description/)
+
+![最小覆盖子串通过记录](./assets/minimum-window-substring-accepted.png)
+
+```
+from collections import Counter, defaultdict
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        if not s or not t or len(s)<len(t):#not s代表s是空字符串
+            return ""
+
+        need = Counter(t) #统计t中每个字符出现的次数
+        window = defaultdict(int) #当前窗口每个字符出现的次数
+        require = len(need) #需要满足的字符种类，因为len统计字典need的键的数量
+        formed = 0 #当前已经满足数量要求的字符种类
+        left = 0 #指向左边元素的下标
+        min_length = float("inf") # 最短窗口的长度初始化为无穷大
+        min_start = 0 #最短窗口的起点
+
+        for right,char in enumerate(s):
+            #只统计t中存在的字符
+            if char in need:
+                window[char] +=1
+
+                #如果该字符的数量刚好达到要求
+                if window[char] == need[char]:
+                    formed +=1 #满足数量要求的字符加1
+            #当前窗口已经覆盖t了
+            while formed == require:
+                current_length = right - left + 1
+                #更新最短长度的窗口
+                if current_length < min_length:
+                    min_length = current_length
+                    min_start = left
+                left_char = s[left]
+                #当前长度大于最短窗口的长度，删除最左边的元素
+                if left_char in need:
+                    window[left_char] -=1
+                    #移出后，该字符数量不再满足要求
+                    if window[left_char] < need[left_char]:
+                        formed -= 1
+                left +=1
+
+        if min_length == float("inf"):
+            return ""
+        return s[min_start:min_start+min_length]
+        
+        
+```
+
+#### 螺旋矩阵
+
+1. [59. 螺旋矩阵 II](https://leetcode.cn/problems/spiral-matrix-ii/)
+
+![螺旋矩阵 II 通过记录](./assets/spiral-matrix-ii-accepted.png)
+
+```
+class Solution:
+    def generateMatrix(self, n: int) -> List[List[int]]:
+        #每条边保持左闭右开
+        startx , starty = 0 , 0#起始位置
+        loop = n // 2 #循环次数
+        mid = n // 2 #如果n是奇数，（mid,mid）=最后一个数
+        count = 1 #给空格赋值
+        offset = 1 #控制每条边遍历的长度
+        nums = [[0] * n for _ in range(n)] #定义二维数组
+        while loop > 0:
+            loop -= 1#控制圈数
+            #每个点的坐标(x,y)
+            for y in range(starty , n-offset):#第一行从左到右，左闭右开
+                nums[startx][y] = count
+                count += 1
+                
+            
+            for x in range(startx , n-offset):#右列，从上到下，上闭下开
+                nums[x][n-offset] = count
+                count += 1
+                
+            
+            for y in range(n-offset , starty , -1):#最下面：从右到左，右闭左开
+                nums[n-offset][y] = count
+                count +=1
+                
+            
+            for x in range(n-offset , startx , -1):#左边，从下到上，下闭上开
+                nums[x][starty] = count
+                count += 1
+                
+            startx +=1
+            starty +=1
+            offset +=1
+        if n % 2 ==1:
+            nums[mid][mid] = count
+        return nums
+```
+
+n*m维数组定义方式：[[0] * m for _ in range(n)]
+
+n<m   range (n , m)  n到m递增，不包括m
+
+n>m   range(n, m , -1) n到m递减，不包括m
+
+
+
+2. [54. 螺旋矩阵](https://leetcode.cn/problems/spiral-matrix/submissions/746858716/)
+
+![螺旋矩阵通过记录](./assets/spiral-matrix-accepted.png)
+
+```
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        startx,starty = 0 , 0#起始位置
+        m = len(matrix) #行数
+        n = len(matrix[0])#列数
+        top = 0 #上
+        bottom = m - 1#下
+        left = 0 #左
+        right = n - 1#右
+        result = []
+        #(x,y)
+        while top <= bottom and left <=right:
+          #1.遍历上边，从左到右，左闭右闭
+            for y in range(left , right + 1):
+                result.append(matrix[top][y])
+            top +=1
+            #2.遍历右边，从上到下，上闭下闭
+            for x in range(top , bottom + 1):
+                result.append(matrix[x][right])
+            right -=1
+            if top <= bottom:
+                #3.遍历下边，从右到左，左开右闭
+                for y in range(right , left - 1 , -1):
+                    result.append(matrix[bottom][y])
+                bottom -=1
+            if left <= right:
+                #4.遍历左边，从下到上，下闭上开
+                for x in range(bottom , top - 1 , -1):
+                    result.append(matrix[x][left])
+                left +=1
+        return result
+```
+
