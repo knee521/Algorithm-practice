@@ -7,6 +7,7 @@
 ## 专题目录
 
 - [`Array/`](./Array/)：数组专题
+- [`Linked list/`](./Linked%20list/)：链表专题
 
 ## 学习约定
 
