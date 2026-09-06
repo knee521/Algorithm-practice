@@ -570,3 +570,51 @@ class Solution:
         return result
 ```
 
+3. [螺旋遍历二维数组](https://leetcode.cn/problems/shun-shi-zhen-da-yin-ju-zhen-lcof/description/)
+
+![螺旋遍历二维数组通过记录](./assets/spiral-array-accepted.png)
+
+```
+class Solution:
+    def spiralArray(self, array: List[List[int]]) -> List[int]:
+        startx  = starty = 0 #起始位置
+        # 先判断是否为空，避免访问 array[0] 时越界
+        if not array or not array[0]:
+            return []
+        m = len(array)#行数
+        n = len(array[0])#列数
+        top = 0 #上面
+        bottom = m - 1 #下面
+        left = 0 #左边
+        right = n - 1#右边
+        result = []#结果数组
+        #(x , y)
+        while top <= bottom and left <= right:
+            #1.遍历上面，从左到右
+            for y in range(left , right + 1):
+                result.append(array[top][y])
+            top += 1
+            #2.遍历右边，从上到下
+            for x in range(top , bottom + 1):
+                result.append(array[x][right])
+            right -= 1
+            #3.遍历下边，从右到左，要在top<= bottom前提下才能执行
+            if top<= bottom:
+                for y in range(right , left - 1 , -1):
+                    result.append(array[bottom][y])
+                bottom -= 1
+            #4.遍历左边，从下到上，要在left<=right前提下才能执行
+            if left<=right:
+                for x in range(bottom , top - 1 , -1):
+                    result.append(array[x][left])
+                left += 1
+        return result
+```
+
+💡**要注意定义数组前先判断数组是否为空，用下面语句判断：**
+
+```
+if not array or not array[0]:
+	return []
+```
+
