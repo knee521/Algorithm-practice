@@ -92,3 +92,119 @@ head: Optional[ListNode]，意思是定义的head可以是None也可以是ListNo
 创建头节点：head: Optional[ListNode] = ListNode(1)
 ```
 
+2. [707. 设计链表](https://leetcode.cn/problems/design-linked-list/description/)
+
+![设计链表通过记录](./assets/design-linked-list-accepted.png)
+
+```
+class ListNode:
+    def __init__(self,val=0,next=None):
+        self.val = val 
+        self.next = next
+class MyLinkedList:
+
+    def __init__(self):
+        self.dummyhead = ListNode()
+        self.size = 0
+
+    def get(self, index: int) -> int:
+        if index < 0 or index >= self.size:
+            return -1
+        cur = self.dummyhead.next #指向链表头节点的整体
+        for i in range(index):#index=0时，不移动
+            cur = cur.next
+        return cur.val
+
+    def addAtHead(self, val: int) -> None:
+        temp = ListNode(val)
+        temp.next = self.dummyhead.next#现在temp.next指向原先的头节点
+        self.dummyhead.next = temp
+        self.size += 1
+
+    def addAtTail(self, val: int) -> None:
+        temp = ListNode(val)
+        cur = self.dummyhead
+        while cur.next !=None:
+            cur = cur.next
+        cur.next = temp
+        self.size += 1
+
+    def addAtIndex(self, index: int, val: int) -> None:
+        if index < 0 or index > self.size:
+            return None
+        cur = self.dummyhead
+        while index:
+            cur = cur.next
+            index -=1
+        cur.next = ListNode(val , cur.next)
+        self.size +=1
+
+    def deleteAtIndex(self, index: int) -> None:
+        if index < 0 or index >= self.size:
+            return None
+        cur = self.dummyhead
+        while index:
+            cur = cur.next
+            index -=1
+        cur.next = cur.next.next
+        self.size -=1
+```
+
+下面是执行用时优化的版本
+
+```
+class ListNode:
+    def __init__(self,val=0,next=None):
+        self.val = val 
+        self.next = next
+class MyLinkedList:
+
+    def __init__(self):
+        self.dummyhead = ListNode()
+        self.size = 0
+        self.tail = self.dummyhead
+
+    def get(self, index: int) -> int:
+        if index < 0 or index >= self.size:
+            return -1
+        cur = self.dummyhead.next #指向链表头节点的整体
+        for _ in range(index):#index=0时，不移动
+            cur = cur.next
+        return cur.val
+
+    def addAtHead(self, val: int) -> None:
+        self.dummyhead.next = ListNode(val,self.dummyhead.next)
+        if self.size == 0:
+            self.tail = self.dummyhead.next
+        self.size += 1
+
+    def addAtTail(self, val: int) -> None:
+        self.tail.next = ListNode(val)
+        self.tail = self.tail.next
+        self.size += 1
+
+    def addAtIndex(self, index: int, val: int) -> None:
+        if index < 0 or index > self.size:#可以在index=size的位置添加结点，但是不能在这个位置删除结点
+            return None
+        if index == self.size:
+            self.addAtTail(val)
+            return
+        cur = self.dummyhead
+        for _ in range(index):
+            cur = cur.next
+        cur.next = ListNode(val, cur.next)
+        self.size += 1
+
+    def deleteAtIndex(self, index: int) -> None:
+        if index < 0 or index >= self.size:
+            return None
+        cur = self.dummyhead
+        for _ in range(index):
+            cur = cur.next
+        #必须在删除之前判断删除的结点是否是尾结点
+        if cur.next == self.tail:
+            self.tail = cur
+        cur.next = cur.next.next
+        self.size -=1
+```
+
