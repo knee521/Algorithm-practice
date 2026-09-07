@@ -9,7 +9,7 @@
 
 ## 学习内容
 
-- [ ] 链表理论基础
+- [x] 链表理论基础
 - [ ] 移除链表元素
 - [ ] 设计链表
 - [ ] 翻转链表
@@ -23,7 +23,28 @@
 
 ### 核心思路
 
-> 在这里记录虚拟头节点、指针移动、节点连接和断链等核心思路。
+> - 链表定义
+>
+>   ```python
+>   # 1. 定义节点 
+>   class ListNode: 
+>       def __init__(self, val=0, next=None): 
+>           self.val = val       # 节点存储的值 
+>           self.next = next     # 下一个节点，默认为 None 
+>   # 2. 创建链表：1 → 2 → 3 
+>   head = ListNode(1) 
+>   head.next = ListNode(2) 
+>   head.next.next = ListNode(3) 
+>   # 3. 遍历链表 
+>   current = head 
+>   while current is not None: 
+>       print(current.val) 
+>       current = current.next
+>   ```
+>
+> - 删除链表中的元素
+>
+>   设置一个虚拟头结点，这样链表中所有元素都可以按照同一个方式进行移除
 
 ### 易错点与边界条件
 
@@ -39,4 +60,35 @@
 
 ## 力扣代码
 
-每道题可单独建立一个目录或在此记录题目链接、实现代码、通过截图与学习总结，建议使用 `题号-题目名称` 命名。
+1. [203. 移除链表元素](https://leetcode.cn/problems/remove-linked-list-elements/description/)
+
+![移除链表元素通过记录](./assets/remove-linked-list-elements-accepted.png)
+
+```
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    #Optional的意思是创建的head可以是指定的ListNode类型，也可以是None
+    def removeElements(self, head: Optional[ListNode], val: int) -> Optional[ListNode]:
+        dummyhead = ListNode(0)#定义一个虚拟的头结点
+        dummyhead.next = head #指向链表的头节点
+        cur = dummyhead#用来遍历链表
+        while  cur.next is not None:
+            if cur.next.val == val:
+                cur.next = cur.next.next
+            else:
+                cur = cur.next
+        head = dummyhead.next
+        return head
+```
+
+head: Optional[ListNode]，意思是定义的head可以是None也可以是ListNode，他通常会把类型标注和赋值一起写：
+
+```python
+定义空链表：head: Optional[ListNode] = None
+创建头节点：head: Optional[ListNode] = ListNode(1)
+```
+
