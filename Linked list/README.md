@@ -60,6 +60,8 @@
 
 ## 力扣代码
 
+#### 移除链表元素
+
 1. [203. 移除链表元素](https://leetcode.cn/problems/remove-linked-list-elements/description/)
 
 ![移除链表元素通过记录](./assets/remove-linked-list-elements-accepted.png)
@@ -91,6 +93,8 @@ head: Optional[ListNode]，意思是定义的head可以是None也可以是ListNo
 定义空链表：head: Optional[ListNode] = None
 创建头节点：head: Optional[ListNode] = ListNode(1)
 ```
+
+#### 设计链表
 
 2. [707. 设计链表](https://leetcode.cn/problems/design-linked-list/description/)
 
@@ -206,5 +210,42 @@ class MyLinkedList:
             self.tail = cur
         cur.next = cur.next.next
         self.size -=1
+```
+
+#### 反转链表
+
+1. [206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/description/)
+
+![反转链表通过记录](./assets/reverse-linked-list-accepted.png)
+
+##### 双指针法
+
+```
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        temp = None #存储cur的next，也就是cur的下一个结点
+        cur = head #cur相当于head
+        pre = None #指向最后一个结点
+        while cur is not None:
+            temp = cur.next #临时存储cur的下一个结点
+            cur.next = pre #反转结点指向
+            pre = cur #pre指向头节点
+            cur = temp #cur再重新指向下一个结点
+        return pre
+```
+
+##### 递归法
+
+```
+class Solution:
+    def reverse(self , cur , pre):
+        if cur == None:
+            return pre
+        temp = cur.next #先保存下一个结点的地址
+        cur.next = pre #保存完之后，把当前结点的指针域改为None
+        return self.reverse(temp , cur)#开始下一个结点与倒数第二个结点互换
+
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        return self.reverse(head , None)
 ```
 
