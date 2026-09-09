@@ -273,3 +273,26 @@ class Solution:
 
 ```
 
+#### 删除链表的倒数第 N 个节点
+
+[19. 删除链表的倒数第 N 个节点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/description/)
+
+![删除链表的倒数第 N 个节点通过记录](./assets/remove-nth-node-from-end-accepted.png)
+
+```
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        dummyNode = ListNode(0 , head)
+        slow = fast = dummyNode #快慢指针都从虚拟节点出发
+        #fast先走n+1步，slow再出发
+        for _ in range(n+1):
+            fast = fast.next
+        #slow出发，直至fast=NULL停止
+        while fast is not None:
+            slow = slow.next
+            fast = fast.next
+        #此时slow指向被删除节点的前一个
+        slow.next = slow.next.next #删除了倒数第n个节点
+        return dummyNode.next
+```
+
