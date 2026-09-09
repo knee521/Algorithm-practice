@@ -249,3 +249,27 @@ class Solution:
         return self.reverse(head , None)
 ```
 
+#### 两两交换链表中的节点
+
+[24. 两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/description/)
+
+![两两交换链表中的节点通过记录](./assets/swap-nodes-in-pairs-accepted.png)
+
+```
+class Solution:
+    # 1 --> 2 --> 3 --> 4 --> None
+    def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        dummyNode = ListNode(0 , head) #虚拟头节点指向真实的头节点
+        cur = dummyNode #用于后面的删除操作
+        while cur.next != None and cur.next.next != None:#如果最后只剩一个结点，或者cur移动到了最后一个结点，是不需要继续交换的
+            temp1 = cur.next #记录真实头节点位置
+            temp2 = cur.next.next.next#记录第三个结点位置
+
+            cur.next = cur.next.next #第二个结点与第一个结点交换
+            cur.next.next = temp1
+            cur.next.next.next = temp2
+            cur = cur.next.next #cur向后移动两位
+        return dummyNode.next
+
+```
+
