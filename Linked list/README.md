@@ -10,12 +10,12 @@
 ## 学习内容
 
 - [x] 链表理论基础
-- [ ] 移除链表元素
-- [ ] 设计链表
-- [ ] 翻转链表
-- [ ] 两两交换链表中的节点
-- [ ] 删除链表的倒数第 N 个节点
-- [ ] 链表相交
+- [x] 移除链表元素
+- [x] 设计链表
+- [x] 翻转链表
+- [x] 两两交换链表中的节点
+- [x] 删除链表的倒数第 N 个节点
+- [x] 链表相交
 - [ ] 环形链表 II
 - [ ] 链表总结
 
@@ -296,3 +296,41 @@ class Solution:
         return dummyNode.next
 ```
 
+#### 链表相交
+
+[面试题 02.07. 链表相交](https://leetcode.cn/problems/intersection-of-two-linked-lists-lcci/description/)
+
+![链表相交通过记录](./assets/intersection-of-two-linked-lists-accepted.png)
+
+```python
+#要让短链的尾部与长链的尾部对齐，因为两个链只要有交点，那么从交点开始，后面所有节点都是一样的，这是由于节点的next只有一个值决定的
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        curA , curB = headA , headB #两个指针都从两个链的头节点出发
+        lenA , lenB = 0 , 0
+        #算链A的长度
+        while curA is not None:
+            lenA += 1
+            curA = curA.next
+        #算链B的长度
+        while curB is not None:
+            lenB += 1
+            curB = curB.next
+        curA , curB = headA , headB
+        #让A是长链，B是短链
+        if lenA < lenB:
+            curA , curB = headB , headA
+            lenA , lenB = lenB , lenA
+        #移动curA，与curB对齐
+        for _ in range(lenA - lenB):
+            curA = curA.next
+        while curB is not None:
+            if curA == curB:
+                return curA
+            else:
+                curA = curA.next
+                curB = curB.next
+        return None
+```
+
+这题要利用节点的next只有一个值的特点。所以只需要让两个链的尾部对齐就可以了，长链指针向前移动（长链长度-短链长度）位。
