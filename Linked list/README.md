@@ -334,3 +334,41 @@ class Solution:
 ```
 
 这题要利用节点的next只有一个值的特点。所以只需要让两个链的尾部对齐就可以了，长链指针向前移动（长链长度-短链长度）位。
+
+#### 环形链表 II
+
+[142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/description/)
+
+![环形链表 II 通过记录](./assets/linked-list-cycle-ii-accepted.png)
+
+```python
+class Solution:
+    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        slow , fast = head , head#快指针和慢指针同时从头节点出发，快指针每次走两步，慢指针每次走一步
+        while fast and fast.next:#如果有一个指向None，说明没有环
+            fast = fast.next.next
+            slow = slow.next
+            #快慢指针在环中相遇了
+            if slow == fast:
+                slow = head #慢指针立刻从头节点出发，快指针从相遇点出发
+                while slow != fast:
+                    slow = slow.next
+                    fast = fast.next
+                return slow
+        return None
+```
+
+上面是双指针法，下面还有一个更简单的哈希集合法
+
+```python
+class Solution:
+    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        visited = set()
+
+        while head:#只有head不等于None，就说明有环
+            if head in visited:#说明head这个节点被访问过
+                return head
+            visited.add(head)
+            head = head.next
+        return None
+```
