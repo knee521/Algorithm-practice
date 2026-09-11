@@ -30,4 +30,29 @@
 
 ## 代码记录
 
-后续将按题目顺序补充实现代码、测试样例和学习心得。
+#### 有效的字母异位词
+
+[有效的字母异位词](https://leetcode.cn/problems/valid-anagram/description/)
+
+![有效的字母异位词通过记录](./assets/valid-anagram-accepted.png)
+
+```python
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        record = [0] * 26 #定义一个长度为
+        #记录t中的每个字母出现的次数
+        for i in t:
+            record[ord(i) - ord('a')] += 1
+        #记录s中的每个字母出现的次数
+        for i in s:
+            record[ord(i) - ord('a')] -= 1
+        #判断record数组里是否全为0
+        for i in range(26):
+            if record[i] != 0:
+                return False
+        return True
+```
+
+ord(单个字符),用于将单个字符转换为对应的Unicode编码整数
+
+#### 两个数组的交集
