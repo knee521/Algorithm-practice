@@ -56,3 +56,42 @@ class Solution:
 ord(单个字符),用于将单个字符转换为对应的Unicode编码整数
 
 #### 两个数组的交集
+
+[两个数组的交集](https://leetcode.cn/problems/intersection-of-two-arrays/description/)
+
+![两个数组的交集通过记录](./assets/intersection-of-two-arrays-accepted.png)
+
+##### 使用数组的方法
+
+```python
+class Solution:
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        #这道题没有限制数组大小，所以不能使用数组来做哈希表
+        count1 = [0] * 1001
+        count2 = [0] * 1001
+        result = []
+        #统计nums1数组中每个数字出现的次数
+        for i in range(len(nums1)):
+            count1[nums1[i]] += 1
+        #统计nums2数组中每个数字出现的次数
+        for i in range(len(nums2)):
+            count2[nums2[i]] += 1
+        #查找两个数组中相同的元素
+        for k in range(1001):
+            if count1[k] * count2[k] != 0:#说明第k个元素两个数组都有
+                result.append(k)
+        return result
+```
+
+##### 使用集合的方法
+
+```python
+class Solution:
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        #set(nums),将nums转换为集合
+        #集合内的元素不可重复，两个集合之间可以进行取交集操作，取并集的操作
+        #  集合1  &  集合2  =可以取出两个集合的交集
+        #  集合1  |  集合2  =可以取出两个集合的并集
+        #  list() 可以将括号内的数据类型转换为字典类型
+        return list(set(nums1) & set(nums2))
+```
