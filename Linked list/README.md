@@ -16,8 +16,8 @@
 - [x] 两两交换链表中的节点
 - [x] 删除链表的倒数第 N 个节点
 - [x] 链表相交
-- [ ] 环形链表 II
-- [ ] 链表总结
+- [x] 环形链表 II
+- [x] 链表总结
 
 ## 学习心得
 
@@ -48,15 +48,24 @@
 
 ### 易错点与边界条件
 
-> 在这里记录空链表、单节点、头节点变化、指针越界和成环等易错情况。
+> - **空链表、单节点**：先判断 `head` 或 `next` 是否为空，避免访问空指针；删除头节点时优先使用虚拟头结点。
+> - **下标边界**：`get`/删除要求 `0 <= index < size`，插入允许 `index == size`。
+> - **尾指针与长度**：插入、删除后同步更新 `size`；删除尾节点时更新 `tail`。
+> - **修改指针**：反转或交换前先保存后继节点，否则链表剩余部分会丢失。
+> - **双指针与成环**：快慢指针移动前检查 `fast` 和 `fast.next`；相遇后再定位入环点。
+> - **相交判断**：比较节点对象而非节点值；无交点或无环时返回 `None`。
 
-### 复杂度总结
 
-> 在这里记录各实现的时间复杂度、空间复杂度及其取舍。
 
 ### 复盘
 
-> 在这里逐题记录遇到的问题、错误原因、修正方法和需要重做的内容。
+> - **移除链表元素**：用虚拟头结点统一处理头节点和普通节点；删除后当前指针不要立即后移。
+> - **设计链表**：核心是维护 `dummyhead`、`size` 和 `tail`，尤其注意插入与删除的边界不同。
+> - **反转、交换节点**：本质是保存后继、调整链接、移动指针；双指针循环必须覆盖空链表和奇数节点。
+> - **删除倒数第 N 个节点**：快指针先走 `n + 1` 步，使慢指针停在待删节点的前一个位置，可统一处理删除头节点。
+> - **链表相交**：先对齐两条链的尾部，再同步比较节点；相交依据是同一节点，不是相同数值。
+> - **环形链表 II**：Floyd 法分为“判断相遇”和“寻找入口”两阶段；哈希集合则记录已访问节点，空间换时间。
+> - **通用复盘**：每次改链前确认后继是否已保存，循环结束后检查返回的新头结点、尾结点和长度是否正确。
 
 ## 力扣代码
 
@@ -66,7 +75,7 @@
 
 ![移除链表元素通过记录](./assets/remove-linked-list-elements-accepted.png)
 
-```
+```python
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -100,7 +109,7 @@ head: Optional[ListNode]，意思是定义的head可以是None也可以是ListNo
 
 ![设计链表通过记录](./assets/design-linked-list-accepted.png)
 
-```
+```python
 class ListNode:
     def __init__(self,val=0,next=None):
         self.val = val 
@@ -156,7 +165,7 @@ class MyLinkedList:
 
 下面是执行用时优化的版本
 
-```
+```python
 class ListNode:
     def __init__(self,val=0,next=None):
         self.val = val 
@@ -220,7 +229,7 @@ class MyLinkedList:
 
 ##### 双指针法
 
-```
+```python
 class Solution:
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         temp = None #存储cur的next，也就是cur的下一个结点
@@ -236,7 +245,7 @@ class Solution:
 
 ##### 递归法
 
-```
+```python
 class Solution:
     def reverse(self , cur , pre):
         if cur == None:
@@ -255,7 +264,7 @@ class Solution:
 
 ![两两交换链表中的节点通过记录](./assets/swap-nodes-in-pairs-accepted.png)
 
-```
+```python
 class Solution:
     # 1 --> 2 --> 3 --> 4 --> None
     def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
