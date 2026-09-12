@@ -141,3 +141,30 @@ class Solution:
                 return [records[comp],i]
             records[num] = i#没有的话，就把当前元素的值和下标存入字典中
 ```
+
+#### 四数相加 II
+
+[四数相加 II](https://leetcode.cn/problems/4sum-ii/description/)
+
+![四数相加 II 通过记录](./assets/4sum-ii-accepted.png)
+
+```python
+class Solution:
+    def fourSumCount(self, nums1: List[int], nums2: List[int], nums3: List[int], nums4: List[int]) -> int:
+        hashmap = dict() #记录nums1和nums2中元素相加的值和对应出现的次数
+        for n1 in nums1:
+            for n2 in nums2:
+                value = n1 + n2#两元素之和
+                if value in hashmap:#value重复出现
+                    hashmap[value] += 1
+                else:
+                    hashmap[value] = 1#value第一次出现
+
+        count = 0
+        for n3 in nums3:
+            for n4 in nums4:
+                value = -n3 - n4 #n1 + n2 = -n3 - n4
+                if value in hashmap:
+                    count += hashmap[value] #不能只加1，要加n1+n2出现的次数
+        return count
+```
