@@ -8,7 +8,7 @@
 - [x] 有效的字母异位词
 - [x] 两个数组的交集
 - [ ] 快乐数
-- [ ] 两数之和
+- [x] 两数之和
 - [ ] 四数相加 II
 - [ ] 赎金信
 - [ ] 三数之和
@@ -123,3 +123,21 @@ class Solution:
 ```
 
 divmod（a,b）用来同时计算两个数相除的商和余数。等价于（a // b , a % b）
+
+#### 两数之和
+
+[两数之和](https://leetcode.cn/problems/two-sum/description/)
+
+![两数之和通过记录](./assets/two-sum-accepted.png)
+
+```python
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        records = dict() #字典，记录遍历数组中的值和下标
+
+        for i , num in enumerate(nums):
+            comp = target - num
+            if comp in records:#判断字典中是否有value=comp的键，如果有的话，就返回对应的键
+                return [records[comp],i]
+            records[num] = i#没有的话，就把当前元素的值和下标存入字典中
+```
