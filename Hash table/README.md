@@ -4,9 +4,9 @@
 
 ## 学习内容
 
-- [ ] 哈希表理论基础
-- [ ] 有效的字母异位词
-- [ ] 两个数组的交集
+- [x] 哈希表理论基础
+- [x] 有效的字母异位词
+- [x] 两个数组的交集
 - [ ] 快乐数
 - [ ] 两数之和
 - [ ] 四数相加 II
@@ -95,3 +95,31 @@ class Solution:
         #  list() 可以将括号内的数据类型转换为字典类型
         return list(set(nums1) & set(nums2))
 ```
+
+#### 快乐数
+
+[快乐数](https://leetcode.cn/problems/happy-number/description/)
+
+![快乐数通过记录](./assets/happy-number-accepted.png)
+
+```python
+class Solution:
+    def getsum(self , n : int) -> int:
+        newsum = 0
+        while n:
+            n , r = divmod(n , 10)#得到除以10的商和余数
+            newsum += r**2
+        return newsum
+    def isHappy(self, n: int) -> bool:
+        record = set() #记录sum是否重复出现
+        while True:
+            n = self.getsum(n) #获取每个位置上数的平方和
+            if n == 1:
+                return True
+            if n in record:#只要n重复出现了，就不是快乐数
+                return False
+            else:
+                record.add(n)
+```
+
+divmod（a,b）用来同时计算两个数相除的商和余数。等价于（a // b , a % b）
