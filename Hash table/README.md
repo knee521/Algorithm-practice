@@ -197,3 +197,42 @@ class Solution:
 ```
 
 hashmap.get(x)返回数据类型是None或者int，所以我直接写if value == 0是错误的，此时value应该是None，应该写成if not value才对
+
+#### 三数之和
+
+[三数之和](https://leetcode.cn/problems/3sum/description/)
+
+![三数之和通过记录](./assets/3sum-accepted.png)
+
+```python
+class Solution:
+    def threeSum(self, nums: list[int]) -> list[list[int]]:
+        result = []#【a ，b ，c】
+        nums.sort()#使用双指针的前提是数组要从小到大排序
+
+        for i in range(len(nums)):
+            #第一个元素大于0的话，直接返回空集，因为最小的元素都大于0了，后面的元素相加不可能等于0
+            if nums[i] > 0:
+                return result
+            #对a去重
+            if i > 0 and nums[i] == nums[i-1]:
+                continue
+            left = i+1
+            right = len(nums)-1
+            while left < right:#题目要求元素的下标各不相同
+                sumnew = nums[i] + nums[left] +nums[right]
+                if sumnew > 0:
+                    right -= 1
+                elif sumnew < 0:
+                    left += 1
+                else:
+                    result.append([nums[i], nums[left], nums[right]])
+                    #去重b和c
+                    while right > left and nums[left] == nums[left + 1]:
+                        left += 1
+                    while right > left and nums[right] == nums[right - 1]:
+                        right -= 1
+                    left +=1
+                    right -=1
+        return result
+```
