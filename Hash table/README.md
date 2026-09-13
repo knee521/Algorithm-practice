@@ -7,10 +7,10 @@
 - [x] 哈希表理论基础
 - [x] 有效的字母异位词
 - [x] 两个数组的交集
-- [ ] 快乐数
+- [x] 快乐数
 - [x] 两数之和
-- [ ] 四数相加 II
-- [ ] 赎金信
+- [x] 四数相加 II
+- [x] 赎金信
 - [ ] 三数之和
 - [ ] 四数之和
 
@@ -168,3 +168,32 @@ class Solution:
                     count += hashmap[value] #不能只加1，要加n1+n2出现的次数
         return count
 ```
+
+#### 赎金信
+
+[赎金信](https://leetcode.cn/problems/ransom-note/)
+
+![赎金信通过记录](./assets/ransom-note-accepted.png)
+
+```python
+class Solution:
+    def canConstruct(self, ransomNote: str, magazine: str) -> bool:
+        #使用字典统计magazine 里每个字母出现的次数
+        #hashmap =dict()
+        hashmap =defaultdict(int)#当访问的键不存在时，会自动给这个键创建一个默认值
+
+        for x in magazine:
+            hashmap[x] += 1
+            #获得了magazine里每个字母出现的次数了
+        #遍历ransomNote里的每个字母，如果该字母出现在了hashmap的键里，那么让hashmap里的值减1
+        for x in ransomNote:
+            #value = hashmap.get(x)
+            if hashmap[x] == 0:#当前字母magazine里没有了
+                return False
+            else:
+                hashmap[x] -= 1#当前字母的次数减1
+        return True
+
+```
+
+hashmap.get(x)返回数据类型是None或者int，所以我直接写if value == 0是错误的，此时value应该是None，应该写成if not value才对
