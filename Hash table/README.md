@@ -217,15 +217,17 @@ class Solution:
             #对a去重
             if i > 0 and nums[i] == nums[i-1]:
                 continue
+            #left指针在i下标的后面一位
             left = i+1
+            #right指针在数组末尾
             right = len(nums)-1
             while left < right:#题目要求元素的下标各不相同
-                sumnew = nums[i] + nums[left] +nums[right]
-                if sumnew > 0:
+                sumnew = nums[i] + nums[left] +nums[right]#a、b、c三个数之和
+                if sumnew > 0:#说明三数之和大了，right要往左移动一位
                     right -= 1
-                elif sumnew < 0:
+                elif sumnew < 0:#说明三数之和小了，left要往右移动一位
                     left += 1
-                else:
+                else:#三数之和等于0，把当前组合存入result字典里
                     result.append([nums[i], nums[left], nums[right]])
                     #去重b和c
                     while right > left and nums[left] == nums[left + 1]:
