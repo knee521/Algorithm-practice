@@ -11,8 +11,8 @@
 - [x] 两数之和
 - [x] 四数相加 II
 - [x] 赎金信
-- [ ] 三数之和
-- [ ] 四数之和
+- [x] 三数之和
+- [x] 四数之和
 
 ## 核心思路
 
@@ -238,3 +238,65 @@ class Solution:
                     right -=1
         return result
 ```
+
+#### 四数之和
+
+[四数之和](https://leetcode.cn/problems/4sum/description/)
+
+![四数之和通过记录](./assets/4sum-accepted.png)
+
+```python
+class Solution:
+    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+        #1.对数组排序
+        nums.sort()
+        #2.定义变量
+        n = len(nums)
+        result = []
+        #3.定义两层循环+双指针
+        for a in range(n):
+            #4.先判断第一种特殊情况
+            if nums[a] > target and nums[a] > 0:
+                return result
+            #对a去重
+            if a >  0 and nums[a] == nums[a-1]:
+                continue
+            for b in range(a+1 , n):
+                #5.第二种特殊情况
+                if nums[a] + nums[b] > target and target > 0:#因为前面两个数已经相加大于target并且target大于0，后面的数一定是正数且值更大
+                    return result
+                #对b去重,0改为了a+1，因为对于b来讲，a是固定的，要从a的下一位开始找
+                if b > a+1 and nums[b] == nums[b-1]:
+                    continue
+                left = b+1
+                right = n-1
+                #6.双指针寻找c,d
+                while left < right:
+                    sumnew = nums[a] + nums[b] + nums[left] + nums[right]
+                    if sumnew > target:#说明值大了，right要往左移动一位
+                        right -= 1
+                    elif sumnew < target:#说明值小了，left要往右移动一位
+                        left += 1
+                    else:
+                        result.append([nums[a],nums[b],nums[left],nums[right]])
+                        #去重c,d
+                        while right > left and nums[left] == nums[left + 1]:
+                            left += 1
+                        while right > left and nums[right] == nums[right - 1]:
+                            right -= 1
+                        left += 1
+                        right -= 1
+        return result
+
+```
+
+不管n数之和，思路是：
+1.排序
+
+2.固定n-2层循环
+
+3.每层循环都有去重，去重要比较当前数与前一位数是否相等
+
+4.双指针寻找最后两位数
+
+5.对最后两位数去重
