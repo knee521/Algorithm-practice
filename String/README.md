@@ -4,8 +4,8 @@
 
 ## 学习内容
 
-- [ ] 字符串理论基础
-- [ ] 反转字符串
+- [x] 字符串理论基础
+- [x] 反转字符串
 - [ ] 反转字符串中的单词
 - [ ] 右旋转字符串
 - [ ] 实现 strStr()
@@ -26,3 +26,24 @@
 > 每道题记录遇到的问题、错误原因、修正方法、复杂度分析和需要重做的内容。
 
 ## 代码记录
+
+#### 反转字符串
+
+[反转字符串](https://leetcode.cn/problems/reverse-string/description/)
+
+![反转字符串学习截图](assets/reverse-string.png)
+
+```python
+class Solution:
+    def reverseString(self, s: List[str]) -> None:
+        """
+        Do not return anything, modify s in-place instead.
+        """
+        left , right = 0 , len(s) - 1
+        while left <= right:
+            s[left] , s[right] = s[right] , s[left]
+            left += 1
+            right -= 1
+```
+
+s[left] , s[right] = s[right] , s[left]是python特有的，直接交换两个数
