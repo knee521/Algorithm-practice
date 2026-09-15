@@ -47,3 +47,32 @@ class Solution:
 ```
 
 s[left] , s[right] = s[right] , s[left]是python特有的，直接交换两个数
+
+#### 反转字符串Ⅱ
+
+[反转字符串Ⅱ](https://leetcode.cn/problems/reverse-string-ii/description/)
+
+![反转字符串 II 学习截图](assets/reverse-string-ii.png)
+
+```
+class Solution:
+    def reverseStr(self, s: str, k: int) -> str:
+        #先写一个函数用来把数组内的元素全部反转
+        def myreverse(chars):
+            left , right = 0 , len(chars) - 1
+            while left < right:
+                chars[left] , chars[right] = chars[right] , chars[left]
+                left += 1
+                right -= 1
+            return chars
+        res = list(s)#因为 Python 中的字符串 str 是不可变对象，不能直接修改其中某个位置的字符
+        for cur in range(0 , len(s) , 2 * k):
+            res[cur : cur + k] = myreverse(res[cur : cur + k])
+        return ''.join(res)
+```
+
+分隔符.join(字符串序列)
+
+eg：res = ['我', '爱', '你']  print(''.join(res))  结果是我爱你
+
+res = ['I', 'love', 'you'] print(' '.join(res))  结果是I love you
