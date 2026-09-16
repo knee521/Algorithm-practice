@@ -8,6 +8,7 @@
 - [x] 反转字符串
 - [x] 替换空格
 - [x] 反转字符串中的单词
+- [ ] 左旋转字符串
 - [ ] 右旋转字符串
 - [ ] 实现 strStr()
 - [ ] 重复的子字符串
@@ -90,4 +91,61 @@ class Solution:
             if res[i] == '.':
                 res[i] = ' '
         return ''.join(res)
+```
+
+#### 反转字符串中的单词
+
+![image-20260916111356274](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20260916111356274.png)
+
+```python
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        s = s[::-1] #反转整个字符串
+        return ' '.join(word[::-1] for word in s.split())
+```
+
+```python
+word[::-1] for word in s.split()
+#这是一个生成式表达式，含义是：
+#s.split()：把字符串 s 按空格切分成单词列表
+#word[::-1]：使用切片，将每个单词倒序。其中，[::-1] 可以理解为：[开始位置:结束位置:步长]
+#for word in ...：依次遍历每个单词。
+```
+
+##### 分割法+双指针
+
+```python
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        s = s.split() #将字符串拆分为单词，里面的空格全部会被去除
+        #反转单词
+        left , right = 0 , len(s) - 1
+        while left < right:
+            s[left] , s[right] = s[right] , s[left]
+            left += 1
+            right -= 1
+        return ' '.join(s)
+```
+
+###### split函数用法
+
+```python
+字符串.split(分隔符, 最大切分次数)
+1.不指定分隔符（不指定分隔符时，默认按照空格、多个空格、换行等空白字符切分）
+s = "I love Python"
+result = s.split()
+print(result)#['I', 'love', 'Python']
+2.指定分隔符（分隔符会被去掉）
+s = "apple,banana,orange"
+result = s.split(',')
+print(result)#['apple', 'banana', 'orange']
+3.指定切分次数（num表示最多切分num次）
+s = "a-b-c-d"
+result = s.split('-', 2)
+print(result)#['a', 'b', 'c-d']
+4.与join()配合使用
+s = "hello world python"
+words = s.split()
+result = "-".join(words)
+print(result)#hello-world-python
 ```
