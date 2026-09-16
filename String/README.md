@@ -8,7 +8,7 @@
 - [x] 反转字符串
 - [x] 替换空格
 - [x] 反转字符串中的单词
-- [ ] 左旋转字符串
+- [x] 左旋转字符串
 - [ ] 右旋转字符串
 - [ ] 实现 strStr()
 - [ ] 重复的子字符串
@@ -148,4 +148,38 @@ s = "hello world python"
 words = s.split()
 result = "-".join(words)
 print(result)#hello-world-python
+```
+
+#### 左旋转字符串
+
+[动态口令](https://leetcode.cn/problems/zuo-xuan-zhuan-zi-fu-chuan-lcof/description/)
+
+![左旋转字符串学习截图](assets/left-rotate-string.png)
+
+```python
+class Solution:
+    def myreverse(self , start , end , s):
+        left , right = start , end-1
+        while left < right:
+            s[left] , s[right] = s[right] , s[left]
+            left += 1
+            right -= 1
+        return s
+    def dynamicPassword(self, password: str, target: int) -> str:
+        #1.反转前target-1个字符
+        #2，反转第target个到末尾的字符
+        #3.反转全部字符
+        password = list(password)
+        password = self.myreverse(0 , target , password)
+        password = self.myreverse(target , len(password) , password)
+        password = self.myreverse(0 , len(password) , password)
+        return ''.join(password)
+```
+
+##### 更简单的方法
+
+```python
+class Solution:
+    def dynamicPassword(self, password: str, target: int) -> str:
+        return password[target:] + password[:target]
 ```
