@@ -6,7 +6,8 @@
 
 - [x] 字符串理论基础
 - [x] 反转字符串
-- [ ] 反转字符串中的单词
+- [x] 替换空格
+- [x] 反转字符串中的单词
 - [ ] 右旋转字符串
 - [ ] 实现 strStr()
 - [ ] 重复的子字符串
@@ -73,6 +74,20 @@ class Solution:
 
 分隔符.join(字符串序列)
 
-eg：res = ['我', '爱', '你']  print(''.join(res))  结果是我爱你
+eg：res = ['我', '爱', '你']  print(''.join(res))  结果是：我爱你
 
-res = ['I', 'love', 'you'] print(' '.join(res))  结果是I love you
+res = ['I', 'love', 'you'] print(' '.join(res))  结果是：I love you
+
+#### 替换空格
+
+![替换空格学习截图](assets/replace-space.png)
+
+```python
+class Solution:
+    def pathEncryption(self, path: str) -> str:
+        res = list(path)
+        for i in range(len(res)):
+            if res[i] == '.':
+                res[i] = ' '
+        return ''.join(res)
+```
