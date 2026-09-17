@@ -183,3 +183,67 @@ class Solution:
     def dynamicPassword(self, password: str, target: int) -> str:
         return password[target:] + password[:target]
 ```
+
+#### 右旋转字符串
+
+[右旋转字符串](https://kamacoder.com/problempage.php?pid=1065)
+
+![右旋转字符串学习截图](assets/right-rotate-string.png)
+
+```python
+#获取输入的数字k和字符串
+k = int(input())
+s = input()
+
+print(s[-k:] + s[:-k])
+```
+
+其中-k的意思是从字符串末尾反向计算位置
+
+例如：
+
+`s[-k:]`：从倒数第 `k` 个字符取到末尾；
+
+`s[:-k]`：从开头取到倒数第 `k` 个字符之前；
+
+负号表示从右往左数。
+
+#### 实现strStr（）
+
+[找出字符串中第一个匹配的下标](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/description/)
+
+![strStr KMP 学习截图](assets/strstr-kmp.png)
+
+
+```python
+class Solution:
+    def getNext(self , next_array , s):
+        #初始化next数组
+        next_array[0]=0
+        j = 0#前缀末尾
+        i= 0#后缀末尾
+        for i in range(1 , len(s)):
+            #s[i]与s[j]不相等的情况
+            while j > 0 and s[i] != s[j]:#j不能等于0，等于0的话就没有意义了，会卡死验证程序
+                j = next_array[j - 1]
+            if s[i] == s[j]:
+                j += 1
+            next_array[i] = j
+    def strStr(self, haystack: str, needle: str) -> int:
+        #题目说1 <= needle.length <= 10^4,所以不用考虑needle长度为0的情况
+        #初始化next数组，长度和子串长度一样
+        next_array = [0]*len(needle)
+        #获取子串的next数组
+        self.getNext(next_array , needle)
+        j = 0#子串指针
+        i = 0
+        while i < len(haystack):
+            while j > 0 and haystack[i] != needle[j]:
+                j = next_array[j - 1]
+            if haystack[i] == needle[j]:
+                j += 1
+            if j == len(needle):
+                return i - j + 1
+            i += 1
+        return -1
+```
