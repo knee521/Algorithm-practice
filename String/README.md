@@ -9,9 +9,9 @@
 - [x] 替换空格
 - [x] 反转字符串中的单词
 - [x] 左旋转字符串
-- [ ] 右旋转字符串
-- [ ] 实现 strStr()
-- [ ] 重复的子字符串
+- [x] 右旋转字符串
+- [x] 实现 strStr()
+- [x] 重复的子字符串
 
 ## 核心思路
 
@@ -246,4 +246,61 @@ class Solution:
                 return i - j + 1
             i += 1
         return -1
+```
+
+#### 重复的子字符串
+
+[重复的子字符串](https://leetcode.cn/problems/repeated-substring-pattern/)
+
+![重复的子字符串学习截图](assets/repeated-substring.png)
+
+##### 只要两个s拼接在一起，去掉头和尾，如果里面还有一个s的话，就说明s是由重复子串组成的
+
+```python
+#find() 用于查找子字符串在字符串中的第一次出现位置，返回下标；如果找不到，返回 -1
+#字符串.find(要查找的内容, 开始位置, 结束位置)
+s = "hello world"
+print(s.find("world"))#6,因为w在s字符串里的下标是6
+print(s.find("abc"))#-1，因为s字符串里没有abc子字符串
+```
+
+###### 使用find法
+
+```python
+class Solution:
+    def repeatedSubstringPattern(self, s: str) -> bool:
+        n = len(s)
+        if n <= 1:
+            return False
+        ss = s[1:] + s[:-1]
+        return ss.find(s) != -1
+```
+
+##### 当最长相等前后缀不包含的子串的长度可以被字符串s的长度整除，那么不包含的子串就是s的最小重复子串。最长相等前后缀的长度等于next[len - 1] （前缀表不加1）
+
+###### KMP算法
+
+```python
+class Solution:
+    def getNext(self , next_array , s):
+        #初始化next数组
+        next_array[0]=0
+        j = 0 #前缀末尾
+        i= 0#后缀末尾
+        for i in range(1 , len(s)):
+            #s[i]不等于s[j]
+            while j > 0 and s[i] != s[j]:
+                j = next_array[j-1]
+            if s[i] == s[j]:
+                j += 1
+            next_array[i] = j
+    def repeatedSubstringPattern(self, s: str) -> bool:
+        n = len(s)
+        next_array = [0] * n
+        if n <= 1:
+            return False
+        self.getNext(next_array , s)
+        if n % (n - next_array[n - 1]) == 0 and next_array[n-1]>0:#next_array[n - 1] > 0 用来判断字符串是否存在非空的最长相等前缀和后缀。只有这个长度大于 0，才可能由某个子串重复构成
+            return True
+        return False
 ```
