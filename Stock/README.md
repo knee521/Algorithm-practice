@@ -5,7 +5,8 @@
 ## 学习内容
 
 - [x] 用栈实现队列
-- [ ] 用队列实现栈
+- [x] 用队列实现栈
+- [x] 有效的括号
 - [ ] 买卖股票的最佳时机
 - [ ] 买卖股票的最佳时机 II
 - [ ] 含冷冻期的股票买卖
@@ -116,4 +117,34 @@ class MyStack:
 
     def empty(self) -> bool:
         return not self.que
+```
+
+#### 有效的括号
+
+[有效的括号](https://leetcode.cn/problems/valid-parentheses/description/)
+
+![有效的括号学习截图](assets/valid-parentheses.png)
+
+```python
+class Solution:
+    def isValid(self, s: str) -> bool:
+        #定义栈
+        stack = []
+        #遇到左括号时，应把对应的右括号压入栈中，而不是遇到右括号时压入左括号
+        #因为栈的特点是“后进先出”，遇到左括号时，暂时无法判断它是否匹配，需要把它期待的右括号保存起来
+        for i in s:
+            if i == '(':
+                stack.append(')')
+            elif i == '[':
+                stack.append(']')
+            elif i == '{':
+                stack.append('}')
+            elif not stack or stack[-1] != i:#1.如果当前栈为空但是又出现了右括号，说明一定是不合法的，因为没有左括号和他进行匹配了。2.当前右括号与栈顶期待的右括号不一致，eg:(}),这是不合法的
+                return False
+            else:
+                stack.pop()
+        if not stack:
+            return True
+        else:
+            return False
 ```
