@@ -7,6 +7,7 @@
 - [x] 用栈实现队列
 - [x] 用队列实现栈
 - [x] 有效的括号
+- [ ] 逆波兰表达式
 - [ ] 买卖股票的最佳时机
 - [ ] 买卖股票的最佳时机 II
 - [ ] 含冷冻期的股票买卖
@@ -166,4 +167,32 @@ class Solution:
             else:
                 stack.append(i)
         return ''.join(stack)
+```
+
+#### 逆波兰表达式
+
+[逆波兰表达式求值](https://leetcode.cn/problems/evaluate-reverse-polish-notation/description/)
+
+![逆波兰表达式学习截图](assets/evaluate-rpn.png)
+
+```python
+class Solution:
+    #因为逆波兰表达式的取整是要求向零取整的，所以要写一个向零取整的函数
+    def mydev(self , x , y):
+        if x * y > 0:
+            return int(x / y)
+        else:
+            return int(- (abs(x) / abs(y)))#号时使用 /，结果会变成浮点数,所以要加数据类型变换int
+    def evalRPN(self, tokens: List[str]) -> int:
+        #初始化栈
+        op_map = {'+':add , '-':sub , '*':mul , '/':self.mydev}
+        stack = []
+        for i in tokens:
+            if i not in {'+' , '-' , '*' , "/"}:
+                stack.append(int(i))
+            else:
+                y = stack.pop()#弹出栈顶元素
+                x = stack.pop()
+                stack.append(op_map[i](x,y))#先出来的元素要在运算符的后面
+        return stack.pop()
 ```
