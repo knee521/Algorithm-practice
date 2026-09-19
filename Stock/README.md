@@ -148,3 +148,22 @@ class Solution:
         else:
             return False
 ```
+
+#### 删除字符串中的所有相邻重复项
+
+[删除字符串中的所有相邻重复项](https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string/description/)
+
+![删除相邻重复项学习截图](assets/remove-adjacent-duplicates.png)
+
+```python
+class Solution:
+    def removeDuplicates(self, s: str) -> str:
+        #初始化栈
+        stack = []
+        for i in s:
+            if stack and i == stack[-1]:#如果当前元素与栈顶元素相同，就把栈顶元素pop掉
+                stack.pop()
+            else:
+                stack.append(i)
+        return ''.join(stack)
+```
