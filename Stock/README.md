@@ -7,12 +7,8 @@
 - [x] 用栈实现队列
 - [x] 用队列实现栈
 - [x] 有效的括号
-- [ ] 逆波兰表达式
-- [ ] 买卖股票的最佳时机
-- [ ] 买卖股票的最佳时机 II
-- [ ] 含冷冻期的股票买卖
-- [ ] 含手续费的股票买卖
-- [ ] 股票买卖系列综合复盘
+- [x] 逆波兰表达式
+- [x] 滑动窗口最大值
 
 ## 核心思路
 
@@ -195,4 +191,46 @@ class Solution:
                 x = stack.pop()
                 stack.append(op_map[i](x,y))#先出来的元素要在运算符的后面
         return stack.pop()
+```
+
+#### 滑动窗口最大值
+
+[滑动窗口最大值](https://leetcode.cn/problems/sliding-window-maximum/description/)
+
+![滑动窗口最大值学习截图](assets/sliding-window-maximum.png)
+
+```python
+#定义一个单调递减的队列
+class Myque:
+    def __init__(self):
+        self.que = deque()#两端都可以操作的数据结构
+    def pop(self , value):
+        #弹出元素之前，先比较要弹出的元素与出口的元素大小，如果相等，直接弹出
+        if self.que and value == self.que[0]:
+            self.que.popleft()
+    def push(self , value):
+        #加入元素之前先判断要加入的元素与队列末尾的元素大小关系，如果大于，就把末尾的元素pu弹出，直至弹完为止
+        while self.que and value > self.que[-1]:
+            self.que.pop()
+        self.que.append(value)
+    def front(self):
+        #直接返回队列最前端的值，该值就是最大值
+        return self.que[0]
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        result = []
+        #先把第一个窗口的值依次送进队列中
+        que = Myque()
+        for i in range(k):
+            que.push(nums[i])
+        #记录第一个窗口的最大值
+        result.append(que.front())
+        for j in range(k , len(nums)):
+            #1.先移除上一个窗口的第一位元素，即下标是j-k
+            que.pop(nums[j - k])
+            #2.把当前窗口的最后一个元素加入队列，即下标是j
+            que.push(nums[j])
+            #3.取出当窗口的最大值
+            result.append(que.front())
+        return result
 ```
