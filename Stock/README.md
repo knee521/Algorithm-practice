@@ -9,6 +9,7 @@
 - [x] 有效的括号
 - [x] 逆波兰表达式
 - [x] 滑动窗口最大值
+- [x] 前k个高频元素
 
 ## 核心思路
 
@@ -233,4 +234,33 @@ class Solution:
             #3.取出当窗口的最大值
             result.append(que.front())
         return result
+```
+
+#### 前k个高频元素
+
+[前k个高频元素](https://leetcode.cn/problems/top-k-frequent-elements/description/)
+
+![前 k 个高频元素学习截图](assets/top-k-frequent.png)
+
+```python
+
+class Solution:
+    def topKFrequent(self, nums: list[int], k: int) -> list[int]:
+        #统计每个元素出现的次数
+        mymap = defaultdict(int)
+        for i in nums:
+            mymap[i] += 1
+        #对频率进行排序，取前k个元素，因为每次要pop最小的元素，所以用小顶堆
+        pre = []
+        for key , freq in mymap.items():
+            #mymap.items():返回mymap的键值对
+            heapq.heappush(pre , (freq , key))#把键值对（freq，key）push到小顶堆里
+            if len(pre) > k:
+                heapq.heappop(pre)#pop堆顶最小元素
+        #小顶堆先弹出最小元素
+        result = [0] * k#定义数组要定义长度为k的列表
+        for i in range(k-1 , -1 , -1):
+            result[i] = heapq.heappop(pre)[1]
+        return result
+
 ```
