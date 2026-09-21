@@ -11,6 +11,7 @@
 - [`String/`](./String/)：字符串专题
 - [`Hash table/`](./Hash%20table/)：哈希表专题
 - [Stock/](./Stock/)：股票算法专题
+- [Binary tree/](./Binary%20tree/)：二叉树专题
 
 ## 学习约定
 
