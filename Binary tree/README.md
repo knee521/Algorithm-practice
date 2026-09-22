@@ -4,7 +4,7 @@
 
 ## 学习内容
 
-- [ ] 二叉树基础与递归遍历
+- [x] 二叉树基础与递归遍历
 - [ ] 二叉树的迭代遍历
 - [ ] 层序遍历
 - [ ] 二叉树的属性
@@ -20,7 +20,23 @@
 
 ## 易错点与边界条件
 
-> 记录空树、单节点、只有左子树或右子树、重复值、遍历顺序、递归终止条件和队列边界等问题。
+> 二叉树定义
+>
+> ```python
+> class TreeNode:
+>     def __init__(self , val , left = None , right = None):
+>         self.val = val
+>         self.left = left
+>         self.right = right
+> ```
+>
+> #### 写递归函数三要素
+>
+> 1.确定递归函数的参数和返回值
+>
+> 2.确定终止条件
+>
+> 3.确定单层递归逻辑
 
 ## 复盘
 
@@ -29,3 +45,81 @@
 ## 代码记录
 
 > 在这里补充每道二叉树题目的题目链接、实现代码和个人学习笔记。
+
+#### 二叉树的前序遍历
+
+[二叉树的前序遍历](https://leetcode.cn/problems/binary-tree-preorder-traversal/description/)
+
+![二叉树前序遍历学习截图](assets/preorder-traversal.png)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        res = []
+        def digui(node):
+            if node is None:
+                return
+            res.append(node.val)
+            digui(node.left)
+            digui(node.right)
+        digui(root)
+        return res
+```
+
+#### 二叉树后序遍历
+
+[二叉树后续遍历](https://leetcode.cn/problems/binary-tree-postorder-traversal/description/)
+
+![二叉树后序遍历学习截图](assets/postorder-traversal.png)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def postorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        res = []
+        def digui(node):
+            if node is None:
+                return
+            digui(node.left)
+            digui(node.right)
+            res.append(node.val)
+        digui(root)
+        return res
+```
+
+#### 二叉树的中序遍历
+
+[二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/description/)
+
+![二叉树中序遍历学习截图](assets/inorder-traversal.png)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def inorderTraversal(self, root: TreeNode | None) -> list[int]:
+        res = []
+        def digui(node):
+            if node is None:
+                return
+            digui(node.left)
+            res.append(node.val)
+            digui(node.right)
+        digui(root)
+        return res
+```
