@@ -52,6 +52,8 @@
 
 ![二叉树前序遍历学习截图](assets/preorder-traversal.png)
 
+##### 递归遍历
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -71,6 +73,35 @@ class Solution:
         digui(root)
         return res
 ```
+
+##### 迭代遍历
+
+注意：比如前序遍历（中左右），要先把中节点放入栈，**再放右节点，再放左节点**。要以**出栈的顺序**为准。
+
+```python
+class Solution:
+    def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        if root is None:
+            return []
+        #定义栈
+        stack = [root]#先把中节点放进去
+        #定义结果列表
+        result = []
+        while stack:#栈不为空
+            #处理栈顶的节点
+            node = stack.pop()
+            #先处理中节点
+            result.append(node.val)
+            #处理右节点---以出栈的顺序为准
+            if node.right is not None:
+                stack.append(node.right)
+            #再处理左节点---以出栈的顺序为准
+            if node.left is not None:
+                stack.append(node.left)
+        return result
+```
+
+
 
 #### 二叉树后序遍历
 
