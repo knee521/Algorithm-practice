@@ -321,3 +321,29 @@ class Solution:
             result.append(level)
         return result
 ```
+
+##### 递归法
+
+
+
+```python
+class Solution:
+    def levelOrder(self, root: TreeNode | None) -> list[list[int]]:
+        if not root:
+            return []
+        #存储每一层的结点值
+        levels = []
+        def mydigui(node , level):
+            if not node:
+                return []
+            #结束条件
+            if len(levels) == level:#在第一次到达某一层时，为这一层创建一个空列表
+#第一次到达第 0 层：levels 是 []，长度为 0，于是加入一个空列表，变成 [[]]。
+#第一次到达第 1 层：levels 是 [[根节点的值]]，长度为 1，于是再加入一个空列表。之后再次到达第 1 层：levels 已经有两层，长度为 2，无需重复创建。
+                levels.append([])
+            levels[level].append(node.val)
+            mydigui(node.left , level + 1)
+            mydigui(node.right , level + 1)
+        mydigui(root , 0)
+        return levels
+```
