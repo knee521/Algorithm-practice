@@ -5,7 +5,8 @@
 ## 学习内容
 
 - [x] 二叉树基础与递归遍历
-- [ ] 二叉树的迭代遍历
+- [x] 二叉树的迭代遍历
+- [x] 二叉树的统一迭代法
 - [ ] 层序遍历
 - [ ] 二叉树的属性
 - [ ] 二叉搜索树
@@ -101,6 +102,34 @@ class Solution:
         return result
 ```
 
+##### 统一迭代法
+
+要点就是在中结点后加一个空指针，另外要以出栈的顺序为准
+
+```python
+class Solution:
+    def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        if root is None:
+            return []
+        #定义栈
+        stack = [root]#先把中节点放进去
+        #定义结果列表
+        result = []
+        while stack:#栈不为空
+            node = stack.pop()
+            if node:
+                if node.right:
+                    stack.append(node.right)
+                if node.left:
+                    stack.append(node.left)
+                stack.append(node)
+                stack.append(None)
+            else:
+                node = stack.pop()
+                result.append(node.val)
+        return result
+```
+
 
 
 #### 二叉树后序遍历
@@ -159,6 +188,32 @@ class Solution:
         return result[::-1]#起始位置：结束位置：遍历方向  -1代表从后往前遍历，起始位置和结束位置为空代表按照默认的，所有result[::-1]代表翻转数组，顺序变成了左右中
 ```
 
+##### 统一迭代法
+
+```python
+class Solution:
+    def postorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        if root is None:
+            return []
+        #定义栈
+        stack = [root]
+        #定义结果数组
+        result = []
+        while stack:#栈不为空
+            node = stack.pop()
+            if node:
+                stack.append(node)
+                stack.append(None)
+                if node.right:
+                    stack.append(node.right)
+                if node.left:
+                    stack.append(node.left)
+            else:
+                node = stack.pop()
+                result.append(node.val)
+        return result
+```
+
 
 
 #### 二叉树的中序遍历
@@ -210,5 +265,59 @@ class Solution:
                 cur = stack.pop()#让指针指向栈顶结点，并弹出栈顶结点  左
                 result.append(cur.val)
                 cur = cur.right                   #                右
+        return result
+```
+
+##### 统一迭代法
+
+```python
+class Solution:
+    def inorderTraversal(self, root: TreeNode | None) -> list[int]:
+        if root is None:
+            return []
+        #定义栈
+        stack = [root]
+        #定义结果列表
+        result = []
+        while stack:
+            node = stack.pop()
+            if node:
+                if node.right:
+                    stack.append(node.right)
+                stack.append(node)
+                stack.append(None)
+                if node.left:
+                    stack.append(node.left)
+            else:
+                node = stack.pop()
+                result.append(node.val)
+        return result
+```
+
+#### 层序遍历
+
+[二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
+
+![二叉树层序遍历学习截图](assets/level-order-traversal.png)
+
+```python
+class Solution:
+    def levelOrder(self, root: TreeNode | None) -> list[list[int]]:
+        if not root:
+            return []
+        #定义一个双端的队列
+        myque = deque([root])#[root] 是只含一个节点的列表
+        #定义结果列表
+        result = []
+        while myque:
+            level = []#保存每一层的遍历结果
+            for _ in range(len(myque)):
+                cur = myque.popleft()
+                level.append(cur.val)
+                if cur.left:
+                    myque.append(cur.left)
+                if cur.right:
+                    myque.append(cur.right)
+            result.append(level)
         return result
 ```
