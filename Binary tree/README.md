@@ -133,6 +133,32 @@ class Solution:
 
 ##### 迭代遍历
 
+改前序遍历的逻辑即可：
+后序遍历的逻辑是左右中。前序遍历的逻辑是中左右，所有中左右--》中右左--》反转result数组就是左右中
+
+```python
+class Solution:
+    def postorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        if root is None:
+            return []
+        #定义栈
+        stack = [root]
+        #定义结果数组
+        result = []
+        while stack:#栈不为空
+            #先处理栈顶结点
+            node = stack.pop()
+            #存入值
+            result.append(node.val)
+            #再处理左结点
+            if node.left:
+                stack.append(node.left)
+            #最后处理右节点
+            if node.right:
+                stack.append(node.right)
+        return result[::-1]#起始位置：结束位置：遍历方向  -1代表从后往前遍历，起始位置和结束位置为空代表按照默认的，所有result[::-1]代表翻转数组，顺序变成了左右中
+```
+
 
 
 #### 二叉树的中序遍历
