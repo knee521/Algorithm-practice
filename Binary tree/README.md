@@ -109,6 +109,8 @@ class Solution:
 
 ![二叉树后序遍历学习截图](assets/postorder-traversal.png)
 
+##### 递归遍历
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -128,6 +130,10 @@ class Solution:
         digui(root)
         return res
 ```
+
+##### 迭代遍历
+
+
 
 #### 二叉树的中序遍历
 
@@ -153,4 +159,30 @@ class Solution:
             digui(node.right)
         digui(root)
         return res
+```
+
+##### 迭代遍历
+
+注意：中序遍历的思路和前序遍历的思路不一样，他要用一个指针来辅助遍历
+
+```python
+class Solution:
+    def inorderTraversal(self, root: TreeNode | None) -> list[int]:
+        if root is None:
+            return []
+        #定义栈
+        stack = []
+        #定义结果列表
+        result = []
+        #定义指针，用来遍历节点，从根节点开始
+        cur = root
+        while cur or stack:#两个全空就结束了
+            if cur:#指针指向的节点非空
+                stack.append(cur)
+                cur = cur.left
+            else:#指针指向的节点为空
+                cur = stack.pop()#让指针指向栈顶结点，并弹出栈顶结点  左
+                result.append(cur.val)
+                cur = cur.right                   #                右
+        return result
 ```
