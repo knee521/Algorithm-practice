@@ -347,3 +347,84 @@ class Solution:
         mydigui(root , 0)
         return levels
 ```
+
+#### 二叉树的层序遍历Ⅱ
+
+![二叉树层序遍历 II 学习截图](assets/level-order-bottom.png)
+
+[二叉树的层序遍历Ⅱ](https://leetcode.cn/problems/binary-tree-level-order-traversal-ii/description/)
+
+```python
+class Solution:
+    def levelOrderBottom(self, root: TreeNode | None) -> list[list[int]]:
+        if not root:
+            return []
+        #定义一个双端队列
+        myque = deque([root])
+        #定义结果列表
+        result = []
+        while myque:
+            level = []#保存每一层的遍历结果
+            for _ in range(len(myque)):
+                cur = myque.popleft()
+                level.append(cur.val)
+                if cur.left:
+                    myque.append(cur.left)
+                if cur.right:
+                    myque.append(cur.right)
+            result.append(level)
+        return result[::-1]
+```
+
+其实就是从上往下层序遍历的结果进行反转
+
+##### 递归法
+
+```python
+class Solution:
+    def levelOrderBottom(self, root: TreeNode | None) -> list[list[int]]:
+        if not root:
+            return []
+        #存储每一层的结点值
+        levels = []
+        def digui(node , level):
+            if not node:
+                return []
+            #到达某一层的时候，初始化一个空的列表
+            if len(levels) == level:
+                levels.append([])
+            levels[level].append(node.val)
+            digui(node.left , level + 1)
+            digui(node.right , level + 1)
+        digui(root , 0)
+        return levels[::-1]
+```
+
+#### 二叉树的右视图
+
+[二叉树的右视图](https://leetcode.cn/problems/binary-tree-right-side-view/description/)
+
+![二叉树右视图学习截图](assets/right-side-view.png)
+
+```python
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        #先判断root是否为空
+        if not root:
+            return []
+        #定义结果数组
+        result = []
+        #定义两端的队列
+        myque = deque([root])
+        while myque:
+            level_size = len(myque)
+            for i in range(level_size):
+                cur = myque.popleft()
+                if i == level_size - 1:#这三个if必须放在for里面，因为如果把这三个 if 移到 for 外面，就无法逐个检查当前层的节点，也无法逐个把它们的孩子加入队列。
+                    result.append(cur.val)
+                if cur.left:
+                    myque.append(cur.left)
+                if cur.right:
+                    myque.append(cur.right)
+        return result
+```
