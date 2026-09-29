@@ -428,3 +428,32 @@ class Solution:
                     myque.append(cur.right)
         return result
 ```
+
+#### 二叉树的层平均值
+
+[二叉树的层平均值](https://leetcode.cn/problems/average-of-levels-in-binary-tree/description/)
+
+![二叉树层平均值学习截图](assets/average-of-levels.png)
+
+```python
+class Solution:
+    def averageOfLevels(self, root: TreeNode | None) -> list[float]:
+        if not root:
+            return []
+        #定义结果数组
+        result = []
+        #定义两端的队列
+        myque = deque([root])
+        while myque:
+            level_size = len(myque)#当前层的长度大小，因为每次刚进入某一层的时候，上一层的元素都被pop掉了
+            level_sum = 0#每一层的总和
+            for i in range(level_size):
+                node = myque.popleft()
+                level_sum += node.val
+                if node.left:
+                    myque.append(node.left)
+                if node.right:
+                    myque.append(node.right)
+            result.append(level_sum / level_size)
+        return result
+```
