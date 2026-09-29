@@ -457,3 +457,31 @@ class Solution:
             result.append(level_sum / level_size)
         return result
 ```
+
+#### N叉树的层序遍历
+
+[N叉树的层序遍历](https://leetcode.cn/problems/n-ary-tree-level-order-traversal/description/)
+
+![N 叉树层序遍历学习截图](assets/n-ary-level-order.png)
+
+```python
+class Solution:
+    def levelOrder(self, root: 'Node') -> List[List[int]]:
+        if not root:
+            return []
+        #定义两端的队列
+        myque = deque([root])
+        #定义结果列表
+        result = []
+        while myque:
+            level_size = len(myque)#获取每一层的长度
+            level = []#保存每一层的遍历结果
+            for i in range(level_size):
+                node = myque.popleft()
+                level.append(node.val)
+                for child in node.children:
+                    myque.append(child)
+            result.append(level)
+        return result
+
+```
