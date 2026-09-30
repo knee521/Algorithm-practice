@@ -549,3 +549,58 @@ class Solution:
                     myque.append(node.right)
         return root
 ```
+
+#### 填充每个节点的下一个右侧节点指针II
+
+[填充每个节点的下一个右侧节点指针II](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/description/)
+
+![填充右侧节点指针 II 学习截图](assets/connect-next-right-ii.png)
+
+```python
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        if not root:
+            return root
+        #定义两端队列
+        myque = deque([root])
+        while myque:
+            level_size = len(myque)
+            pre = None
+            for i in range(level_size):
+                node = myque.popleft()
+                if pre:
+                    pre.next = node
+                pre = node
+                if node.left:
+                    myque.append(node.left)
+                if node.right:
+                    myque.append(node.right)
+        return root
+```
+
+#### 二叉树的最大深度
+
+[二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/description/)
+
+二叉树的深度就是根节点到最远叶子节点的最长路径上的节点数。
+
+![二叉树最大深度学习截图](assets/maximum-depth.png)
+
+```python
+class Solution:
+    def maxDepth(self, root: TreeNode | None) -> int:
+        if not root:
+            return 0
+        myque = deque([root])
+        deepth = 0
+        while myque:
+            deepth += 1
+            level_size = len(myque)
+            for i in range(level_size):
+                node = myque.popleft()
+                if node.left:
+                    myque.append(node.left)
+                if node.right:
+                    myque.append(node.right)
+        return deepth
+```
