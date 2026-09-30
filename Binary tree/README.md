@@ -604,3 +604,33 @@ class Solution:
                     myque.append(node.right)
         return deepth
 ```
+
+#### 二叉树的最小深度
+
+[二叉树的最小深度](https://leetcode.cn/problems/minimum-depth-of-binary-tree/description/)
+
+最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+
+![二叉树最小深度学习截图](assets/minimum-depth.png)
+
+```python
+class Solution:
+    def minDepth(self, root: TreeNode | None) -> int:
+        #只有当左右孩子都为空的时候，才说明遍历的最低点了。如果其中一个孩子为空则不是最低点
+        if not root:
+            return 0
+        myque = deque([root])
+        deepth = 0
+        while myque:
+            deepth += 1
+            level_size = len(myque)
+            for i in range(level_size):
+                node = myque.popleft()
+                if node.left:
+                    myque.append(node.left)
+                if node.right:
+                    myque.append(node.right)
+                if not node.left and not node.right:
+                    return deepth
+        return deepth
+```
