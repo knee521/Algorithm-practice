@@ -7,7 +7,7 @@
 - [x] 二叉树基础与递归遍历
 - [x] 二叉树的迭代遍历
 - [x] 二叉树的统一迭代法
-- [ ] 层序遍历
+- [x] 层序遍历
 - [ ] 二叉树的属性
 - [ ] 二叉搜索树
 - [ ] 公共祖先与路径问题
@@ -485,3 +485,35 @@ class Solution:
         return result
 
 ```
+
+#### 在每个树行中找最大值
+
+[在每个树行中找最大值](https://leetcode.cn/problems/find-largest-value-in-each-tree-row/)
+
+![每层最大值学习截图](assets/largest-values.png)
+
+```python
+class Solution:
+    def largestValues(self, root: TreeNode | None) -> list[int]:
+        if not root:
+            return []
+        #定义结果列表
+        result = []
+        #定义两端队列
+        myque = deque([root])
+
+        while myque:
+            #每一层的最大值，不能初始化为0，如果某一层的节点值全部是负数，最大值就会错误地得到 0.所以要把初始值改为负无穷大
+            max_value = float('-inf')
+            for i in range(len(myque)):
+                node = myque.popleft()
+                max_value = max(max_value , node.val)
+                if node.left:
+                    myque.append(node.left)
+                if node.right:
+                    myque.append(node.right)
+            result.append(max_value)
+        return result
+```
+
+float('-inf')代表负无穷大，float('inf')代表正无穷大
