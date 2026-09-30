@@ -8,6 +8,8 @@
 - [x] 二叉树的迭代遍历
 - [x] 二叉树的统一迭代法
 - [x] 层序遍历
+- [x] 翻转二叉树
+- [x] 对称二叉树
 - [ ] 二叉树的属性
 - [ ] 二叉搜索树
 - [ ] 公共祖先与路径问题
@@ -694,4 +696,61 @@ class Solution:
             if node.right:
                 stack.append(node.right)
         return root
+```
+
+#### 对称二叉树
+
+[对称二叉树](https://leetcode.cn/problems/symmetric-tree/description/)
+
+![对称二叉树学习截图](assets/symmetric-tree.png)
+
+##### 递归法
+
+```python
+class Solution:
+    def compare(self , left , right):
+        #首先排除空结点情况
+        if left is None and right is not None:
+            return False
+        elif left is not None and right is None:
+            return False
+        elif left is None and right is None:
+            return True
+        #再排除非空但数值不同的情况
+        elif left.val != right.val:
+            return False
+        #开始递归
+        outside = self.compare(left.left , right.right)#外
+        inside = self.compare(left.right , right.left)#内
+        result = outside and inside
+        return result
+    def isSymmetric(self, root: TreeNode | None) -> bool:
+        if not root:
+            return True
+        result = self.compare(root.left , root.right)
+        return result
+```
+
+##### 层序遍历法
+
+```python
+class Solution:
+    def isSymmetric(self, root: TreeNode | None) -> bool:
+        if not root:
+            return True
+        myque = deque([root])
+        while myque:
+            level_size = len(myque)
+            level_val = []#存储每一层节点的值
+            for i in range(level_size):
+                node = myque.popleft()
+                if node:
+                    level_val.append(node.val)
+                    myque.append(node.left)
+                    myque.append(node.right)
+                else:
+                    level_val.append(None)
+            if level_val != level_val[::-1]:
+                return False
+        return True
 ```
