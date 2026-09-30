@@ -517,3 +517,35 @@ class Solution:
 ```
 
 float('-inf')代表负无穷大，float('inf')代表正无穷大
+
+#### 填充每个节点的下一个右侧节点指针
+
+[填充每个节点的下一个右侧节点指针](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/description/)
+
+![填充右侧节点指针学习截图](assets/connect-next-right.png)
+
+```python
+
+class Solution:
+    def connect(self, root: 'Optional[Node]') -> 'Optional[Node]':
+        if not root:
+            return root
+        #定义两端队列
+        myque = deque([root])
+        #前一个结点
+        pre = None
+        while myque:
+            level_size = len(myque)
+            #前一个结点
+            pre = None#每一层开始的时候都要更新
+            for i in range(level_size):
+                node = myque.popleft()
+                if pre:
+                    pre.next = node
+                pre = node
+                if node.left:
+                    myque.append(node.left)
+                if node.right:
+                    myque.append(node.right)
+        return root
+```
