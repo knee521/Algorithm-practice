@@ -634,3 +634,64 @@ class Solution:
                     return deepth
         return deepth
 ```
+
+#### 翻转二叉树
+
+[翻转二叉树](https://leetcode.cn/problems/invert-binary-tree/description/)
+
+只要保证每个结点的左右子节点交换就可以
+
+![翻转二叉树学习截图](assets/invert-binary-tree.png)
+
+##### 递归法
+
+前序遍历
+
+```python
+class Solution:
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if not root:
+            return None
+        root.left , root.right = root.right , root.left
+        self.invertTree(root.left)
+        self.invertTree(root.right)
+        return root
+```
+
+##### 层序遍历
+
+```python
+class Solution:
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if not root:
+            return None
+        myque = deque([root])
+        while myque:
+            level_size = len(myque)
+            for i in range(level_size):
+                node = myque.popleft()
+                node.left , node.right = node.right , node.left
+                if node.left:
+                    myque.append(node.left)
+                if node.right:
+                    myque.append(node.right)
+        return root
+```
+
+##### 迭代法
+
+```python
+class Solution:
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if not root:
+            return None
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            node.left , node.right = node.right , node.left
+            if node.left:
+                stack.append(node.left)
+            if node.right:
+                stack.append(node.right)
+        return root
+```
