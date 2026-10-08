@@ -879,3 +879,26 @@ class Solution:
         #走到这里了，说明没有找到子树
         return False
 ```
+
+#### N叉树的最大深度
+
+[N叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-n-ary-tree/)
+
+![N叉树的最大深度学习截图](assets/n-ary-tree-maximum-depth.png)
+
+```python
+class Solution:
+    def maxDepth(self, root: 'Node') -> int:
+        if not root:
+            return 0
+        myque = deque([root])
+        maxdepth = 0
+        while myque:
+            maxdepth += 1
+            level_size = len(myque)
+            for i in range(level_size):
+                node = myque.popleft()
+                for child in node.children:
+                    myque.append(child)
+        return maxdepth
+```
