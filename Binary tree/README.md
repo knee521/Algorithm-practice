@@ -804,3 +804,78 @@ class Solution:
             myque_q.append(node_q.right)#即使节点是空的，也要把None放入队列中
         return not myque_p and not myque_q
 ```
+
+#### 另一颗树的子树
+
+[另一棵树的子树](https://leetcode.cn/problems/subtree-of-another-tree/)
+
+![另一棵树的子树学习截图](assets/subtree-of-another-tree.png)
+
+##### 递归法
+
+```python
+class Solution:
+    def isSame(self , p , q):
+        if p is None and q is None:
+            return True
+        if p is None or q is None:
+            return False
+        if p.val != q.val:
+            return False
+        leftsame = self.isSame(p.left , q.left)
+        rightsame = self.isSame(p.right , q.right)
+        return leftsame and rightsame
+
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        if subRoot is None:
+            return True
+        elif root is None:
+            return False
+        if self.isSame(root , subRoot):
+            return True
+        #往下找一下左右节点是否存在另一颗子树
+        left = self.isSubtree(root.left , subRoot)
+        right = self.isSubtree(root.right , subRoot)
+        return left or right
+```
+
+##### 层序遍历法
+
+```python
+class Solution:
+    #用来判断以改起点为根节点的两棵树是否相同
+    def isSametree(self , p , q ):
+        myque_p = deque([p])
+        myque_q = deque([q])
+        while myque_p and myque_q:
+            #去除节点
+            node_p = myque_p.popleft()
+            node_q = myque_q.popleft()
+            #比较节点
+            if node_p is None and node_q is None:
+                continue
+            if node_p is None or node_q is None:
+                return False
+            if node_p.val != node_q.val:
+                return False
+            myque_p.append(node_p.left)
+            myque_p.append(node_p.right)#即使节点是空的，也要把None放入队列中
+            myque_q.append(node_q.left)
+            myque_q.append(node_q.right)#即使节点是空的，也要把None放入队列中
+        return not myque_p and not myque_q
+
+    #用来找子树的对应匹配的起点
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        myque = deque([root])
+        while myque:
+            node = myque.popleft()
+            if self.isSametree(node , subRoot):
+                return True
+            #说明起点找错了，继续往下找左右子树节点
+            if node.left:
+                myque.append(node.left)
+            if node.right:
+                myque.append(node.right)
+        #走到这里了，说明没有找到子树
+        return False
+```
