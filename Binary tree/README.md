@@ -902,3 +902,60 @@ class Solution:
                     myque.append(child)
         return maxdepth
 ```
+
+
+
+#### 完全二叉树的节点个数
+
+[完全二叉树的节点个数](https://leetcode.cn/problems/count-complete-tree-nodes/description/)
+
+![完全二叉树的节点个数学习截图](assets/count-complete-tree-nodes.png)
+
+##### 二叉树的层序遍历方法
+
+这个方法统计是正确的，但是效率不满足力扣的条件
+
+```python
+class Solution:
+    def countNodes(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        myque = deque([root])
+        result = 0
+        while myque:
+            level_size = len(myque)
+            for i in range(level_size):
+                result += 1#记录节点数量
+                node = myque.popleft()
+                if node.left:
+                    myque.append(node.left)
+                if node.right:
+                    myque.append(node.right)
+        return result
+```
+
+##### 递归法
+
+```python
+class Solution:
+    def countNodes(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        #分别统计从根节点出发的最左路径和最右路径的高度
+        node = root
+        left_height = 0
+        while node:
+            left_height += 1
+            node = node.left
+
+        node = root
+        right_height = 0
+        while node:
+            right_height += 1
+            node = node.right
+        #如果左右子树的最大高度相同，说明是满二叉树
+        if left_height == right_height:
+            return 2 ** left_height - 1
+        else:
+            return (self.countNodes(root.left) + self.countNodes(root.right) + 1)#加1是加上根节点，到这里的时候node已经是None了
+```
