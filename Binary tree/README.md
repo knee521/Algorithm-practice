@@ -754,3 +754,53 @@ class Solution:
                 return False
         return True
 ```
+
+#### 相同的树
+
+[相同的树](https://leetcode.cn/problems/same-tree/description/)
+
+![相同的树学习截图](assets/same-tree.png)
+
+##### 递归法
+
+```python
+class Solution:
+    def isSameTree(self, p: TreeNode | None, q: TreeNode | None) -> bool:
+        if p is not None and q is None:
+            return False
+        elif p is None and q is not None:
+            return False
+        elif p is None and q is None:
+            return True
+        elif p.val != q.val:
+            return False
+        #已经排除节点为空、不为空但值不同的情况，下面继续比较两棵树对应的子节点的情况
+        leftsame = self.isSameTree(p.left , q.left)#比较两个树的左节点是否相同
+        rightsame = self.isSameTree(p.right , q.right)#比较两个树的右节点是否相同
+        return leftsame and rightsame
+```
+
+##### 层序遍历法
+
+```python
+class Solution:
+    def isSameTree(self, p: TreeNode | None, q: TreeNode | None) -> bool:
+        myque_p = deque([p])
+        myque_q = deque([q])
+        while myque_p and myque_q:
+            #去除节点
+            node_p = myque_p.popleft()
+            node_q = myque_q.popleft()
+            #比较节点
+            if node_p is None and node_q is None:
+                continue
+            if node_p is None or node_q is None:
+                return False
+            if node_p.val != node_q.val:
+                return False
+            myque_p.append(node_p.left)
+            myque_p.append(node_p.right)#即使节点是空的，也要把None放入队列中
+            myque_q.append(node_q.left)
+            myque_q.append(node_q.right)#即使节点是空的，也要把None放入队列中
+        return not myque_p and not myque_q
+```
