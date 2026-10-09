@@ -959,3 +959,73 @@ class Solution:
         else:
             return (self.countNodes(root.left) + self.countNodes(root.right) + 1)#加1是加上根节点，到这里的时候node已经是None了
 ```
+
+#### 平衡二叉树
+
+[平衡二叉树](https://leetcode.cn/problems/balanced-binary-tree/description/)
+
+![平衡二叉树学习截图](assets/balanced-binary-tree.png)
+
+##### 递归法
+
+```python
+class Solution:
+    #用来获取改节点的高度
+    #如果以该节点为根节点，他不是平衡二叉树，即左右子树高度差超过1，那么返回-1
+    #如果是二叉树，即左右子树高度差小于等于1，那么返回该节点的高度值
+    def getHeight(self , node):
+        #确认终止条件
+        if node is None:
+            return 0
+        #确认单层递归逻辑:后序遍历用来求高度
+        leftHeight = self.getHeight(node.left)
+        if leftHeight == -1:
+            return -1
+        rightHeight = self.getHeight(node.right)
+        if rightHeight == -1:
+            return -1
+        if abs(leftHeight - rightHeight) > 1:#不是平衡二叉树
+            return -1
+        else:#左右子树高度差小于等于1，是平衡二叉树
+            return (1 + max(leftHeight , rightHeight))
+    def isBalanced(self, root: TreeNode | None) -> bool:
+        if self.getHeight(root) == -1:
+            return False
+        else:
+            return True
+```
+
+#### 二叉树的所有路径
+
+[二叉树的所有路径](https://leetcode.cn/problems/binary-tree-paths/description/)
+
+![二叉树的所有路径学习截图](assets/binary-tree-paths.png)
+
+```python
+class Solution:
+    #首先确认递归参数：当前节点、path数组记录路径值、result列表记录结果，字符串类型
+    #终止条件是遇到叶节点，即当前节点不为空，但是左右子节点为空
+    def mydigui(self , node , path , result):
+        #单层递归遍历，前序遍历
+        path.append(node.val)#中
+        #终止条件
+        if node.left is None and node.right is None:
+            str_path = '->'.join(map(str , path))#map是迭代器，用来把path这个对象转换为str类型
+            result.append(str_path)
+            return result
+        #单层递归遍历，前序遍历
+        if node.left:#左
+            self.mydigui(node.left , path , result)
+            path.pop()#回溯
+        if node.right:
+            self.mydigui(node.right , path , result)
+            path.pop()#回溯
+
+    def binaryTreePaths(self, root: TreeNode | None) -> list[str]:
+        path = []
+        result = []
+        if root is None:
+            return result
+        self.mydigui(root , path , result)
+        return result
+```
