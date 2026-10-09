@@ -1049,7 +1049,35 @@ class Solution:
         left_val = self.sumOfLeftLeaves(root.left)
         if root.left is not None and root.left.left is None and root.left.right is None:#左叶子节点的父节点不为空，其左右子节点为空
             left_val = root.left.val
-        right_val = self.sumOfLeftLeaves(root.right)
+        right_val = self.sumOfLeftLeaves(root.right)#右子树右边的叶子节点的值不属于左叶子，所以不考虑
         mysum = left_val + right_val
         return mysum
+```
+
+#### 找树左下角的值
+
+[找树左下角的值](https://leetcode.cn/problems/find-bottom-left-tree-value/description/)
+
+![找树左下角的值学习截图](assets/find-bottom-left-tree-value.png)
+
+##### 层序遍历法
+
+```python
+class Solution:
+    def findBottomLeftValue(self, root: TreeNode | None) -> int:
+        if root is None:
+            return 0
+        myque = deque([root])
+        result = 0#用来记录最后一行最左边的元素
+        while myque:
+            level_size = len(myque)
+            for i in range(level_size):
+                node = myque.popleft()
+                if i == 0:
+                    result = node.val
+                if node.left:
+                    myque.append(node.left)
+                if node.right:
+                    myque.append(node.right)
+        return result
 ```
