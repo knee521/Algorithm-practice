@@ -1029,3 +1029,27 @@ class Solution:
         self.mydigui(root , path , result)
         return result
 ```
+
+#### 左叶子之和
+
+[左叶子之和](https://leetcode.cn/problems/sum-of-left-leaves/description/)
+
+![左叶子之和学习截图](assets/sum-of-left-leaves.png)
+
+```python
+class Solution:
+    #确定递归参数：根节点，返回左叶子之和
+    def sumOfLeftLeaves(self, root: Optional[TreeNode]) -> int:
+        #终止条件：当前节点是None或者当前节点的左右子节点都是None
+        if root is None:
+            return 0
+        if root.left is None and root.right is None:
+            return 0
+        #单层递归逻辑：记录左子树和右子树的左叶子数值，最后把这两个数相加.后序遍历
+        left_val = self.sumOfLeftLeaves(root.left)
+        if root.left is not None and root.left.left is None and root.left.right is None:#左叶子节点的父节点不为空，其左右子节点为空
+            left_val = root.left.val
+        right_val = self.sumOfLeftLeaves(root.right)
+        mysum = left_val + right_val
+        return mysum
+```
