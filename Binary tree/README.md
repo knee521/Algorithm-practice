@@ -1081,3 +1081,77 @@ class Solution:
                     myque.append(node.right)
         return result
 ```
+
+#### 路径总和
+
+[路径总和](https://leetcode.cn/problems/path-sum/)
+
+![路径总和学习截图](assets/path-sum.png)
+
+##### 递归法
+
+```python
+class Solution:
+    #确定递归参数：根节点、目标值
+    def mydigui(self , node , target):
+        #终止条件：找到叶子节点并且target等于0或者已经到叶子节点了，但是target还没等于0
+        if node.left is None and node.right is None and target == 0:
+            return True
+        if node.left is None and node.right is None and target != 0:
+            return False
+        #单层递归逻辑：前序遍历，
+        if node.left:
+            if self.mydigui(node.left , target - node.left.val):
+                return True#因为不需要遍历整个树，所以要有返回值。如果要遍历整个树，就不要返回值
+        if node.right:
+            if self.mydigui(node.right , target - node.right.val):
+                return True
+
+        return False
+    def hasPathSum(self, root: TreeNode | None, targetSum: int) -> bool:
+        if root is None:
+            return False
+        return self.mydigui(root , targetSum - root.val)
+```
+
+#### 路径总和Ⅱ
+
+[路径总和Ⅱ](https://leetcode.cn/problems/path-sum-ii/description/)
+
+![路径总和Ⅱ学习截图](assets/path-sum-ii.png)
+
+##### 递归法
+
+```python
+class Solution:
+    #定义实例属性
+    def __init__(self):
+        self.result = []#记录最终所有路径值
+        self.path = []#记录路径值
+    #确认递归参数：根节点、目标值
+    def mydigui(self , node , target):
+    #递归结束条件：遇到叶子节点并且target等于0或者遇到叶子节点target不等于0
+        if node.left is None and node.right is None and target == 0:
+            #这里存在的问题是：保存的是同一个路径列表的引用，没有保存当时路径的副本。 后续回溯执行 self.path.pop() 时，result 中已经保存的路径也会跟着变化。
+            #所以用.copy()会创建一个新的列表，保存当前路径。后面修改 self.path，就不会影响这个副本
+            self.result.append(self.path.copy())
+            return
+        if node.left is None and node.right is None:
+            return
+    #单层递归逻辑:前序遍历，递归前，把当前子节点的值放到path里
+        if node.left:
+            self.path.append(node.left.val)
+            self.mydigui(node.left , target - node.left.val)
+            self.path.pop()#把node.left弹出，回溯到根节点，从而遍历右子节点,退回当前父节点对应的路径
+        if node.right:
+            self.path.append(node.right.val)
+            self.mydigui(node.right , target - node.right.val)
+            self.path.pop()
+
+    def pathSum(self, root: TreeNode | None, targetSum: int) -> list[list[int]]:
+        if root is None:
+            return self.result
+        self.path.append(root.val)
+        self.mydigui(root , targetSum - root.val)
+        return self.result
+```
