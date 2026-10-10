@@ -1155,3 +1155,59 @@ class Solution:
         self.mydigui(root , targetSum - root.val)
         return self.result
 ```
+
+#### 从中序与后序遍历序列构造二叉树
+
+[从中序与后序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/description/)
+
+![从中序与后序遍历序列构造二叉树学习截图](assets/build-tree-inorder-postorder.png)
+
+```python
+class Solution:
+    def buildTree(self, inorder: list[int], postorder: list[int]) -> TreeNode | None:
+        #后序数组为空，说明没有根节点
+        if not postorder:
+            return None#这个返回值会被赋值给左右子节点，子节点的类型是TreeNode，而[]是列表类型，出现了类型冲突
+        #在后序中找切割点，也就是中间节点
+        root_val = postorder[-1]
+        newroot = TreeNode(val = root_val)
+        #在中序中根据切割点进行切割
+        separator_id =  inorder.index(root_val)#直接返回中序数组中root_val的下标
+        inorder_left = inorder[ : separator_id]#这是左闭右开区间
+        inorder_right = inorder[separator_id + 1 : ]#这是左闭右开区间
+        #根据中序中切割的左中序和右中序进行切割后序数组,因为后序数组的左右后序数组的长度和中序数组的左右中序数组长度一样
+        postorder_left = postorder[ : len(inorder_left)]#这是左闭右开区间
+        postorder_right = postorder[len(inorder_left) : len(postorder) - 1]#这是左闭右开区间,要去掉最后一个根节点.左右中
+        #最后递归左右区间
+        newroot.left = self.buildTree(inorder_left , postorder_left)
+        newroot.right = self.buildTree(inorder_right , postorder_right)
+        return newroot
+```
+
+#### 从前序与中序遍历序列构造二叉树
+
+[从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/)
+
+![从前序与中序遍历序列构造二叉树学习截图](assets/build-tree-preorder-inorder.png)
+
+```python
+class Solution:
+    def buildTree(self, preorder: list[int], inorder: list[int]) -> TreeNode | None:
+        #前序数组为空，说明没有根节点
+        if not preorder:
+            return None
+        #在前序列表中找切割点，就是前序数组的第一个元素为根节点
+        root_val = preorder[0]
+        root = TreeNode(val = root_val)
+        #在中序列表中找到切割点的下标，进行切割成左右中序列表
+        separator_id = inorder.index(root_val)
+        inorder_left = inorder[ : separator_id]#左闭右开
+        inorder_right = inorder[separator_id + 1 : ]#要跳过中间节点
+        #根据中序列表切割成的左右中序列表，进行切割前序列表，因为前序列表的左右前序列表的长度和中序列表的左右中序列表长度一样
+        preorder_left = preorder[1 : 1 + len(inorder_left)]#这里截至下标也要加1，这样就相当于整个数组都往右移动一位，就可以跳过根节点
+        preorder_right = preorder[1 + len(inorder_left) : ]
+        #递归左右子树
+        root.left = self.buildTree(preorder_left , inorder_left)
+        root.right = self.buildTree(preorder_right , inorder_right)
+        return root
+```
