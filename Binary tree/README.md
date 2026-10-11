@@ -1211,3 +1211,33 @@ class Solution:
         root.right = self.buildTree(preorder_right , inorder_right)
         return root
 ```
+
+#### 最大二叉树
+
+[最大二叉树](https://leetcode.cn/problems/maximum-binary-tree/description/)
+
+![最大二叉树学习截图](assets/maximum-binary-tree.png)
+
+```python
+class Solution:
+    #首先确认递归参数：左或右区间的数组
+    def constructMaximumBinaryTree(self, nums: list[int]) -> TreeNode | None:
+        #终止条件
+        if len(nums) == 1:#传入的数组长度是1，说明到了叶子节点
+            node = TreeNode(nums[0])
+            return node
+        #单层递归逻辑
+        #1.先找到区间内的最大值及其下标，并创建以其为根节点的树
+        max_value = max(nums)
+        max_id = nums.index(max_value)
+        node = TreeNode(max_value)
+        #2.根据最大值（根节点）的下标切割左右子树区间
+        #3.分别递归左右子树
+        if max_id > 0:#左
+            nums_left = nums[ : max_id]#左闭右开
+            node.left = self.constructMaximumBinaryTree(nums_left)
+        if max_id < len(nums) - 1:#右
+            nums_right = nums[max_id + 1 : ]#左闭右开
+            node.right = self.constructMaximumBinaryTree(nums_right)
+        return node
+```
