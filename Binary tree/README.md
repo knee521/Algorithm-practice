@@ -1241,3 +1241,29 @@ class Solution:
             node.right = self.constructMaximumBinaryTree(nums_right)
         return node
 ```
+
+#### 合并二叉树
+
+[合并二叉树](https://leetcode.cn/problems/merge-two-binary-trees/description/)
+
+![合并二叉树学习截图](assets/merge-two-binary-trees.png)
+
+```python
+class Solution:
+    #确认递归参数：两个树的根节点，返回合并树的根节点,把root1作为合并树的根节点
+    def mergeTrees(self, root1: TreeNode | None, root2: TreeNode | None) -> TreeNode | None:
+        #递归结束条件：root1为None，返回root2节点，root2为None，返回root1节点
+        if root1 is None :
+            return root2
+        if root2 is None:
+            return root1
+        #单层递归逻辑:前序遍历
+        #把root1节点的值加上root2对应节点的值
+        root1.val += root2.val #中
+        #root1.left.val += root2.left.val#左 如果加这两句，那么root1的左右子节点就重复加了两次
+        #root1.right.val += root2.right.val#右
+        #左右子树分别进行递归
+        root1.left = self.mergeTrees(root1.left , root2.left)#左
+        root1.right = self.mergeTrees(root1.right , root2.right)#右
+        return root1
+```
