@@ -1323,3 +1323,32 @@ class Solution:
         return result_left and result_right
 
 ```
+
+#### 二叉搜索树的最小绝对差
+
+[二叉搜索树的最小绝对差](https://leetcode.cn/problems/minimum-absolute-difference-in-bst/description/)
+
+![二叉搜索树的最小绝对差学习截图](assets/minimum-absolute-difference-in-bst.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.pre = None
+        self.result = float('inf')
+    #确定递归参数：根节点，无返回值，因为有全局变量result
+    def mydigui(self , node):
+         #终止条件：当前根节点为None
+        if node is None:
+            return
+        #单层递归逻辑：中序遍历
+        self.mydigui(node.left)
+        #保存node-pre的最小值
+        if self.pre is not None:
+            self.result = min(self.result , node.val - self.pre.val)
+        self.pre = node
+        self.mydigui(node.right)
+
+    def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
+        self.mydigui(root)
+        return self.result
+```
