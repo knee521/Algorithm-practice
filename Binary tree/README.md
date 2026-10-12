@@ -1267,3 +1267,30 @@ class Solution:
         root1.right = self.mergeTrees(root1.right , root2.right)#右
         return root1
 ```
+
+#### 二叉搜索树中的搜索
+
+[二叉搜索树中的搜索](https://leetcode.cn/problems/search-in-a-binary-search-tree/description/)
+
+![二叉搜索树中的搜索学习截图](assets/search-in-a-binary-search-tree.png)
+
+```python
+#二叉搜索树是一个有序树：
+#若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值；
+#若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值；
+#它的左、右子树也分别为二叉搜索树
+class Solution:
+    #确定递归的参数：根节点、目标值，返回目标节点
+    def searchBST(self, root: TreeNode | None, val: int) -> TreeNode | None:
+        #终止条件：1.根节点为None 2.找到目标值
+        if root is None or root.val == val:
+            return root
+        #单层递归逻辑
+        #1.如果根节点的值大于val，就递归左子树
+        #2.如果根节点的值小于val，就递归右子树
+        if root.val > val :
+            result = self.searchBST(root.left , val)
+        if root.val < val:
+            result = self.searchBST(root.right , val)
+        return result
+```
