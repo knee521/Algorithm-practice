@@ -1294,3 +1294,32 @@ class Solution:
             result = self.searchBST(root.right , val)
         return result
 ```
+
+#### 验证二叉搜索树
+
+[验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/description/)
+
+![验证二叉搜索树学习截图](assets/validate-binary-search-tree.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.maxvalue = float('-inf')
+    #递归参数：根节点，返回布尔类型
+    def isValidBST(self, root: TreeNode | None) -> bool:
+        #结束条件：根节点为None
+        if root is None:
+            return True
+        #单层递归逻辑：中序遍历
+        #左
+        result_left = self.isValidBST(root.left)
+        #中
+        if self.maxvalue < root.val:
+            self.maxvalue = root.val
+        else:
+            return False
+        #右
+        result_right = self.isValidBST(root.right)
+        return result_left and result_right
+
+```
