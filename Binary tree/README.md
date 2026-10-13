@@ -1394,3 +1394,36 @@ class Solution:
         self.mydigui(root)
         return self.result
 ```
+
+#### 二叉树的最近祖先
+
+[二叉树的最近祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/description/)
+
+![二叉树的最近公共祖先学习截图](assets/lowest-common-ancestor-of-a-binary-tree.png)
+
+```python
+class Solution:
+    #递归参数：根节点，p和q
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        #结束条件：根节点为空，返回None；根节点等于p或q，返回根节点
+        if root is None:
+            return None
+        if root == p or root == q:
+            return root
+        #单层递归逻辑：后序遍历
+        left = self.lowestCommonAncestor(root.left , p , q)
+        right = self.lowestCommonAncestor(root.right , p , q)
+        if left is not None and right is not None:#left和right不是布尔类型，所以不能写成not left
+            return root
+        elif left is not None and right is None:
+            return left
+        elif left is None and right is not None:
+            return right
+        else:
+            return None
+
+```
+
+1. 求最小公共祖先，需要从底向上遍历，那么二叉树，只能通过后序遍历（即：回溯）实现从底向上的遍历方式。
+2. 在回溯的过程中，必然要遍历整棵二叉树，即使已经找到结果了，依然要把其他节点遍历完，因为要使用递归函数的返回值（也就是代码中的left和right）做逻辑判断。
+3. 要理解如果返回值left为空，right不为空为什么要返回right，为什么可以用返回right传给上一层结果。
