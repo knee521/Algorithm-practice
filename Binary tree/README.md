@@ -1352,3 +1352,45 @@ class Solution:
         self.mydigui(root)
         return self.result
 ```
+
+#### 二叉搜索树中的众数
+
+[二叉搜索树中的众数](https://leetcode.cn/problems/find-mode-in-binary-search-tree/description/)
+
+![二叉搜索树中的众数学习截图](assets/find-mode-in-binary-search-tree.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.pre = None
+        self.count = 0
+        self.maxcount = 0
+        self.result =[]
+    #确定递归参数：根节点
+    def mydigui(self , node):
+        #结束条件
+        if node is None:
+            return
+        #单层递归逻辑：中序遍历
+        #因为二叉搜索的特点：结点左子树中所含节点的值 小于等于 当前节点的值，结点右子树中所含节点的值 大于等于 当前节点的值
+        #二叉搜索树中序遍历是非递减的数组。所以相同的值一定挨在一起
+        self.mydigui(node.left)
+        if self.pre is None:
+            self.count = 1
+        elif self.pre.val == node.val:
+            self.count += 1
+        elif self.pre.val != node.val:
+            self.count = 1
+        self.pre = node#更新前一个结点
+        if self.count == self.maxcount:
+            self.result.append(node.val)
+        if self.count > self.maxcount:
+            self.maxcount = self.count
+            self.result = []
+            self.result.append(node.val)
+        self.mydigui(node.right)
+
+    def findMode(self, root: TreeNode | None) -> list[int]:
+        self.mydigui(root)
+        return self.result
+```
