@@ -1427,3 +1427,48 @@ class Solution:
 1. 求最小公共祖先，需要从底向上遍历，那么二叉树，只能通过后序遍历（即：回溯）实现从底向上的遍历方式。
 2. 在回溯的过程中，必然要遍历整棵二叉树，即使已经找到结果了，依然要把其他节点遍历完，因为要使用递归函数的返回值（也就是代码中的left和right）做逻辑判断。
 3. 要理解如果返回值left为空，right不为空为什么要返回right，为什么可以用返回right传给上一层结果。
+
+#### 二叉搜索树的最近公共祖先
+
+[二叉搜索树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/description/)
+
+![二叉搜索树的最近公共祖先学习截图](assets/lowest-common-ancestor-of-a-binary-search-tree.png)
+
+从上往下搜索，遇到第一个结点的值在p和q之间，那么这点结点就是p和q的最近公共祖先
+
+```python
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        #递归结束条件：根节点为None
+        if root is None:
+            return root
+        #单层递归逻辑：后序遍历  只要当前节点值在p和q之间，就直接返回
+        if root.val > p.val and root.val > q.val:
+            return self.lowestCommonAncestor(root.left , p , q)
+        if root.val < p.val and root.val < q.val:
+            return self.lowestCommonAncestor(root.right , p ,q)
+        return root
+
+```
+
+#### 二叉搜索树中的插入操作
+
+[二叉搜索树中的插入操作](https://leetcode.cn/problems/insert-into-a-binary-search-tree/description/)
+
+![二叉搜索树中的插入操作学习截图](assets/insert-into-a-binary-search-tree.png)
+
+```python
+class Solution:
+    #找到空节点插进去
+    def insertIntoBST(self, root: TreeNode | None, val: int) -> TreeNode | None:
+        if root is None:
+            node = TreeNode(val)
+            return node
+        #单层递归逻辑
+        if root.val > val:
+            root.left = self.insertIntoBST(root.left , val)
+        if root.val < val:
+            root.right = self.insertIntoBST(root.right , val)
+        return root
+```
