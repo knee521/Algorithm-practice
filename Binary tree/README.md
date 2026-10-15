@@ -1532,3 +1532,26 @@ class Solution:
         root.right = self.trimBST(root.right , low , high)
         return root
 ```
+
+#### 将有序数组转换为二叉搜索树
+
+[将有序数组转换为二叉搜索树](https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/description/)
+
+![将有序数组转换为二叉搜索树学习截图](assets/convert-sorted-array-to-binary-search-tree.png)
+
+```python
+class Solution:
+    def mydigui(self ,nums , left , right):
+        #如果左边界元素大于右边界元素，就返回None.左闭右闭区间
+        if left > right:return None
+        #单层递归逻辑
+        mid = (left + right)  // 2
+        node = TreeNode(nums[mid])
+        node.left = self.mydigui(nums , left , mid - 1)
+        node.right = self.mydigui(nums , mid + 1 , right)
+        return node
+
+    def sortedArrayToBST(self, nums: list[int]) -> TreeNode | None:
+        root = self.mydigui(nums , 0 ,len(nums) - 1)
+        return root
+```
