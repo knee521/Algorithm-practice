@@ -1508,3 +1508,27 @@ class Solution:
             root.right = self.deleteNode(root.right , key)
         return root
 ```
+
+#### 修建二叉搜索树
+
+[修建二叉搜索树](https://leetcode.cn/problems/trim-a-binary-search-tree/description/)
+
+![修剪二叉搜索树学习截图](assets/trim-a-binary-search-tree.png)
+
+```python
+class Solution:
+    def trimBST(self, root: TreeNode | None, low: int, high: int) -> TreeNode | None:
+        if root is None:
+            return root
+        #单层递归逻辑
+        #先寻找有效节点
+        if root.val < low:
+            #从根节点的右子树寻找符合条件的节点，并返回其根节点
+            return self.trimBST(root.right , low , high)
+        if root.val > high:
+            return self.trimBST(root.left , low , high)
+        #将寻找到的有效节点返回给根节点
+        root.left = self.trimBST(root.left , low , high)
+        root.right = self.trimBST(root.right , low , high)
+        return root
+```
