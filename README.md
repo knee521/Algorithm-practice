@@ -12,6 +12,7 @@
 - [`Hash table/`](./Hash%20table/)：哈希表专题
 - [Stock/](./Stock/)：股票算法专题
 - [Binary tree/](./Binary%20tree/)：二叉树专题
+- [Backtracking algorithms/](./Backtracking%20algorithms/)：回溯算法专题
 
 ## 学习约定
 
