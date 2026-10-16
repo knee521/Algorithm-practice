@@ -4,7 +4,7 @@
 
 ## 学习内容
 
-- [ ] 回溯算法基础与递归框架
+- [x] 回溯算法基础与递归框架
 - [ ] 组合问题
 - [ ] 分割问题
 - [ ] 子集问题
@@ -30,8 +30,59 @@
 
 ## 复盘
 
-> 后续根据每道题的注释和笔记，总结选择范围、递归状态、回溯恢复、去重与剪枝，以及实际遇到的问题。
+> 回溯三部曲：
+>
+> 1.确定回溯函数返回值与参数
+>
+> 2.确定终止条件
+>
+> 3.回溯搜索的遍历过程
+>
+> 模板：
+>
+> ```
+> void backtracking(参数) {
+>     if (终止条件) {
+>         存放结果;
+>         return;
+>     }
+>
+>     for (选择：本层集合中元素（树中节点孩子的数量就是集合的大小）) {
+>         处理节点;
+>         backtracking(路径，选择列表); // 递归
+>         回溯，撤销处理结果
+>     }
+> }
+> ```
+>
+>
 
 ## 代码记录
 
-> 在这里补充每道题的题目链接、实现代码和个人学习笔记。
+#### 组合
+
+[组合](https://leetcode.cn/problems/combinations/description/)
+
+![组合学习截图](assets/combinations.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.result = []
+        self.path = []
+    #startindex为了防止出现重复组合
+    def backtracing(self , n , k , startindex):
+        #回溯终止条件
+        if len(self.path) == k:
+            self.result.append(self.path[:])#复制当前列表，把这一刻的组合保存下来。之后修改 self.path，不会影响已经保存的组合。如果是self.path，保存的是同一个列表对象的引用。后续执行 append()、pop() 时，这个列表会变化，result 中看到的内容也会变化。
+            return
+        #回溯搜索的遍历过程
+        for i in range(startindex , n + 1):
+            self.path.append(i)
+            self.backtracing(n , k , i + 1)
+            self.path.pop()
+
+    def combine(self, n: int, k: int) -> list[list[int]]:
+        self.backtracing(n , k , 1)
+        return self.result
+```
