@@ -5,7 +5,7 @@
 ## 学习内容
 
 - [x] 回溯算法基础与递归框架
-- [ ] 组合问题
+- [x] 组合问题
 - [ ] 分割问题
 - [ ] 子集问题
 - [ ] 排列问题
@@ -85,4 +85,35 @@ class Solution:
     def combine(self, n: int, k: int) -> list[list[int]]:
         self.backtracing(n , k , 1)
         return self.result
+```
+
+#### 组合总和Ⅱ
+
+[组合总和Ⅱ](https://leetcode.cn/problems/combination-sum-iii/description/)
+
+![组合总和Ⅲ学习截图](assets/combination-sum-iii.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.result = []
+        self.path = []
+    def backtracing(self , n , k , startindex):
+        #终止条件
+        if len(self.path) == k:
+            if n == 0:
+                self.result.append(self.path[:])
+            return
+        #回溯遍历过程
+        for i in range(startindex , 10):
+            n -= i
+            self.path.append(i)#保存当前元素
+            self.backtracing(n , k , i + 1)#回溯
+            n += i#必须回溯，才能让下一轮选择从相同的剩余目标和开始。
+            self.path.pop()
+
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        self.backtracing(n , k , 1)
+        return self.result
+
 ```
