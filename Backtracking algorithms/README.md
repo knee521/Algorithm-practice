@@ -117,3 +117,43 @@ class Solution:
         return self.result
 
 ```
+
+#### 电话号码的字母组合
+
+[电话号码的字母组合](https://leetcode.cn/problems/letter-combinations-of-a-phone-number/description/)
+
+![电话号码的字母组合学习截图](assets/letter-combinations-of-a-phone-number.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.letterMap = [
+            "",     # 0
+            "",     # 1
+            "abc",  # 2
+            "def",  # 3
+            "ghi",  # 4
+            "jkl",  # 5
+            "mno",  # 6
+            "pqrs", # 7
+            "tuv",  # 8
+            "wxyz"  # 9
+        ]
+        self.result = []
+        self.path = ""
+    def backtracing(self , digits , index):
+        #结束条件
+        if index == len(digits):
+            self.result.append(self.path)
+            return
+        #回溯遍历过程
+        nums = int(digits[index])
+        letter = self.letterMap[nums]
+        for i in range(len(letter)):
+            self.path += letter[i]
+            self.backtracing(digits , index + 1)
+            self.path = self.path[:-1]#删除最后一位元素
+    def letterCombinations(self, digits: str) -> list[str]:
+        self.backtracing(digits , 0)
+        return self.result
+```
