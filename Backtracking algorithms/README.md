@@ -157,3 +157,32 @@ class Solution:
         self.backtracing(digits , 0)
         return self.result
 ```
+
+#### 组合总和
+
+[组合总和](https://leetcode.cn/problems/combination-sum/description/)
+
+![组合总和学习截图](assets/combination-sum.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.result = []
+        self.path = []
+    def backtracing(self , candidates , target , startindex):
+        if target == 0:
+            self.result.append(self.path[:])
+            return
+        if target < 0:
+            return
+        #单层回溯遍历过程
+        for i in range(startindex , len(candidates)):
+            target -= candidates[i]
+            self.path.append(candidates[i])
+            self.backtracing(candidates , target , i)#题目说可以重复选，所以不是下一次遍历起点不是i+1，应该是i
+            target += candidates[i]
+            self.path.pop()
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        self.backtracing(candidates , target , 0)
+        return self.result
+```
