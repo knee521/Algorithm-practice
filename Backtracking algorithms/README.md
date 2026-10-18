@@ -186,3 +186,41 @@ class Solution:
         self.backtracing(candidates , target , 0)
         return self.result
 ```
+
+#### 组合总和Ⅱ
+
+[组合总和Ⅱ](https://leetcode.cn/problems/combination-sum-ii/description/)
+
+![组合总和Ⅱ学习截图](assets/combination-sum-ii.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.result = []
+        self.path = []
+    def backtracing(self , candidates , target , startindex , used):
+        if target == 0:
+            self.result.append(self.path[:])
+            return
+        if target < 0:
+            return
+        #used[i - 1] == true，说明同一树枝candidates[i - 1]使用过
+        #used[i - 1] == false，说明同一树层candidates[i - 1]使用过
+        #要对同一树层使用过的元素进行跳过
+        for i in range(startindex , len(candidates)):
+            if i>0 and candidates[i] == candidates[i - 1] and used[i-1] == False:
+                continue
+            target -= candidates[i]
+            self.path.append(candidates[i])
+            used[i] = True
+            self.backtracing(candidates , target , i + 1 , used)
+            used[i] = False
+            target += candidates[i]
+            self.path.pop()
+
+    def combinationSum2(self, candidates: list[int], target: int) -> list[list[int]]:
+        used = [False] * len(candidates)
+        candidates.sort()#去重需要比较相邻元素，所以首先要让相同的数字排在一起
+        self.backtracing(candidates , target , 0 , used)
+        return self.result
+```
