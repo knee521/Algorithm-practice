@@ -308,3 +308,27 @@ class Solution:
         self.backtracing(s , 0 , 0)
         return self.result
 ```
+
+#### 子集
+
+[子集](https://leetcode.cn/problems/subsets/description/)
+
+![子集学习截图](assets/subsets.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.result = []
+        self.path = []
+    def backtracing(self , nums , startindex):
+        self.result.append(self.path[:])
+        if startindex >= len(nums):
+            return
+        for i in range(startindex , len(nums)):
+            self.path.append(nums[i])
+            self.backtracing(nums , i + 1)
+            self.path.pop()
+    def subsets(self, nums: list[int]) -> list[list[int]]:
+        self.backtracing(nums , 0)
+        return self.result
+```
