@@ -263,3 +263,48 @@ class Solution:
         self.backtracing(s , 0)
         return self.result
 ```
+
+#### 复原IP地址
+
+[复原IP地址](https://leetcode.cn/problems/restore-ip-addresses/description/)
+
+![复原IP地址学习截图](assets/restore-ip-addresses.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.path = ""
+        self.result = []
+
+    def backtracing(self , s , startindex , pointNum):
+        if pointNum == 3:
+            if self.isvaild(s , startindex , len(s) - 1):#如果第四段字符段是合法的，就加入结果列表
+                self.path += s[startindex : len(s)]
+                self.result.append(self.path)
+                return
+        #回溯遍历逻辑
+        for i in range(startindex , len(s) - 1):
+            if self.isvaild(s , startindex , i):
+                old_path = self.path
+                self.path += s[startindex : i + 1] + "."
+                self.backtracing(s , i + 1 , pointNum + 1)
+                self.path = old_path #path也要回溯
+
+
+    def isvaild(self , s , start , end):
+        if start > end:
+            return False
+        if s[start] == '0' and start != end:
+            return False
+        num = 0
+        for i in range(start , end + 1):
+            if not s[i].isdigit():#判断当前字符是否是数字
+                return False
+            num = num * 10 + int(s[i])#判断当前字段是否大于255
+            if num > 255:
+                return False
+        return True
+    def restoreIpAddresses(self, s: str) -> list[str]:
+        self.backtracing(s , 0 , 0)
+        return self.result
+```
