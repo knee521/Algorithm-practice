@@ -224,3 +224,42 @@ class Solution:
         self.backtracing(candidates , target , 0 , used)
         return self.result
 ```
+
+#### 分割回文串
+
+[分割回文串](https://leetcode.cn/problems/palindrome-partitioning/description/)
+
+![分割回文串学习截图](assets/palindrome-partitioning.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.path = []
+        self.result = []
+    def backtracing(self , s , startindex):
+        #结束条件
+        if startindex == len(s):
+            self.result.append(self.path[:])
+            return
+        #回溯遍历过程
+        for i in range(startindex , len(s)):
+            if self.ishuiwen(s , startindex , i):
+                self.path.append(s[startindex : i + 1])
+                self.backtracing(s , i + 1)
+                self.path.pop()
+            else:
+                continue
+
+    def ishuiwen(self , s , start , end):
+        i = start
+        j = end
+        while i < j:
+            if s[i] != s[j]:
+                return False
+            i += 1
+            j -= 1
+        return True
+    def partition(self, s: str) -> list[list[str]]:
+        self.backtracing(s , 0)
+        return self.result
+```
