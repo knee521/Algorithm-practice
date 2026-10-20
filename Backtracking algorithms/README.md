@@ -456,3 +456,53 @@ class Solution:
         self.backtracing(nums , used)
         return self.result
 ```
+
+#### N皇后
+
+[N皇后](https://leetcode.cn/problems/n-queens/)
+
+![N皇后学习截图](assets/n-queens.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.result = []
+
+    def backtracing(self , n , row , path):
+        if row == n:#说明到达最后一行了
+            self.result.append(path[:])
+            return
+        for col in range(n):
+            if self.isvaild(row , col , path):
+                path[row] = path[row][ : col] + 'Q' + path[row][col+1 : ]
+                self.backtracing(n , row + 1 , path)
+                path[row] = path[row][ : col] + '.' + path[row][col+1 : ]
+
+
+    def isvaild(self , row , col , path):
+        #检查列
+        for i in range(row):
+            if path[i][col] == 'Q':
+                return False
+        #检查45°
+        i , j = row - 1 , col - 1
+        while i>=0 and j >=0:
+            if path[i][j] == 'Q':
+                return False
+            i -= 1
+            j -= 1
+
+        #检查135°
+        i , j = row - 1 , col + 1
+        while i >=0 and j < len(path):
+            if path[i][j] == 'Q':
+                return False
+            i -= 1
+            j += 1
+        return True
+
+    def solveNQueens(self, n: int) -> list[list[str]]:
+        path = ['.' * n for _ in range(n)]#初始化为二维棋盘
+        self.backtracing(n , 0 , path)
+        return self.result
+```
