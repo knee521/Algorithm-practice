@@ -423,3 +423,36 @@ class Solution:
         self.backtracing(nums , used)
         return self.result
 ```
+
+#### 全排列Ⅱ
+
+[全排列Ⅱ](https://leetcode.cn/problems/permutations-ii/description/)
+
+![全排列Ⅱ学习截图](assets/permutations-ii.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.result = []
+        self.path = []
+    def backtracing(self , nums , used):
+        if len(self.path) == len(nums):
+            self.result.append(self.path[:])
+            return
+        for i in range(len(nums)):
+            # used[i - 1] == True，说明同一树枝 nums[i - 1] 使用过
+            # used[i - 1] == False，说明同一树层 nums[i - 1] 使用过
+            # 而我们要对同一树层使用过的元素进行跳过
+            if i > 0 and nums[i] == nums[i - 1] and not used[i - 1] or used[i]:#used[i]是为了防止同一个位置的元素重复使用，因为该数组会有重复出现的元素
+                continue
+            self.path.append(nums[i])
+            used[i] = True
+            self.backtracing(nums , used)
+            self.path.pop()
+            used[i] = False
+    def permuteUnique(self, nums: list[int]) -> list[list[int]]:
+        used = [False] * len(nums)
+        nums.sort()
+        self.backtracing(nums , used)
+        return self.result
+```
