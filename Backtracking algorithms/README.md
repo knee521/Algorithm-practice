@@ -364,3 +364,30 @@ class Solution:
         self.backtracing(nums , 0 , used)
         return self.result
 ```
+
+#### 非递减子序列
+
+[非递减子序列](https://leetcode.cn/problems/non-decreasing-subsequences/description/)
+
+![非递减子序列学习截图](assets/non-decreasing-subsequences.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.result = []
+        self.path = []
+    def backtracing(self , nums , startindex):
+        if len(self.path) > 1:
+            self.result.append(self.path[:])
+        uset = set()
+        for i in range(startindex , len(nums)):
+            if (self.path and nums[i] < self.path[-1]) or nums[i] in uset:
+                continue
+            uset.add(nums[i])
+            self.path.append(nums[i])
+            self.backtracing(nums , i + 1)
+            self.path.pop()
+    def findSubsequences(self, nums: list[int]) -> list[list[int]]:
+        self.backtracing(nums , 0)
+        return self.result
+```
