@@ -391,3 +391,35 @@ class Solution:
         self.backtracing(nums , 0)
         return self.result
 ```
+
+#### 全排列
+
+[全排列](https://leetcode.cn/problems/permutations/description/)
+
+![全排列学习截图](assets/permutations.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.result = []
+        self.path = []
+    def backtracing(self , nums , used):
+        #结束条件
+        if len(self.path) == len(nums):
+            self.result.append(self.path[:])
+            return
+        #单层回溯遍历过程，每一层都要从头开始遍历
+        for i in range(len(nums)):
+            if used[i]:#说明这个元素用过，就跳过，因为同一树枝的元素不能重复
+                continue
+            self.path.append(nums[i])
+            used[i] = True
+            self.backtracing(nums , used)
+            self.path.pop()
+            used[i] = False
+
+    def permute(self, nums: list[int]) -> list[list[int]]:
+        used = [False] * len(nums)
+        self.backtracing(nums , used)
+        return self.result
+```
