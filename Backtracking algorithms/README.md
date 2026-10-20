@@ -332,3 +332,35 @@ class Solution:
         self.backtracing(nums , 0)
         return self.result
 ```
+
+#### 子集Ⅱ
+
+[子集Ⅱ](https://leetcode.cn/problems/subsets-ii/description/)
+
+![子集Ⅱ学习截图](assets/subsets-ii.png)
+
+```python
+class Solution:
+    def __init__(self):
+        self.result = []
+        self.path = []
+
+    def backtracing(self , nums , startindex , used):
+        self.result.append(self.path[:])
+        for i in range(startindex , len(nums)):
+            # used[i - 1] == True，说明同一树枝 nums[i - 1] 使用过
+            # used[i - 1] == False，说明同一树层 nums[i - 1] 使用过
+            # 而我们要对同一树层使用过的元素进行跳过
+            if i > 0 and nums[i - 1] == nums[i] and not used[i - 1]:
+                continue
+            self.path.append(nums[i])
+            used[i] = True
+            self.backtracing(nums , i + 1 , used)
+            used[i] = False
+            self.path.pop()
+    def subsetsWithDup(self, nums: list[int]) -> list[list[int]]:
+        used = [False] * len(nums)
+        nums.sort()
+        self.backtracing(nums , 0 , used)
+        return self.result
+```
