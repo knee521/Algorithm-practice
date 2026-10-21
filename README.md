@@ -13,6 +13,7 @@
 - [Stock/](./Stock/)：股票算法专题
 - [Binary tree/](./Binary%20tree/)：二叉树专题
 - [Backtracking algorithms/](./Backtracking%20algorithms/)：回溯算法专题
+- [贪心算法/](./贪心算法/)：贪心算法专题
 
 ## 学习约定
 
