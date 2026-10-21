@@ -506,3 +506,109 @@ class Solution:
         self.backtracing(n , 0 , path)
         return self.result
 ```
+
+#### 解数独
+
+[解数独](https://leetcode.cn/problems/sudoku-solver/description/)
+
+![解数独学习截图](assets/sudoku-solver.png)
+
+##### 超出了时间限制
+
+```python
+class Solution:
+    def backtracing(self , board):
+        #遍历行、遍历列、判断这个点放哪个数字有效
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] == '.':
+                    for num in map(str, range(1, 10)):#寻找合适的数字放到该位置
+                        if self.isvaild(i , j , num , board):
+                            board[i][j] = num
+                            if(self.backtracing(board)):return True#找到一组合适的，就返回
+                            board[i][j] = '.'
+                    return False
+        return True
+    def isvaild(self , row , col , val , board):
+        #同行不重复
+        for i in range(9):
+            if board[row][i] == val:return False
+        #同列不重复
+        for j in range(9):
+            if board[j][col] == val:return False
+        #同一个子棋盘不重复
+        startrow = (row // 3) * 3
+        startcol = (col // 3) * 3
+        for i in range(startrow , startrow + 3):
+            for j in range(startcol , startcol + 3):
+                if board[i][j] == val:
+                    return False
+        return True
+
+
+    def solveSudoku(self, board: list[list[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        self.backtracing(board)
+```
+
+##### 优化回溯遍历过程
+
+```python
+class Solution:
+    def backtracing(self , board):
+        # 记录可选数字最少的空格及其候选数字
+        best_row = -1
+        best_col = -1
+        best_nums = None
+        # 遍历空格，选择下一步要填写的位置
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] != '.':
+                    continue
+                # 收集当前空格所有合法的候选数字
+                valid_nums = []
+                for num in "123456789":
+                    if self.isvaild(i, j, num, board):
+                        valid_nums.append(num)
+                # 有空格无数字可填，说明当前分支无解
+                if not valid_nums:
+                    return False
+                # 更新：找到候选数字更少的空格
+                if best_nums is None or len(valid_nums) < len(best_nums):
+                    best_row = i
+                    best_col = j
+                    best_nums = valid_nums
+        # 没找到空格，说明棋盘已经填完
+        if best_row == -1:
+            return True
+        # 只对选中的空格进行回溯
+        for num in best_nums:
+            board[best_row][best_col] = num
+            if self.backtracing(board):
+                return True
+            board[best_row][best_col] = '.'
+        # 当前空格的所有候选数字都试过，仍无法完成棋盘
+        return False
+    def isvaild(self , row , col , val , board):
+        #同行不重复
+        for i in range(9):
+            if board[row][i] == val:return False
+        #同列不重复
+        for j in range(9):
+            if board[j][col] == val:return False
+        #同一个子棋盘不重复
+        startrow = (row // 3) * 3
+        startcol = (col // 3) * 3
+        for i in range(startrow , startrow + 3):
+            for j in range(startcol , startcol + 3):
+                if board[i][j] == val:
+                    return False
+        return True
+    def solveSudoku(self, board: list[list[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        self.backtracing(board)
+```
