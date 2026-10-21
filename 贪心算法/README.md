@@ -4,8 +4,8 @@
 
 ## 学习内容
 
-- [ ] 贪心算法基础与适用条件
-- [ ] 分配问题（分发饼干、分发糖果等）
+- [x] 贪心算法基础与适用条件
+- [x] 分配问题（分发饼干、分发糖果等）
 - [ ] 序列问题（摆动序列、最大子数组和等）
 - [ ] 跳跃游戏与覆盖范围
 - [ ] 区间问题（无重叠区间、合并区间等）
@@ -34,4 +34,69 @@
 
 ## 代码记录
 
-> 在这里补充每道题的题目链接、实现代码和个人学习笔记。
+#### 分发饼干
+
+[分发饼干](https://leetcode.cn/problems/assign-cookies/description/)
+
+![分发饼干学习截图](assets/assign-cookies.png)
+
+```python
+class Solution:
+    def findContentChildren(self, g: List[int], s: List[int]) -> int:
+        #先进行排序，从小到大
+        g.sort()
+        s.sort()
+        #全局最优，可以满足胃口数量
+        result = 0
+        #饼干从最大的开始
+        index_s = len(s) - 1
+        #胃口也从最大的开始
+        for i in range(len(g) - 1 , -1 , -1):#range(起始值, 结束值, 步长)。第二个-1是遍历在到达 -1 前停止，因此最后取到的是 0。第三个-1是步长为 -1，表示每次下标减 1，即倒序遍历
+            if index_s >= 0 and s[index_s] >= g[i]:
+                result += 1
+                index_s -= 1
+        return result
+```
+
+#### 摆动序列
+
+[摆动序列](https://leetcode.cn/problems/wiggle-subsequence/description/)
+
+![摆动序列学习截图](assets/wiggle-subsequence.png)
+
+```python
+class Solution:
+    def wiggleMaxLength(self, nums: list[int]) -> int:
+        if len(nums) <= 1:
+            return len(nums)
+        cur_dif = 0
+        pre_dif = 0
+        result = 1 #默认序列最右边有一个峰值
+        for i in range(len(nums) - 1):
+            cur_dif = nums[i + 1] - nums[i]
+            ##出现峰值
+            if (pre_dif <= 0 and cur_dif > 0) or (pre_dif >= 0 and cur_dif < 0):
+                result += 1
+                pre_dif = cur_dif#只有发现新的摆动方向时才更新
+        return result
+```
+
+#### 最大子数组和
+
+[最大子数组和](https://leetcode.cn/problems/maximum-subarray/description/)
+
+![最大子数组和学习截图](assets/maximum-subarray.png)
+
+```python
+class Solution:
+    def maxSubArray(self, nums: list[int]) -> int:
+        result = float('-inf')#初始化为负无穷大
+        count = 0#记录区间的和
+        for i in range(len(nums)):
+            count += nums[i]
+            if count >= result:
+                result = count
+            if count <=0:
+                count = 0
+        return result
+```
