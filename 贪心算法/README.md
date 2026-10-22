@@ -116,3 +116,24 @@ class Solution:
             result += max(prices[i] - prices[i - 1] , 0)
         return result
 ```
+
+#### 跳跃游戏
+
+[跳跃游戏](https://leetcode.cn/problems/jump-game/description/)
+
+![跳跃游戏学习截图](assets/jump-game.png)
+
+```python
+class Solution:
+    def canJump(self, nums: list[int]) -> bool:
+        #只要能覆盖最后一个元素，就一定可以跳到最后一个元素
+        cover = 0#覆盖范围
+        if len(nums) == 1:return True
+        # python不支持动态修改for循环中变量,使用while循环代替
+        i = 0
+        while i <= cover:
+            cover = max(nums[i] + i , cover)
+            i += 1
+            if cover >= len(nums) - 1:return True
+        return False
+```
