@@ -137,3 +137,28 @@ class Solution:
             if cover >= len(nums) - 1:return True
         return False
 ```
+
+#### 跳跃游戏Ⅱ
+
+[跳跃游戏Ⅱ](https://leetcode.cn/problems/jump-game-ii/description/)
+
+![跳跃游戏Ⅱ学习截图](assets/jump-game-ii.png)
+
+```python
+class Solution:
+    def jump(self, nums: list[int]) -> int:
+        #以最小的步数增加最大的覆盖范围，直到覆盖范围覆盖了终点
+        if len(nums) == 1:
+            return 0
+        next_distance = 0#下一次最大能到达的下标
+        cur_distance = 0#当前最大能达到的下标
+        step = 0#跳数
+        for i in range(len(nums)):
+            next_distance = max(nums[i] + i , next_distance)
+            if i == cur_distance:
+                step += 1
+                cur_distance = next_distance
+                if next_distance >= len(nums) - 1:
+                    break
+        return step
+```
