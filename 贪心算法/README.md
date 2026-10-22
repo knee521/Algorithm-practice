@@ -100,3 +100,19 @@ class Solution:
                 count = 0
         return result
 ```
+
+#### 买卖股票的最佳时机Ⅱ
+
+[买卖股票的最佳时机Ⅱ](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/description/)
+
+![买卖股票的最佳时机Ⅱ学习截图](assets/best-time-to-buy-and-sell-stock-ii.png)
+
+```python
+class Solution:
+    def maxProfit(self, prices: list[int]) -> int:
+        #只需要统计每天正利润就可以
+        result = 0
+        for i in range(1 , len(prices)):
+            result += max(prices[i] - prices[i - 1] , 0)
+        return result
+```
