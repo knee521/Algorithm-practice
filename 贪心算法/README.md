@@ -162,3 +162,48 @@ class Solution:
                     break
         return step
 ```
+
+#### K次取反后最大化的数组和
+
+[K次取反后最大化的数组和](https://leetcode.cn/problems/maximize-sum-of-array-after-k-negations/description/)
+
+![K次取反后最大化的数组和学习截图](assets/maximize-sum-after-k-negations.png)
+
+```python
+class Solution:
+    def largestSumAfterKNegations(self, nums: List[int], k: int) -> int:
+        nums.sort(key = lambda x : abs(x) , reverse = True)#将nums里的元素按照绝对值大小从大到小排列
+        #取k次翻转
+        for i in range(len(nums)):
+            if nums[i] < 0 and k > 0:
+                nums[i] *= -1
+                k -= 1
+        if k % 2 == 1:#如果还有剩余次数，就把最小的元素翻转
+            nums[-1] *= -1
+        #求和
+        result = sum(nums)
+        return result
+```
+
+#### 加油站
+
+[加油站](https://leetcode.cn/problems/gas-station/description/)
+
+![加油站学习截图](assets/gas-station.png)
+
+```python
+class Solution:
+    def canCompleteCircuit(self, gas: list[int], cost: list[int]) -> int:
+        resSUm = 0
+        totalSum = 0
+        start = 0
+        for i in range(len(gas)):
+            resSUm += gas[i] - cost[i]
+            totalSum += gas[i] - cost[i]
+            if resSUm < 0:
+                start = i + 1
+                resSUm = 0
+        if totalSum < 0 :
+            return -1
+        return start
+```
