@@ -207,3 +207,79 @@ class Solution:
             return -1
         return start
 ```
+
+#### 分发糖果
+
+[分发糖果](https://leetcode.cn/problems/candy/description/)
+
+![分发糖果学习截图](assets/candy.png)
+
+```python
+class Solution:
+    def candy(self, ratings: List[int]) -> int:
+        sums = [1]  * len(ratings)
+        #右大于左的情况
+        for i in range(1 , len(ratings)):
+            if ratings[i] > ratings[i - 1]:
+                sums[i] = sums[i - 1] + 1
+        #左大于右的情况
+        for i in range(len(ratings) - 2 , -1 , -1):
+            if ratings[i] > ratings[i+1]:
+                sums[i] = max(sums[i+1]+1, sums[i])
+        return sum(sums)
+```
+
+#### 柠檬水找零
+
+[柠檬水找零](https://leetcode.cn/problems/lemonade-change/description/)
+
+![柠檬水找零学习截图](assets/lemonade-change.png)
+
+```python
+class Solution:
+    def lemonadeChange(self, bills: List[int]) -> bool:
+        five = 0
+        ten = 0
+        twenty = 0
+        for bill in bills:
+            if bill == 5:
+                five += 1
+            if bill == 10:
+                if five > 0:
+                    five -= 1
+                    ten += 1
+                else :
+                    return False
+            if bill == 20:
+                if five > 0 and ten > 0:
+                    five -= 1
+                    ten -= 1
+                    twenty += 1
+                elif five >= 3:
+                    five -= 3
+                    twenty += 1
+                else:
+                    return False
+        return True
+```
+
+#### 根据身高重建队列
+
+[根据身高重建队列](https://leetcode.cn/problems/queue-reconstruction-by-height/)
+
+![根据身高重建队列学习截图](assets/queue-reconstruction-by-height.png)
+
+```python
+class Solution:
+    def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
+        #**对当前的人：**已经入队的人都比他高，或者和他一样高。因此，把他插入下标 k，前面就恰好有 k 个身高不低于他的人。
+        #**对已经入队的人：**后来插入的矮个子，即使站在他们前面，也不会增加他们前面“身高大于或等于自己”的人数，所以不会破坏已有条件。同身高的人按照 k 从小到大处理，后处理的人会插在此前同身高的人后面。
+        #先按照h维度的身高顺序从高到低排序。确定第一个维度
+        people.sort(key = lambda x : (-x[0] , x[1]))#-x[0]表示h维度从大到小排序，x[1]表示h相同时，k小的排在前面
+        que = []
+        #根据每个元素的第二个维度k，贪心算法，进行插入
+        for p in people:
+            #按照k进行插入
+            que.insert(p[1] , p)#把p插入到p[1]的位置
+        return que
+```
