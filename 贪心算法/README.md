@@ -283,3 +283,28 @@ class Solution:
             que.insert(p[1] , p)#把p插入到p[1]的位置
         return que
 ```
+
+#### 用最少数量的箭引爆气球
+
+[用最少数量的箭引爆气球](https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/)
+
+![用最少数量的箭引爆气球学习截图](assets/minimum-number-of-arrows-to-burst-balloons.png)
+
+```python
+class Solution:
+    def findMinArrowShots(self, points: List[List[int]]) -> int:
+        if len(points) ==  0 : return 0
+        #按照左边界进行从小到大排序
+        points.sort(key = lambda x : x[0])
+        result = 1 #气球不为空的时候，最少需要一支箭
+        for i in range(1 , len(points)):
+            #如果两个气球不重叠
+            if points[i][0] > points[i-1][1]:
+                result += 1
+            else:#气球重叠的话
+            #更新最小右边界
+                points[i][1] = min(points[i-1][1] , points[i][1])
+
+        return result
+
+```
