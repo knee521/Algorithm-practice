@@ -331,3 +331,53 @@ class Solution:
         return count
 
 ```
+
+#### 划分字母区间
+
+[划分字母区间](https://leetcode.cn/problems/partition-labels/submissions/756962589/)
+
+![划分字母区间学习截图](assets/partition-labels.png)
+
+```py
+class Solution:
+    def partitionLabels(self, s: str) -> list[int]:
+        #找到每种字符最后出现的位置下标
+        last = {}
+        for i , ch in enumerate(s):
+            last[ch] = i
+        #再遍历s字符串，当前字符的下标等于最后出现位置的下标时，就可以进行切割
+        result = []
+        #切割区间的起始位置下标
+        start , end = 0 , 0
+        for i , ch in enumerate(s):
+            end = max(end , last[ch])#当前字符出现的最远距离
+            if i == end:
+                result.append(end - start + 1)
+                start = end + 1
+        return result
+```
+
+#### 合并区间
+
+[合并区间](https://leetcode.cn/problems/merge-intervals/description/)
+
+![合并区间学习截图](assets/merge-intervals.png)
+
+```python
+class Solution:
+    def merge(self, intervals: list[list[int]]) -> list[list[int]]:
+        result = []
+        if not intervals:
+            return result
+        #按照左边界进行升序排序
+        intervals.sort(key = lambda x : x[0])
+        #第一个数组加到result中
+        result.append(intervals[0])
+        #如果当前区间的左边界小于上一个区间的右边界，就有重叠
+        for i in range(1 , len(intervals)):
+            if result[-1][1] >= intervals[i][0]:
+                result[-1][1] = max(result[-1][1] , intervals[i][1])
+            else:
+                result.append(intervals[i])
+        return result
+```
