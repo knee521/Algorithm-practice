@@ -308,3 +308,26 @@ class Solution:
         return result
 
 ```
+
+#### 无重叠区间
+
+[无重叠区间](https://leetcode.cn/problems/non-overlapping-intervals/description/)
+
+![无重叠区间学习截图](assets/non-overlapping-intervals.png)
+
+```python
+class Solution:
+    def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+        if not intervals:
+            return 0
+        #按照左边界进行升序排序
+        intervals.sort(key = lambda x : x[0])
+        #记录重叠个数
+        count = 0
+        for i in range(1 , len(intervals)):
+            if intervals[i][0] < intervals[i - 1][1]:#当前区间的左边界小于上一个区间的右边界，说明有重叠
+                count += 1
+                intervals[i][1] = min(intervals[i][1] , intervals[i-1][1])#更新最小右边界
+        return count
+
+```
