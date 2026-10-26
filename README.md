@@ -14,6 +14,7 @@
 - [Binary tree/](./Binary%20tree/)：二叉树专题
 - [Backtracking algorithms/](./Backtracking%20algorithms/)：回溯算法专题
 - [贪心算法/](./贪心算法/)：贪心算法专题
+- [动态规划/](./动态规划/)：动态规划专题
 
 ## 学习约定
 
