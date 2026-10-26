@@ -381,3 +381,24 @@ class Solution:
                 result.append(intervals[i])
         return result
 ```
+
+#### 单调递增的数字
+
+[单调递增的数字](https://leetcode.cn/problems/monotone-increasing-digits/description/)
+
+![单调递增的数字学习截图](assets/monotone-increasing-digits.png)
+
+```python
+class Solution:
+    def monotoneIncreasingDigits(self, n: int) -> int:
+        #将数字转换为字符串，再把每个字符放进列表中
+        strNum = list(str(n))
+        #从右向左遍历，遇到小于前一位的字符就变成9，前一个减去1
+        for i in range(len(strNum) - 1 , 0 , -1):
+            if strNum[i] < strNum[i - 1]:
+                strNum[i - 1] = str(int(strNum[i - 1]) - 1)
+                #将修改位置后的字符都改为9
+                for j in range(i , len(strNum)):
+                    strNum[j] = '9'
+        return int(''.join(strNum))
+```
