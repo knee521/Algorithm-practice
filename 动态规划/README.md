@@ -5,7 +5,7 @@
 ## 学习内容
 
 - [x] 动态规划基础与解题步骤
-- [ ] 基础递推（斐波那契数、爬楼梯等）
+- [x] 基础递推（斐波那契数、爬楼梯等）
 - [ ] 路径问题（不同路径等）
 - [ ] 01背包与完全背包
 - [ ] 打家劫舍问题
@@ -93,4 +93,62 @@ class Solution:
         for i in range(2 , len(cost) + 1):
             dp[i] = min(dp[i - 1] + cost[i - 1] , dp[i - 2] + cost[i - 2])
         return dp[len(cost)]
+```
+
+  #### 不同路径
+
+[不同路径](https://leetcode.cn/problems/unique-paths/description/)
+
+![不同路径学习截图](assets/unique-paths.png)
+
+```python
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        #初始化二维数组
+        dp = [[0] * n for _ in range(m)]
+        #第一行第一列设为1
+        for i in range(n):
+            dp[0][i] = 1
+        for j in range(m):
+            dp[j][0] = 1
+        #计算每个单元格的路径数
+        for i in range(1 , m):
+            for j in range(1 , n):
+                dp[i][j] = dp[i-1][j] + dp[i][j-1]
+        return dp[m-1][n-1]
+```
+
+#### 不同路径Ⅱ
+
+[不同路径Ⅱ](https://leetcode.cn/problems/unique-paths-ii/description/)
+
+![不同路径Ⅱ学习截图](assets/unique-paths-ii.png)
+
+```python
+class Solution:
+    def uniquePathsWithObstacles(self, obstacleGrid: list[list[int]]) -> int:
+        #获取棋盘大小
+        m = len(obstacleGrid)#行
+        n = len(obstacleGrid[0])#列
+        #初始化dp数组
+        dp = [[0] * n for _ in range(m)]
+        #初始化第一行第一列
+        for i in range(n):
+            if obstacleGrid[0][i] == 1 :
+                break
+            else:
+                dp[0][i] = 1
+        for j in range(m):
+            if obstacleGrid[j][0] == 1:
+                break
+            else:
+                dp[j][0] = 1
+        #遍历棋盘
+        for i in range(1 , m):
+            for j in range(1 , n):
+                if obstacleGrid[i][j] == 1:
+                    continue
+                else:
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+        return dp[m-1][n-1]
 ```
