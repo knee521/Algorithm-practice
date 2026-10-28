@@ -4,7 +4,7 @@
 
 ## 学习内容
 
-- [ ] 动态规划基础与解题步骤
+- [x] 动态规划基础与解题步骤
 - [ ] 基础递推（斐波那契数、爬楼梯等）
 - [ ] 路径问题（不同路径等）
 - [ ] 01背包与完全背包
@@ -38,4 +38,41 @@
 
 ## 代码记录
 
-> 在这里补充每道题的题目链接、实现代码和个人学习笔记。
+#### 斐波那契数
+
+[斐波那契数](https://leetcode.cn/problems/fibonacci-number/description/)
+
+![斐波那契数学习截图](assets/fibonacci-number.png)
+
+```python
+class Solution:
+    def fib(self, n: int) -> int:
+        #排除个例
+        if n <=1:return n
+        #创建dp数组
+        dp = [0 , 1]
+        ## 遍历顺序: 由前向后。因为后面要用到前面的状态
+        for i in range(2 , n+1):
+            total = dp[1] + dp[0]
+            dp[0] = dp[1]
+            dp[1] = total
+        return dp[1]
+```
+
+#### 爬楼梯
+
+[爬楼梯](https://leetcode.cn/problems/climbing-stairs/description/)
+
+![爬楼梯学习截图](assets/climbing-stairs.png)
+
+```python
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n <= 1:return n
+        dp = [0] * (n + 1)
+        dp[1] = 1
+        dp[2] = 2
+        for i in range(3 , n + 1):
+            dp[i] = dp[i - 1] + dp[i - 2]
+        return dp[n]
+```
