@@ -76,3 +76,21 @@ class Solution:
             dp[i] = dp[i - 1] + dp[i - 2]
         return dp[n]
 ```
+
+#### 使用最小花费爬楼梯
+
+[使用最小花费爬楼梯](https://leetcode.cn/problems/min-cost-climbing-stairs/description/)
+
+![使用最小花费爬楼梯学习截图](assets/min-cost-climbing-stairs.png)
+
+```python
+class Solution:
+    def minCostClimbingStairs(self, cost: list[int]) -> int:
+        #初始化dp数组
+        dp = [0] * (len(cost) + 1)
+        dp[0] = 0
+        dp[1] = 0#初始起点不花费体力值
+        for i in range(2 , len(cost) + 1):
+            dp[i] = min(dp[i - 1] + cost[i - 1] , dp[i - 2] + cost[i - 2])
+        return dp[len(cost)]
+```
