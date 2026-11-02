@@ -152,3 +152,24 @@ class Solution:
                     dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
         return dp[m-1][n-1]
 ```
+
+#### 整数拆分
+
+[整数拆分](https://leetcode.cn/problems/integer-break/description/)
+
+![整数拆分学习截图](assets/integer-break.png)
+
+```python
+class Solution:
+    def integerBreak(self, n: int) -> int:
+        # 假设对正整数 i 拆分出的第一个正整数是 j（1 <= j < i），则有以下两种方案：
+        # 1) 将 i 拆分成 j 和 i−j 的和，且 i−j 不再拆分成多个正整数，此时的乘积是 j * (i-j)
+        # 2) 将 i 拆分成 j 和 i−j 的和，且 i−j 继续拆分成多个正整数，此时的乘积是 j * dp[i-j]
+        dp = [0] * (n + 1)#dp[i] 表示“整数 i 拆分后能得到的最大乘积”，所以必须能访问到 dp[n],python数组下标从0开始，所以要定义dp数组长度为n+1
+        dp[2] = 1
+        for i in range(3 , n + 1):
+            for j in range(1 , n // 2 + 1):
+                dp[i] = max(dp[i] , j * (i - j) , j * dp[i - j])
+        return dp[n]
+
+```
