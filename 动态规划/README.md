@@ -173,3 +173,20 @@ class Solution:
         return dp[n]
 
 ```
+
+#### 不同的二叉搜索树
+
+[不同的二叉搜索树](https://leetcode.cn/problems/unique-binary-search-trees/description/)
+
+![不同的二叉搜索树学习截图](assets/unique-binary-search-trees.png)
+
+```python
+class Solution:
+    def numTrees(self, n: int) -> int:
+        dp = [0] * (n + 1)
+        dp[0] = 1
+        for i in range(1 , n+1):
+            for j in range(1 , i + 1):
+                dp[i] += dp[j - 1] * dp[i - j]#j - 1是以j为头节点的左子树的节点数量，i-j是以j为头节点的右子树的节点数量
+        return dp[n]
+```
