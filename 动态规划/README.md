@@ -6,8 +6,8 @@
 
 - [x] 动态规划基础与解题步骤
 - [x] 基础递推（斐波那契数、爬楼梯等）
-- [ ] 路径问题（不同路径等）
-- [ ] 01背包与完全背包
+- [x] 路径问题（不同路径等）
+- [x] 01背包与完全背包
 - [ ] 打家劫舍问题
 - [ ] 股票买卖问题
 - [ ] 子序列与子串问题
@@ -189,4 +189,30 @@ class Solution:
             for j in range(1 , i + 1):
                 dp[i] += dp[j - 1] * dp[i - j]#j - 1是以j为头节点的左子树的节点数量，i-j是以j为头节点的右子树的节点数量
         return dp[n]
+```
+
+#### 背包理论基础一
+
+[背包理论基础一](https://kamacoder.com/problempage.php?pid=1046)
+
+![背包理论基础一学习截图](assets/knapsack-basics-1.png)
+
+```python
+n, bagweight = map(int, input().split())
+
+weight = list(map(int, input().split()))
+value = list(map(int, input().split()))
+
+dp = [[0] * (bagweight + 1) for _ in range(n)]
+for i in range(weight[0] , bagweight + 1):#从物品0的重量开始遍历到书包的重量结束
+    dp[0][i] = value[0]
+
+for i in range(1 , n):
+    for j in range(bagweight + 1):#从重量0开始遍历到书包重量结束
+        if j < weight[i]:#如果小于物品i的重量，那么此时书包的价值是上一个物品使用此重量书包的价值
+            dp[i][j] = dp[i-1][j]
+        else:
+            dp[i][j] = max(dp[i-1][j] , dp[i-1][j - weight[i]] + value[i])
+print(dp[n - 1][bagweight])
+
 ```
