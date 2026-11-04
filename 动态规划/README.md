@@ -254,3 +254,27 @@ class Solution:
                 dp[j] = max(dp[j] , dp[j - i] + i)
         return total_sum - 2*dp[target]
 ```
+
+#### 目标和
+
+[目标和](https://leetcode.cn/problems/target-sum/description/)
+
+![目标和学习截图](assets/target-sum.png)
+
+```python
+class Solution:
+    def findTargetSumWays(self, nums: list[int], target: int) -> int:
+        total_sum = sum(nums)
+        if total_sum < abs(target):
+            return 0
+        if (total_sum + target) % 2 != 0:
+            return 0
+        #目标和
+        target_sum = (total_sum + target) // 2
+        dp = [0] * (target_sum + 1)
+        dp[0] = 1
+        for i in nums:
+            for j in range(target_sum , i - 1 , -1):
+                dp[j] += dp[j-i]
+        return dp[target_sum]
+```
