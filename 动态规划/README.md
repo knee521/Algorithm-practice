@@ -216,3 +216,41 @@ for i in range(1 , n):
 print(dp[n - 1][bagweight])
 
 ```
+
+#### 分割等和子集
+
+[分割等和子集](https://leetcode.cn/problems/partition-equal-subset-sum/description/)
+
+![分割等和子集学习截图](assets/partition-equal-subset-sum.png)
+
+```python
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        #物品是nums[i]，重量是nums[i]，价值也是nums[i]，背包体积是sum/2
+        total_sum = sum(nums)
+        if total_sum % 2 != 0: return False#nums的总和必须是2的倍数
+        target = total_sum // 2
+        dp = [0] * (target + 1)
+        for i in nums:
+            for j in range(target , i -1 , -1):
+                dp[j] = max(dp[j] , dp[j - i] + i)
+        return dp[-1] == target
+```
+
+#### 最后一块石头的重量Ⅱ
+
+[最后一块石头的重量Ⅱ](https://leetcode.cn/problems/last-stone-weight-ii/description/)
+
+![最后一块石头的重量Ⅱ学习截图](assets/last-stone-weight-ii.png)
+
+```python
+class Solution:
+    def lastStoneWeightII(self, stones: list[int]) -> int:
+        dp = [0] * 15000
+        total_sum = sum(stones)
+        target = total_sum // 2
+        for i in stones:
+            for j in range(target , i - 1, -1):#i-1是为了让j可以取到i
+                dp[j] = max(dp[j] , dp[j - i] + i)
+        return total_sum - 2*dp[target]
+```
