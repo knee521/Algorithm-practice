@@ -278,3 +278,23 @@ class Solution:
                 dp[j] += dp[j-i]
         return dp[target_sum]
 ```
+
+#### 一和零
+
+[一和零](https://leetcode.cn/problems/ones-and-zeroes/)
+
+![一和零学习截图](assets/ones-and-zeroes.png)
+
+```python
+class Solution:
+    def findMaxForm(self, strs: List[str], m: int, n: int) -> int:
+        dp = [[0] * (n + 1) for _ in range(m+1)]
+        #统计0、1个数
+        for s in strs:
+            zeroNum = s.count('0')
+            oneNum = len(s) - zeroNum
+            for i in range(m , zeroNum - 1 , -1):
+                for j in range(n , oneNum - 1 , -1):
+                    dp[i][j] = max(dp[i][j] , dp[i - zeroNum][j - oneNum] + 1)
+        return dp[m][n]
+```
