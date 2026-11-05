@@ -329,3 +329,21 @@ for _ in range(n):
     value.append(v)
 print(knapsack(n , bag_weight, weight, value))
 ```
+
+#### 零钱兑换Ⅱ
+
+[零钱兑换Ⅱ](https://leetcode.cn/problems/coin-change-ii/description/)
+
+![零钱兑换Ⅱ学习截图](assets/coin-change-ii.png)
+
+```python
+class Solution:
+    def change(self, amount: int, coins: list[int]) -> int:
+        dp = [0] * (amount + 1)
+        dp[0] = 1#背包重量为0的组合种类有1个
+        #这个完全背包要考虑顺序问题，所以外层遍历种类，内层遍历背包重量
+        for i in range(len(coins)):
+            for j in range(coins[i] , amount + 1):#当前硬币面值是 coins[i]，只有金额 j >= coins[i] 时，才放得下这枚硬币，才能用它凑钱。
+                dp[j] += dp[j - coins[i]]
+        return dp[amount]
+```
