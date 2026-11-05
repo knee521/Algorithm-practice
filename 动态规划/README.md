@@ -298,3 +298,34 @@ class Solution:
                     dp[i][j] = max(dp[i][j] , dp[i - zeroNum][j - oneNum] + 1)
         return dp[m][n]
 ```
+
+#### 完全背包
+
+[完全背包](https://kamacoder.com/problempage.php?pid=1052)
+
+![完全背包学习截图](assets/complete-knapsack.png)
+
+```python
+def knapsack(n, bag_weight, weight, value):
+    dp = [[0] * (bag_weight + 1) for _ in range(n)]#背包重量加1是要把重量为0考虑进去
+    #初始化dp数组
+    for j in range(weight[0] , bag_weight + 1):
+        dp[0][j] = dp[0][j - weight[0]]+value[0]#dp数组第一行只要还能加物品0，就继续加
+    #动态规划,先遍历物品种类，再遍历背包重量
+    for i in range(1 , n):
+        for j in range(bag_weight + 1):
+            if j < weight[i]:dp[i][j] = dp[i-1][j]
+            else:
+                dp[i][j] = max(dp[i-1][j] , dp[i][j - weight[i]] + value[i])
+    return dp[n-1][bag_weight]
+
+#输入
+n , bag_weight = map(int , input().split())
+weight = []
+value = []
+for _ in range(n):
+    w , v = map(int , input().split())
+    weight.append(w)
+    value.append(v)
+print(knapsack(n , bag_weight, weight, value))
+```
