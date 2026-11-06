@@ -347,3 +347,23 @@ class Solution:
                 dp[j] += dp[j - coins[i]]
         return dp[amount]
 ```
+
+#### 组合总和Ⅳ
+
+[组合总和Ⅳ](https://leetcode.cn/problems/combination-sum-iv/description/)
+
+![组合总和Ⅳ学习截图](assets/combination-sum-iv.png)
+
+```python
+class Solution:
+    def combinationSum4(self, nums: list[int], target: int) -> int:
+        #如果求组合数就是外层for循环遍历物品，内层for遍历背包。
+        #如果求排列数就是外层for遍历背包，内层for循环遍历物品。
+        dp = [0] * (target + 1)
+        dp[0] = 1
+        for i in range(target  + 1):
+            for j in range(len(nums)):
+                if i >= nums[j]:
+                    dp[i] += dp[i - nums[j]]
+        return dp[target]
+```
