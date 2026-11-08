@@ -367,3 +367,26 @@ class Solution:
                     dp[i] += dp[i - nums[j]]
         return dp[target]
 ```
+
+#### 爬楼梯进阶版
+
+[爬楼梯进阶版](https://kamacoder.com/problempage.php?pid=1067)
+
+![爬楼梯进阶版学习截图](assets/climbing-stairs-advanced.png)
+
+```python
+def climbing_stairs(n,m):
+    #背包总容量
+    dp = [0] * (n + 1)
+    dp[0] = 1
+    #排列题
+    for j in range(1 , n + 1):
+        for i in range(1 , m + 1):
+            if j >=  i:
+                dp[j] += dp[j - i]
+    return dp[n]
+
+if __name__ == '__main__':
+    n , m = list(map(int , input().split(' ')))
+    print(climbing_stairs(n , m))
+```
