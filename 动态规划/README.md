@@ -390,3 +390,24 @@ if __name__ == '__main__':
     n , m = list(map(int , input().split(' ')))
     print(climbing_stairs(n , m))
 ```
+
+#### 零钱兑换
+
+[零钱兑换](https://leetcode.cn/problems/coin-change/description/)
+
+![零钱兑换学习截图](assets/coin-change.png)
+
+```python
+class Solution:
+    def coinChange(self, coins: list[int], amount: int) -> int:
+        dp = [float('inf')] * (amount + 1)
+        dp[0] = 0 #背包重量为0时，最小硬币数量也为0
+        #先遍历物品，再遍历背包
+        for i in coins:
+            for j in range(i , amount + 1):
+                if dp[j - i] != float('inf'):
+                    dp[j] = min(dp[j] , dp[j - i] + 1)
+        if dp[amount] == float('inf'):#如果背包最终的结果还是无穷大，说明无解
+            return -1
+        return dp[amount]
+```
