@@ -411,3 +411,44 @@ class Solution:
             return -1
         return dp[amount]
 ```
+
+#### 完全平方数
+
+[完全平方数](https://leetcode.cn/problems/perfect-squares/description/)
+
+![完全平方数学习截图](assets/perfect-squares.png)
+
+```python
+class Solution:
+    #n是背包重量，完全平方数是物品
+    def numSquares(self, n: int) -> int:
+        dp = [float('inf')] * (n + 1)
+        dp[0] = 0
+        #先遍历背包，再遍历物品，反之也可以，因为是完全背包求最小值
+        for i in range(1 , n + 1):
+            for j in range(1 , int(i ** 0.5) + 1):
+                dp[i] = min(dp[i] , dp[i - j * j] + 1)
+        return dp[n]
+```
+
+#### 单词拆分
+
+[单词拆分](https://leetcode.cn/problems/word-break/description/)
+
+![单词拆分学习截图](assets/word-break.png)
+
+```python
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        wordset = set(wordDict)#将字典转换为集合，因为集合里的元素不重复，可以快速判断单词有没有出现在集合里
+        n = len(s)
+        dp = [False] * (n + 1)
+        dp[0] = True #空字符可以被拆分成单词
+        #先遍历背包，再遍历物品
+        for i in range(1 , n + 1):
+            for j in range(i):
+                if dp[j] and s[j : i] in wordset:
+                    dp[i] = True
+                    break
+        return dp[n]
+```
