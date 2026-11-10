@@ -483,3 +483,88 @@ print(dp[-1])
 #### 背包问题总结
 
 ![img](https://file1.kamacoder.com/i/algo/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%981.jpeg)
+
+#### 打家劫舍
+
+[打家劫舍](https://leetcode.cn/problems/house-robber/description/)
+
+![打家劫舍学习截图](assets/house-robber.png)
+
+```python
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        #如果没有房屋，返回0
+        if len(nums) == 0:
+            return 0
+        #如果只有一间房屋，返回 nums[0]
+        if len(nums) == 1:
+            return nums[0]
+        dp = [0] * len(nums)#这里有n个房屋，dp数据长度不用加1，因为房屋的下标是从0到n-1，一共n个房屋
+        dp[0] = nums[0]
+        dp[1] = max(nums[0] , nums[1])
+        #从前向后遍历
+        for i in range(2 , len(nums)):
+            # 对于每个房屋，选择抢劫当前房屋和抢劫前一个房屋的最大金额
+            dp[i] = max(dp[i-1] , dp[i-2] + nums[i])
+        return dp[-1]
+```
+
+#### 打家劫舍Ⅱ
+
+[打家劫舍Ⅱ](https://leetcode.cn/problems/house-robber-ii/description/)
+
+![打家劫舍Ⅱ学习截图](assets/house-robber-ii.png)
+
+```python
+class Solution:
+    def rob(self, nums: list[int]) -> int:
+        if len(nums) == 0:
+            return 0
+        if len(nums) == 1:
+            return nums[0]
+        #情况一，不偷最后一间
+        #情况二，不偷第一间
+        result1 = self.robrange(nums , 0 , len(nums) -2)
+        result2 = self.robrange(nums , 1 , len(nums) -1)
+        return max(result1 , result2)
+
+    def robrange(self , nums , start , end):
+        if end == start:
+            return nums[start]
+        pre_max = nums[start]
+        cur_max = max(nums[start] , nums[start + 1])
+        for i in range(start + 2, end + 1):#因为 end 是这段范围内最后一间房的下标，需要处理，所以要加1
+            temp = cur_max
+            cur_max = max(pre_max + nums[i] , cur_max)
+            pre_max = temp
+        return cur_max
+```
+
+#### 打家劫舍Ⅲ
+
+[打家劫舍Ⅲ](https://leetcode.cn/problems/house-robber-iii/description/)
+
+![打家劫舍Ⅲ学习截图](assets/house-robber-iii.png)
+
+```python
+class Solution:
+    def rob(self, root: TreeNode | None) -> int:
+        # dp数组（dp table）以及下标的含义：
+        # 1. 下标为 0 记录 **不偷该节点** 所得到的的最大金钱
+        # 2. 下标为 1 记录 **偷该节点** 所得到的的最大金钱
+        dp = self.mydigui(root)
+        return max(dp)
+
+    # 要用后序遍历, 因为要通过递归函数的返回值来做下一步计算
+    def mydigui(self , node):
+        # 递归终止条件，就是遇到了空节点，那肯定是不偷的
+        if not node:
+            return (0 , 0)
+        left = self.mydigui(node.left)
+        right = self.mydigui(node.right)
+        #偷当前节点
+        val_0 = node.val + left[0] + right[0]
+        #不偷当前节点
+        val_1 = max(left[0] , left[1]) + max(right[0] , right[1])
+        return (val_1 , val_0)
+```
