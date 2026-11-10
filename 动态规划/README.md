@@ -452,3 +452,34 @@ class Solution:
                     break
         return dp[n]
 ```
+
+#### 多重背包
+
+[多重背包](https://kamacoder.com/problempage.php?pid=1066)
+
+![多重背包学习截图](assets/multiple-knapsack.png)
+
+```python
+#多重背包
+C, N = input().split(" ")#C是背包重量 ， N是物品种类
+C, N = int(C), int(N)
+
+# value数组需要判断一下非空不然过不了
+weights = [int(x) for x in input().split(" ")]
+values = [int(x) for x in input().split(" ") if x]
+nums = [int(x) for x in input().split(" ")]
+
+dp = [0] * (C + 1)
+#先遍历物品种类，再遍历背包重量，再遍历物品件数
+for i in range(N):
+    for j in range(C , weights[i] - 1 , -1):
+        for k in range(1 , nums[i] + 1 ):
+            if k * weights[i] > j:
+                break
+            dp[j] = max(dp[j] , dp[j - k * weights[i]] + values[i] * k)
+print(dp[-1])
+```
+
+#### 背包问题总结
+
+![img](https://file1.kamacoder.com/i/algo/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%981.jpeg)
