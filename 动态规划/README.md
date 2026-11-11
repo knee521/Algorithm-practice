@@ -568,3 +568,70 @@ class Solution:
         val_1 = max(left[0] , left[1]) + max(right[0] , right[1])
         return (val_1 , val_0)
 ```
+
+#### 买卖股票的时机
+
+[买卖股票的时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/description/)
+
+![买卖股票的时机学习截图](assets/best-time-to-buy-and-sell-stock.png)
+
+```python
+class Solution:
+    def maxProfit(self, prices: list[int]) -> int:
+        length = len(prices)
+        if length == 0:
+            return 0
+        dp = [[0] * 2 for _ in range(length)]
+        dp[0][0] -= prices[0]
+        dp[0][1] = 0
+        for i in range(1 , length):
+            dp[i][0] = max(dp[i - 1][0] , -prices[i])
+            dp[i][1] = max(prices[i] + dp[i - 1][0] , dp[i - 1][1])
+        return dp[length - 1][1]
+```
+
+#### 买卖股票的最佳时机Ⅱ
+
+[买卖股票的最佳时机Ⅱ](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/description/)
+
+![买卖股票的最佳时机Ⅱ学习截图](assets/best-time-to-buy-and-sell-stock-ii.png)
+
+```python
+class Solution:
+    def maxProfit(self, prices: list[int]) -> int:
+        length = len(prices)
+        if length == 0:
+            return 0
+        dp = [[0] * 2 for _ in range(length)]
+        dp[0][0] -= prices[0]
+        dp[0][1] = 0
+        for i in range(1 , length):
+            dp[i][0] = max(dp[i - 1][0] , dp[i - 1][1] - prices[i])
+            dp[i][1] = max(dp[i - 1][1] , prices[i] + dp[i - 1][0])
+        return dp[length - 1][1]
+```
+
+#### 买卖股票的最佳时机Ⅲ
+
+[买卖股票的最佳时机Ⅲ](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii/description/)
+
+![买卖股票的最佳时机Ⅲ学习截图](assets/best-time-to-buy-and-sell-stock-iii.png)
+
+```python
+class Solution:
+    def maxProfit(self, prices: list[int]) -> int:
+        #5种状态 0: 没有操作, 1: 第一次买入, 2: 第一次卖出, 3: 第二次买入, 4: 第二次卖出
+        length = len(prices)
+        if length == 0:
+            return 0
+        dp = [[0] * 5 for _ in range(length)]
+        dp[0][1] -= prices[0]
+        dp[0][3] -= prices[0]
+        for i in range(1 , length):
+            dp[i][0] = dp[i - 1][0]
+            dp[i][1] = max(dp[i - 1][1] , dp[i - 1][0] - prices[i])
+            dp[i][2] = max(dp[i - 1][2] , dp[i - 1][1] + prices[i])
+            dp[i][3] = max(dp[i - 1][3] , dp[i - 1][2] - prices[i])
+            dp[i][4] = max(dp[i - 1][4] , dp[i - 1][3] + prices[i])
+        return dp[length - 1][4]
+```
