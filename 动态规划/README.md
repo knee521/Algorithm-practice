@@ -746,3 +746,23 @@ class Solution:
             result = max(dp[i + 1] , result)
         return result
 ```
+
+#### 最长重复子数组
+
+[最长重复子数组](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/description/)
+
+![最长重复子数组学习截图](assets/maximum-length-of-repeated-subarray.png)
+
+```python
+class Solution:
+    def findLength(self, nums1: list[int], nums2: list[int]) -> int:
+        dp = [[0] * (len(nums2) + 1) for _ in range(len(nums1) + 1)]
+        result = 0
+        for i in range(1 , len(nums1) + 1):
+            for j in range(1 , len(nums2) + 1):
+                if nums1[i - 1] == nums2[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1] + 1
+                if dp[i][j] > result:#更新最长重复子数组的长度
+                    result = dp[i][j]
+        return result
+```
