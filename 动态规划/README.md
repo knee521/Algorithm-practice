@@ -8,8 +8,8 @@
 - [x] 基础递推（斐波那契数、爬楼梯等）
 - [x] 路径问题（不同路径等）
 - [x] 01背包与完全背包
-- [ ] 打家劫舍问题
-- [ ] 股票买卖问题
+- [x] 打家劫舍问题
+- [x] 股票买卖问题
 - [ ] 子序列与子串问题
 - [ ] 状态压缩与空间优化
 - [ ] 动态规划综合复盘
@@ -657,4 +657,51 @@ class Solution:
                 dp[i][j + 1] = max(dp[i - 1][j + 1] , dp[i - 1][j] - prices[i])
                 dp[i][j + 2] = max(dp[i - 1][j + 2] , dp[i - 1][j + 1] + prices[i])
         return dp[length - 1][2* k]
+```
+
+#### 买卖股票的最佳时机含冷冻期
+
+[买卖股票的最佳时机含冷冻期](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-cooldown/description/)
+
+![买卖股票的最佳时机含冷冻期学习截图](assets/best-time-to-buy-and-sell-stock-with-cooldown.png)
+
+```python
+class Solution:
+    def maxProfit(self, prices: list[int]) -> int:
+        length = len(prices)
+        if length == 0:
+            return 0
+        #4个状态分别表示昨天就持有，或者今天买入0、昨天普通空仓，或者昨天冷冻、今天解冻后仍然没买1、昨天持股，今天卖出2、昨天卖出，今天不能买3
+        dp = [[0] * 4 for _ in range(length)]
+        dp[0][0] = -prices[0]
+        for i in range(1 , length):
+            dp[i][0] = max(dp[i - 1][0] , # 昨天持有，今天继续持有
+                           dp[i - 1][3] - prices[i], # 昨天是冷冻期，今天解冻，可以买入
+                           dp[i - 1][1] - prices[i])# 昨天空仓，既没卖出也不在冷冻期，今天买入
+            dp[i][1] = max(dp[i - 1][1] ,
+                           dp[i - 1][3])
+            dp[i][2] = dp[i - 1][0] + prices[i]
+            dp[i][3] = dp[i - 1][2]
+        return max(dp[length - 1][3] , dp[length - 1][1] , dp[length - 1][2])
+```
+
+#### 买卖股票的最佳时机含手续费
+
+[买卖股票的最佳时机含手续费](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/description/)
+
+![买卖股票的最佳时机含手续费学习截图](assets/best-time-to-buy-and-sell-stock-with-transaction-fee.png)
+
+```python
+class Solution:
+    def maxProfit(self, prices: List[int], fee: int) -> int:
+        #dp[i][0] 表示第i天持有股票所得最多现金。 dp[i][1] 表示第i天不持有股票所得最多现金
+        length = len(prices)
+        if length == 0:
+            return 0
+        dp = [[0] * 2 for _ in range(length)]
+        dp[0][0] = -prices[0]
+        for i in range(1 , length):
+            dp[i][0] = max(dp[i - 1][0] , dp[i - 1][1] - prices[i])
+            dp[i][1] = max(dp[i - 1][1] , dp[i - 1][0] + prices[i] - fee)
+        return dp[length - 1][1]
 ```
