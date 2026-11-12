@@ -705,3 +705,24 @@ class Solution:
             dp[i][1] = max(dp[i - 1][1] , dp[i - 1][0] + prices[i] - fee)
         return dp[length - 1][1]
 ```
+
+#### 最长递增子序列
+
+[最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/)
+
+![最长递增子序列学习截图](assets/longest-increasing-subsequence.png)
+
+```python
+class Solution:
+    def lengthOfLIS(self, nums: list[int]) -> int:
+        if len(nums) <= 1:
+            return len(nums)
+        dp = [1] * len(nums)
+        result = 1
+        for i in range(1 , len(nums)):
+            for j in range(0 , i):
+                if nums[j] < nums[i]:
+                    dp[i] = max(dp[i] , dp[j] + 1)
+            result = max(result , dp[i])#取最长的子序列
+        return result
+```
