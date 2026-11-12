@@ -726,3 +726,23 @@ class Solution:
             result = max(result , dp[i])#取最长的子序列
         return result
 ```
+
+#### 最长连续递增序列
+
+[最长连续递增序列](https://leetcode.cn/problems/longest-continuous-increasing-subsequence/description/)
+
+![最长连续递增序列学习截图](assets/longest-continuous-increasing-subsequence.png)
+
+```python
+class Solution:
+    def findLengthOfLCIS(self, nums: list[int]) -> int:
+        if len(nums) == 0:
+            return 0
+        result = 1
+        dp = [1] * len(nums)
+        for i in range(len(nums) - 1):
+            if nums[i + 1] > nums[i]:
+                dp[i + 1] = dp[i] + 1
+            result = max(dp[i + 1] , result)
+        return result
+```
