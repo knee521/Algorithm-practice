@@ -766,3 +766,43 @@ class Solution:
                     result = dp[i][j]
         return result
 ```
+
+#### 最长公共子序列
+
+[最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/description/)
+
+![最长公共子序列学习截图](assets/longest-common-subsequence.png)
+
+```python
+class Solution:
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        dp = [[0] * (len(text2) + 1) for _ in range(len(text1) + 1)]
+        #相等与不相等，不相等就各自往前推一个比较
+        for i in range(1 , len(text1) + 1):
+            for j in range(1 , len(text2) + 1):
+                if text1[i - 1] == text2[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1] + 1
+                else:
+                    dp[i][j] = max(dp[i - 1][j] , dp[i][j - 1])
+        return dp[len(text1)][len(text2)]
+```
+
+#### 不相交的线
+
+[不相交的线](https://leetcode.cn/problems/uncrossed-lines/description/)
+
+![不相交的线学习截图](assets/uncrossed-lines.png)
+
+```python
+class Solution:
+    def maxUncrossedLines(self, nums1: list[int], nums2: list[int]) -> int:
+        #本题说是求绘制的最大连线数，其实就是求两个字符串的最长公共子序列的长度！
+        dp = [[0] * (len(nums2) + 1) for _ in range(len(nums1) + 1)]
+        for i in range(1 , len(nums1) + 1):
+            for j in range(1 , len(nums2) + 1):
+                if nums1[i - 1] == nums2[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1] + 1
+                else:
+                    dp[i][j] = max(dp[i - 1][j] , dp[i][j - 1])
+        return dp[len(nums1)][len(nums2)]
+```
