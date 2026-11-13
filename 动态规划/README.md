@@ -806,3 +806,21 @@ class Solution:
                     dp[i][j] = max(dp[i - 1][j] , dp[i][j - 1])
         return dp[len(nums1)][len(nums2)]
 ```
+
+#### 最大子数组和
+
+[最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
+
+![最大子数组和学习截图](assets/maximum-subarray.png)
+
+```python
+class Solution:
+    def maxSubArray(self, nums: list[int]) -> int:
+        dp = [0] * len(nums)
+        dp[0] = nums[0]
+        result = nums[0]
+        for i in range(1 , len(nums)):
+            dp[i] = max(dp[i - 1] + nums[i] , nums[i])
+            result = max(result , dp[i])
+        return result
+```
