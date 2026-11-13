@@ -824,3 +824,47 @@ class Solution:
             result = max(result , dp[i])
         return result
 ```
+
+#### 判断子序列
+
+[判断子序列](https://leetcode.cn/problems/is-subsequence/description/)
+
+![判断子序列学习截图](assets/is-subsequence.png)
+
+```python
+class Solution:
+    def isSubsequence(self, s: str, t: str) -> bool:
+        dp = [[0] * (len(t) + 1) for _ in range(len(s) + 1)]
+        for i in range(1 , len(s) + 1):
+            for j in range(1 , len(t) + 1):
+                if s[i - 1] == t[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1] + 1
+                else:
+                    dp[i][j] = dp[i][j - 1]
+        if dp[-1][-1] == len(s):
+            return True
+        return False
+```
+
+#### 不同的子序列
+
+[不同的子序列](https://leetcode.cn/problems/distinct-subsequences/description/)
+
+![不同的子序列学习截图](assets/distinct-subsequences.png)
+
+```python
+class Solution:
+    def numDistinct(self, s: str, t: str) -> int:
+        dp = [[0] * (len(t)+1) for _ in range(len(s)+1)]
+        for i in range(len(s)):
+            dp[i][0] = 1
+        for j in range(1, len(t)):
+            dp[0][j] = 0
+        for i in range(1 , len(s) + 1):
+            for j in range(1 , len(t) + 1):
+                if s[i - 1] == t[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j]#`j` 表示目标一个字符都没消掉，`j-1` 表示目标的最后一个字符已经匹配。相加的是两种情况下的方案数。
+                else:
+                    dp[i][j] = dp[i - 1][j]
+        return dp[-1][-1]
+```
