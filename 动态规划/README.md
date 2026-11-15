@@ -914,3 +914,26 @@ class Solution:
                     dp[i][j] = min(dp[i - 1][j - 1] , dp[i][ j - 1] , dp[i - 1][j]) + 1
         return dp[-1][-1]
 ```
+
+#### 回文子串
+
+[回文子串](https://leetcode.cn/problems/palindromic-substrings/)
+
+![回文子串学习截图](assets/palindromic-substrings.png)
+
+```python
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        dp = [[False] * len(s) for _ in range(len(s))]
+        result = 0
+        for i in range(len(s) - 1 , -1 , -1):#第二个参数 -1	停止边界：`range` 不包含它，所以最后取到 0
+            for j in range(i, len(s)):
+                if s[i] == s[j]:
+                    if j - i <= 1:
+                        result += 1
+                        dp[i][j] = True
+                    elif dp[i + 1][j - 1]:
+                        result += 1
+                        dp[i][j] = True
+        return result
+```
