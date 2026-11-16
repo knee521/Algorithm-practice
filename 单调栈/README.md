@@ -99,3 +99,44 @@ class Solution:
             stack.append(i % len(nums))
         return result
 ```
+
+#### 接雨水
+
+[接雨水](https://leetcode.cn/problems/trapping-rain-water/description/)
+
+![接雨水学习截图](assets/trapping-rain-water.png)
+
+```python
+class Solution:
+    def trap(self, height: list[int]) -> int:
+        '''
+        单调栈是按照 行 的方向来计算雨水
+        从栈顶到栈底的顺序：从小到大
+        通过三个元素来接水：栈顶，栈顶的下一个元素，以及即将入栈的元素
+        雨水高度是 min(凹槽左边高度, 凹槽右边高度) - 凹槽底部高度
+        雨水的宽度是 凹槽右边的下标 - 凹槽左边的下标 - 1（因为只求中间宽度）
+        '''
+        result = 0#表示能接多少水
+        stack = [0] #存下标
+        for i in range(1 , len(height)):
+            #1.即将入栈的元素高度小于栈顶元素的高度，直接入栈
+            if height[i] < height[stack[-1]]:
+                stack.append(i)
+            #2.即将入栈的元素高度等于栈顶元素的高度，弹出栈顶元素，加入即将入栈的元素
+            if height[i] == height[stack[-1]]:
+                stack.pop()
+                stack.append(i)
+            #3.即将入栈的元素高度大于栈顶元素的高度
+            if height[i] > height[stack[-1]]:
+                while len(stack) != 0 and height[i] > height[stack[-1]]:
+                    mid_height = height[stack[-1]]
+                    stack.pop()
+                    if stack:
+                        left_height = height[stack[-1]]
+                        right_height = height[i]
+                        h = min(left_height , right_height) - mid_height
+                        w = i - stack[-1] - 1
+                        result += h * w
+                stack.append(i)
+        return result
+```
