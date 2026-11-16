@@ -140,3 +140,46 @@ class Solution:
                 stack.append(i)
         return result
 ```
+
+#### 柱状图中最大的矩形
+
+[柱状图中最大的矩形](https://leetcode.cn/problems/largest-rectangle-in-histogram/)
+
+![柱状图中最大的矩形学习截图](assets/largest-rectangle-in-histogram.png)
+
+```python
+class Solution:
+    def largestRectangleArea(self, heights: list[int]) -> int:
+        '''
+        找每个柱子左右侧的第一个高度值小于该柱子的柱子
+        单调栈：栈顶到栈底：从大到小（每插入一个新的小数值时，都要弹出先前的大数值）
+        栈顶，栈顶的下一个元素，即将入栈的元素：这三个元素组成了最大面积的高度和宽度
+        情况一：当前遍历的元素heights[i]大于栈顶元素的情况
+        情况二：当前遍历的元素heights[i]等于栈顶元素的情况
+        情况三：当前遍历的元素heights[i]小于栈顶元素的情况
+        '''
+        # 输入数组首尾各补上一个0
+        heights.insert(0 , 0)#第一个 0 是插入位置，第二个 0 是插入的值
+        heights.append(0)
+        stack = [0]
+        result = 0
+        for i in range(1 , len(heights)):
+            #情况一
+            if heights[i] > heights[stack[-1]]:
+                stack.append(i)
+            elif heights[i] == heights[stack[-1]]:
+                stack.pop()
+                stack.append(i)
+            elif heights[i] < heights[stack[-1]]:
+                while stack and heights[i] < heights[stack[-1]]:
+                    mid_height = heights[stack[-1]]
+                    stack.pop()
+                    if stack:
+                        left_index = stack[-1]
+                        right_index = i
+                        w = right_index - left_index - 1
+                        result = max(result , w * mid_height)
+                stack.append(i)
+
+        return result
+```
