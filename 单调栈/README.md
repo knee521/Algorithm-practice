@@ -79,3 +79,23 @@ class Solution:
                 stack.append(i)
         return result
 ```
+
+#### 下一个更大元素Ⅱ
+
+[下一个更大元素Ⅱ](https://leetcode.cn/problems/next-greater-element-ii/description/)
+
+![下一个更大元素Ⅱ学习截图](assets/next-greater-element-ii.png)
+
+```python
+class Solution:
+    def nextGreaterElements(self, nums: list[int]) -> list[int]:
+        result = [-1] * len(nums)
+        stack = [0]
+        # 模拟遍历两边nums，注意一下都是用i % nums.size()来操作
+        for i in range(1 , len(nums) * 2):
+            while (len(stack) != 0) and nums[i % len(nums)] > nums[stack[-1]]:
+                result[stack[-1]] = nums[i % len(nums)]
+                stack.pop()
+            stack.append(i % len(nums))
+        return result
+```
