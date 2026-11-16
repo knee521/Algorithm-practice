@@ -55,3 +55,27 @@ class Solution:
         ##否则的话，可以直接入栈。
         ##注意，单调栈里 加入的元素是 下标。
 ```
+
+#### 下一个更大的元素Ⅰ
+
+[下一个更大的元素Ⅰ](https://leetcode.cn/problems/next-greater-element-i/description/)
+
+![下一个更大的元素Ⅰ学习截图](assets/next-greater-element-i.png)
+
+```python
+class Solution:
+    def nextGreaterElement(self, nums1: list[int], nums2: list[int]) -> list[int]:
+        result = [-1] * (len(nums1))
+        stack = [0]
+        for i in range(1 , len(nums2)):
+            if nums2[i] <= nums2[stack[-1]]:
+                stack.append(i)
+            else:
+                while len(stack) != 0 and nums2[i] > nums2[stack[-1]]:
+                    if nums2[stack[-1]] in nums1:
+                        index = nums1.index(nums2[stack[-1]])#nums1.index 是方法，要用圆括号调用
+                        result[index] = nums2[i]#栈里始终存 nums2 的下标，所以要压入 i。
+                    stack.pop()
+                stack.append(i)
+        return result
+```
