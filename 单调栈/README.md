@@ -28,4 +28,30 @@
 
 ## 代码记录
 
-> 在这里补充题目链接、实现代码和个人学习笔记。
+#### 每日温度
+
+[每日温度](https://leetcode.cn/problems/daily-temperatures/description/)
+
+![每日温度学习截图](assets/daily-temperatures.png)
+
+```python
+class Solution:
+    def dailyTemperatures(self, temperatures: list[int]) -> list[int]:
+        result = [0] * (len(temperatures))
+        stack = [0]
+        for i in range(1 , len(temperatures)):
+            if temperatures[i] <= temperatures[stack[-1]]:
+                stack.append(i)
+            else:
+                while len(stack) != 0 and temperatures[i] > temperatures[stack[-1]]:
+                    result[stack[-1]] = i - stack[-1]
+                    stack.pop()
+                stack.append(i)
+        return result
+
+        ##如果当前遍历的元素 大于栈顶元素，表示 栈顶元素的 右边的最大的元素就是 当前遍历的元素，
+        ##所以弹出 栈顶元素，并记录
+        ##如果栈不空的话，还要考虑新的栈顶与当前元素的大小关系
+        ##否则的话，可以直接入栈。
+        ##注意，单调栈里 加入的元素是 下标。
+```
