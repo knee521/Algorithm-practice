@@ -398,3 +398,68 @@ def dfs(graph , visit , x , y , side):
 if __name__ == "__main__":
     main()
 ```
+
+#### 建造最大岛屿
+
+[建造最大岛屿](https://kamacoder.com/problempage.php?pid=1176)
+
+![建造最大岛屿学习截图](assets/making-a-large-island.png)
+
+```python
+import collections
+#先用 DFS 给每个岛编号、记下它的面积；再枚举每个水格，看看把它变成陆地后，最多能连成多大的岛。
+directions = [[0 , 1] , [0 , -1] , [1 , 0] , [-1 , 0]]
+area = 0
+def main():
+    global area
+    n , m = map(int , input().split())
+    graph = []
+    for i in range(n):
+        graph.append(list(map(int , input().split())))
+    visited = [[False] * m for _ in range(n)]#记录访问的点
+    rec = collections.defaultdict(int)#初始化键值，岛屿编号-》对应面积
+    cnt = 2 #从编号2开始
+    for i in range(n):
+        for j in range(m):
+            if graph[i][j] == 1:
+                area = 0
+                dfs(graph , visited , i , j , cnt)
+                rec[cnt] = area#记录对应编号岛屿的面积
+                cnt += 1
+    #求将水变为陆地之后的最大面积
+    res = 0
+    for i in range(n):
+        for j in range(m):
+            if graph[i][j] == 0:
+                v = set()
+                max_island = 1
+                for  x ,y in directions:
+                    next_x = i + x
+                    next_y = j + y
+                    if (0 <= next_x and next_x < n and next_y >=0 and next_y < m and graph[next_x][next_y] != 0 and graph[next_x][next_y] not in v):
+                        max_island += rec[graph[next_x][next_y]]
+                        v.add(graph[next_x][next_y])
+                res = max(res , max_island)
+    if res == 0:
+        return max(rec.values())   #无水情况
+    return res
+
+def dfs(graph , visited , x , y , cnt):
+    global area
+    if visited[x][y]:#访问过的点不再访问
+        return
+    visited[x][y] = True
+    graph[x][y] = cnt
+    area += 1
+    for i , j in directions:
+        next_x = i + x
+        next_y = j + y
+        #边界判断
+        if next_x < 0 or next_x >= len(graph) or next_y < 0 or next_y >= len(graph[0]):
+            continue
+        if graph[next_x][next_y] == 1:
+            dfs(graph , visited , next_x , next_y , cnt)
+if __name__ == "__main__":
+    print(main())
+
+```
