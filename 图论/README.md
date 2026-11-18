@@ -4,8 +4,8 @@
 
 ## 学习内容
 
-- [ ] 图的基本概念与存储（邻接表、邻接矩阵）
-- [ ] 深度优先搜索与广度优先搜索
+- [x] 图的基本概念与存储（邻接表、邻接矩阵）
+- [x] 深度优先搜索与广度优先搜索
 - [ ] 连通性与并查集
 - [ ] 有向无环图与拓扑排序
 - [ ] 最短路径
@@ -462,4 +462,31 @@ def dfs(graph , visited , x , y , cnt):
 if __name__ == "__main__":
     print(main())
 
+```
+
+#### 海岸线计算
+
+[海岸线计算](https://kamacoder.com/problempage.php?pid=1178)
+
+![海岸线计算学习截图](assets/island-perimeter.png)
+
+```python
+n , m = map(int , input().split())
+graph = []
+for i in range(n):
+    graph.append(list(map(int , input().split())))
+sum_land = 0 #陆地数量
+cover = 0 #相邻陆地数量
+for i in range(n):
+    for j in range(m):
+        if graph[i][j] == 1:
+            sum_land += 1
+            #上方也有陆地
+            if i - 1 >= 0 and graph[i - 1][j] == 1:#允许等于0
+                cover += 1
+            #左方也有陆地
+            if j - 1 >= 0 and graph[i][j - 1] == 1:#允许等于0
+                cover += 1
+result = sum_land * 4 - 2 * cover
+print(result)
 ```
