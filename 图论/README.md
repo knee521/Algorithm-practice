@@ -345,3 +345,56 @@ def dfs(graph , x , y):
 if __name__ == "__main__":
     main()
 ```
+
+#### 高山流水
+
+[高山流水](https://kamacoder.com/problempage.php?pid=1175)
+
+![高山流水学习截图](assets/mountain-water-flow.png)
+
+```python
+directions = [[0 , 1] , [0 , -1] , [1 , 0] , [-1 , 0]]
+first = set()#第一个边界
+second = set()#第二个边界
+
+def main():
+    global first , second
+    n , m = map(int , input().split())
+    graph = []
+    for i in range(n):
+        graph.append(list(map(int , input().split())))
+    #判断是否能到达第一边界
+    visit = [[False] * m for _ in range(n)]
+    for i in range(m):
+        dfs(graph , visit , 0 , i , first)
+    for i in range(n):
+        dfs(graph , visit , i , 0 , first)
+    #判断是否能到达第二边界
+    visit = [[False] * m for _ in range(n)]
+    for i in range(m):
+        dfs(graph , visit , n - 1 , i , second)
+    for i in range(n):
+        dfs(graph , visit , i , m - 1 , second)
+    #取都能到达第一边界和第二边界的点
+    res = first & second
+    for i in res:
+        print(" ".join(map(str , i)))
+
+def dfs(graph , visit , x , y , side):
+    global first , second
+    if visit[x][y]:#访问过的点不再访问
+        return
+    visit[x][y] = True
+    side.add((x , y))#set集合添加元素用add
+    for i , j in directions:
+        next_x = i + x
+        next_y = j + y
+        #边界判断
+        if next_x < 0 or next_x >= len(graph) or next_y < 0 or next_y >= len(graph[0]):
+            continue
+        if graph[next_x][next_y] >= graph[x][y]:
+            dfs(graph , visit , next_x , next_y , side)
+
+if __name__ == "__main__":
+    main()
+```
