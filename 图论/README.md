@@ -201,3 +201,98 @@ def dfs(graph , visit , x , y):
 if __name__ == "__main__":
     main()
 ```
+
+#### 最大岛屿面积
+
+[最大岛屿面积](https://kamacoder.com/problempage.php?pid=1172)
+
+![最大岛屿面积学习截图](assets/max-island-area.png)
+
+```python
+direcrtions = [ [0 , 1] , [0 , -1] , [1 , 0] , [-1 , 0] ]
+count = 0#记录每片岛屿的面积
+def main():
+    global count#声明为全局变量，不要赋值
+    n , m = map(int , input().split())
+    #邻接矩阵
+    graph = []
+    for i in range(n):
+        graph.append(list(map(int , input().split())))
+    #访问表
+    visit = [[False] * m for _ in range(n)]
+    result = 0 #最大面积
+    for i in range(n):
+        for j in range(m):
+            if graph[i][j] == 1 and not visit[i][j]:#当前位置是岛屿且为访问过
+                count = 1
+                visit[i][j] = True
+                dfs(graph , i , j , visit)
+                result = max(result , count)
+    print(result)
+
+def dfs(graph , x , y , visit):
+    global count#声明为全局变量
+    for i , j in direcrtions:
+        next_x = i + x
+        next_y = j + y
+        #下标越界，直接跳过
+        if next_x < 0 or next_x >= len(graph) or next_y < 0 or next_y >= len(graph[0]):
+            continue
+        if graph[next_x][next_y] == 1 and not visit[next_x][next_y]:
+            visit[next_x][next_y] = True
+            count += 1
+            dfs(graph , next_x , next_y , visit)
+if __name__ == "__main__":
+    main()
+
+```
+
+#### 孤岛的总面积
+
+[孤岛的总面积](https://kamacoder.com/problempage.php?pid=1173)
+
+![孤岛的总面积学习截图](assets/enclosed-islands-total-area.png)
+
+```python
+directions = [[0 , 1] , [0 , -1] , [1 , 0] , [-1 , 0]]
+count = 0
+def main():
+    global count
+    n , m = map(int , input().split())
+    graph = []
+    for i in range(n):
+        graph.append(list(map(int , input().split())))
+    #清楚边界上的联通分量
+    for i in range(n):
+        if graph[i][0] == 1:
+            dfs(graph , i , 0)
+        if graph[i][m - 1] == 1:
+            dfs(graph , i , m - 1)
+    for j in range(m):
+        if graph[0][j] == 1:
+            dfs(graph , 0 , j)
+        if graph[n - 1][j] == 1:
+            dfs(graph , n - 1 , j)
+    #重新遍历地图，统计孤岛面积
+    count = 0
+    for i in range(n):
+        for j in range(m):
+            if graph[i][j] == 1:
+                dfs(graph , i , j)
+    print(count)
+
+def dfs(graph , x , y):
+    global count
+    graph[x][y] = 0
+    count += 1
+    for i , j in directions:
+        next_x = x + i
+        next_y = y + j
+        #越界判断
+        if next_x < 0 or next_x>= len(graph) or next_y < 0 or next_y >= len(graph[0]):
+            continue
+        if graph[next_x][next_y] == 1:
+            dfs(graph , next_x , next_y)
+if __name__== "__main__":
+    main()
+```
