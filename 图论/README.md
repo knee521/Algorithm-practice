@@ -296,3 +296,52 @@ def dfs(graph , x , y):
 if __name__== "__main__":
     main()
 ```
+
+#### 沉没的孤岛
+
+[沉没的孤岛](https://kamacoder.com/problempage.php?pid=1174)
+
+![沉没的孤岛学习截图](assets/sunken-islands.png)
+
+```python
+directions = [[0 , 1] , [0 , -1] , [1 , 0] , [-1 , 0]]
+def main():
+    n , m =map(int , input().split())
+    graph = []
+    for i in range(n):
+        graph.append(list(map(int , input().split())))
+    for i in range(n):
+        if graph[i][0] == 1:
+            dfs(graph , i , 0)
+        if graph[i][m - 1] == 1:
+            dfs(graph , i , m - 1)
+    for j in range(m):
+        if graph[0][j] == 1:
+            dfs(graph , 0 , j)
+        if graph[n - 1][j] == 1:
+            dfs(graph , n - 1 , j)
+    #将2改为1，1改为0
+    for i in range(n):
+        for j in range(m):
+            if graph[i][j] == 1:
+                graph[i][j] = 0
+            elif graph[i][j] == 2:
+                graph[i][j] = 1
+    for i in graph:
+        print(' '.join(map(str , i)))
+
+def dfs(graph , x , y):
+    graph[x][y] = 2
+    for i , j in directions:
+        next_x = i + x
+        next_y = j + y
+        #判断是否越界
+        if next_x < 0 or next_x >= len(graph) or next_y < 0 or next_y >= len(graph[0]):
+            continue
+        #判断是否为孤岛，不是孤岛，就跳过
+        if graph[next_x][next_y] == 0 or graph[next_x][next_y] == 2:
+            continue
+        dfs(graph , next_x , next_y)
+if __name__ == "__main__":
+    main()
+```
