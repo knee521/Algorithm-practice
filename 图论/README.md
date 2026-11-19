@@ -490,3 +490,77 @@ for i in range(n):
 result = sum_land * 4 - 2 * cover
 print(result)
 ```
+
+#### 字符串迁移
+
+[字符串迁移](https://kamacoder.com/problempage.php?pid=1183)
+
+![字符串迁移学习截图](assets/string-transformation.png)
+
+```python
+from collections import deque
+#判断两个字符串是否只差一个字符
+def judge(s1 , s2):
+    count = 0
+    for i in range(len(s1)):
+        if s1[i] != s2[i]:
+            count += 1
+    return count == 1
+
+def main():
+    n = int(input())
+    beginStr , endStr = map(str , input().split())
+    if beginStr == endStr:
+        print(0)
+        exit()
+    strlist = []
+    for i in range(n):
+        strlist.append(input())
+    #记录访问过的字符串
+    visit = [False] * n
+    myque = deque([[beginStr , 1]])  # 创建队列，数据量较大时，这样取队首不用移动后面的元素
+    while myque:
+        zifu , step = myque.popleft()#取队首
+        if judge(zifu , endStr):#当前字符串是否之和最后一个字符串相差一个字符
+            print(step + 1)
+            exit()
+        for i in range(n):
+            if not visit[i] and judge(strlist[i] , zifu):
+                visit[i] = True
+                myque.append([strlist[i] , step + 1])
+    print(0)
+if __name__ == "__main__":
+    main()
+```
+
+#### 有向图的完全联通
+
+[有向图的完全联通](https://kamacoder.com/problempage.php?pid=1177)
+
+![有向图的完全联通学习截图](assets/directed-graph-reachability.png)
+
+```python
+def main():
+    n , m = map(int , input().split())
+    graph = [[] for _ in range(n + 1)]## graph[s] 存放从节点 s 出发能直接到达的节点
+    for i in range(m):
+        s , t = map(int , input().split())
+        graph[s].append(t)
+    visit = [False]* (n + 1)#从下标1开始
+    visit[1] = True
+    dfs(graph , visit , 1)#地图、访问记录、搜索开始下标
+    #如果还有False，就说明无法达到全部节点
+    for i in range(1 , n + 1):
+        if not visit[i]:
+            print(-1)
+            exit()
+    print(1)
+
+def dfs(graph , visit , index):
+    for i in graph[index]:#index 是当前节点；`i` 是从邻接表中取出的下一个节点
+        if not visit[i]:
+            visit[i] = True
+            dfs(graph , visit , i)
+if __name__ == "__main__":
+    main()
+```
