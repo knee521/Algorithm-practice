@@ -564,3 +564,157 @@ def dfs(graph , visit , index):
 if __name__ == "__main__":
     main()
 ```
+
+#### 寻找存在的路线
+
+[寻找存在的路线](https://kamacoder.com/problempage.php?pid=1179)
+
+![寻找存在的路线学习截图](assets/valid-path.png)
+
+```python
+class UnionFind:#并查集
+    def __init__(self , size):
+        self.father = list(range(size + 1))#初始化并查集
+    def find(self , u):
+        if self.father[u] != u:#不是根节点
+            self.father[u] = self.find(self.father[u])#路径压缩.让所有节点都指向根节点
+        return self.father[u]
+    def join(self , u , v):#将v->u 这条边加入并查集
+        root_u = self.find(u)
+        root_v = self.find(v)
+        if root_u != root_v:
+            self.father[root_v] = root_u
+    def is_same(self , u , v):
+        return self.find(u) == self.find(v)
+def main():
+    n , m = map(int , input().split())
+    uf = UnionFind(n)#初始化对象
+    for _ in range(m):
+        s , t = map(int , input().split())
+        uf.join(s , t)
+    source , destination = map(int , input().split())
+    if uf.is_same(source , destination):
+        print(1)
+    else:
+        print(0)
+if __name__ == "__main__":
+    main()
+```
+
+#### 多余的边
+
+[多余的边](https://kamacoder.com/problempage.php?pid=1181)
+
+![多余的边学习截图](assets/redundant-connection.png)
+
+```python
+class UnionFind:#并查集
+    def __init__(self , size):
+        self.father = list(range(size + 1))#初始化并查集
+    def find(self , u):
+        if self.father[u] != u:#不是根节点
+            self.father[u] = self.find(self.father[u])#路径压缩.让所有节点都指向根节点
+        return self.father[u]
+    def join(self , u , v):#将v->u 这条边加入并查集
+        root_u = self.find(u)
+        root_v = self.find(v)
+        if root_u != root_v:
+            self.father[root_v] = root_u
+    def is_same(self , u , v):
+        return self.find(u) == self.find(v)
+def main():
+    n = int(input())
+    uf = UnionFind(n)
+    for _ in range(n):
+        s , t = map(int , input().split())
+        if uf.is_same(s , t):#s , t在同一集合里
+            result = str(s) + ' ' + str(t)
+        else:#不在同一集合里，就加进来
+            uf.join(s , t)
+    print(result)
+if __name__ == "__main__":
+    main()
+```
+
+#### 多余的边Ⅱ
+
+[多余的边Ⅱ](https://kamacoder.com/problempage.php?pid=1182)
+
+![多余的边Ⅱ学习截图](assets/redundant-connection-ii.png)
+
+```python
+class UnionFind:
+    def __init__(self, size):
+        self.father = list(range(size + 1))
+
+    def find(self, u):
+        if self.father[u] != u:
+            self.father[u] = self.find(self.father[u])
+        return self.father[u]
+
+    def join(self, u, v):
+        root_u = self.find(u)
+        root_v = self.find(v)
+        if root_u != root_v:
+            self.father[root_v] = root_u
+
+    def is_same(self, u, v):
+        return self.find(u) == self.find(v)
+
+
+def is_tree_after_remove_edge(edges, remove_index, n):
+    uf = UnionFind(n)  # 每次试删都重新开始建图
+
+    for i in range(len(edges)):
+        if i == remove_index:
+            continue
+
+        s, t = edges[i]
+        if uf.is_same(s, t):
+            return False  # 加入这条边会形成环
+        uf.join(s, t)
+
+    return True
+
+
+def main():
+    n = int(input())
+    edges = []
+    in_degree = [0] * (n + 1)
+
+    for _ in range(n):
+        s, t = map(int, input().split())
+        edges.append((s, t))
+        in_degree[t] += 1  # s → t，增加的是 t 的入度
+
+    # 倒序找指向同一个入度为 2 的节点的两条边
+    candidates = []
+    for i in range(n - 1, -1, -1):
+        s, t = edges[i]
+        if in_degree[t] == 2:
+            candidates.append(i)
+
+    if candidates:
+        later, earlier = candidates
+
+        # 优先试删输入顺序靠后的那条边
+        if is_tree_after_remove_edge(edges, later, n):
+            s, t = edges[later]
+        else:
+            s, t = edges[earlier]
+
+        print(s, t)
+        return
+
+    # 没有节点入度为 2，就用并查集找成环的边
+    uf = UnionFind(n)
+    for s, t in edges:
+        if uf.is_same(s, t):
+            print(s, t)
+            return
+        uf.join(s, t)
+
+
+if __name__ == "__main__":
+    main()
+```
