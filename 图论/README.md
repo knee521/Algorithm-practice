@@ -837,3 +837,61 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+#### 拓扑排序
+
+[拓扑排序](https://kamacoder.com/problempage.php?pid=1191)
+
+![拓扑排序学习截图](assets/topological-sort.png)
+
+```python
+from collections import deque, defaultdict
+
+def topological_sort(n, edges):
+    # 文件编号是 0 到 n - 1
+    # in_degree[i] 表示文件 i 的入度
+    in_degree = [0] * n
+    graph = defaultdict(list)  # 邻接表：graph[s] 存放依赖文件 s 的文件
+
+    for s, t in edges:
+        # s -> t：必须先处理 s，再处理 t
+        graph[s].append(t)
+        in_degree[t] += 1
+
+    queue = deque()
+    for i in range(n):
+        if in_degree[i] == 0:#入度为0，直接加进队列
+            queue.append(i)
+
+    result = []
+    while queue:
+        cur = queue.popleft()  # 从队首取出一个可以处理的文件
+        result.append(cur)
+
+        for next_file in graph[cur]:
+            # cur 已经处理完，next_file 就少了一个入度
+            in_degree[next_file] -= 1
+            if in_degree[next_file] == 0:
+                queue.append(next_file)  # 入度为0，可以入队
+
+    if len(result) == n:
+        print(" ".join(map(str, result)))
+    else:
+        # 队列已经空了，却还有文件没处理，说明依赖关系中存在环
+        print(-1)
+
+
+def main():
+    n, m = map(int, input().split())  # n 个文件，m 条依赖关系
+
+    edges = []
+    for _ in range(m):
+        s, t = map(int, input().split())
+        edges.append((s, t))
+
+    topological_sort(n, edges)
+
+
+if __name__ == "__main__":
+    main()
+```
