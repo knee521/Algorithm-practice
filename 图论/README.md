@@ -760,3 +760,80 @@ for i in range(2, v + 1):#把选中的边权加起来
     ans += minDist[i]
 print(ans)
 ```
+
+#### 最小生成树之kruskal
+
+```python
+class Edge:
+    """存储一条无向边：两个端点和边的权重。"""
+
+    def __init__(self, l, r, val):
+        self.l = l      # 边的一个端点
+        self.r = r      # 边的另一个端点
+        self.val = val  # 边的权重
+
+
+# 并查集预留 10001 个位置，可访问的下标是 0 到 10000
+n = 10001
+father = list(range(n))
+
+
+def init():
+    global father
+    # 每个节点的父节点初始化为自己，各自形成一个集合
+    father = list(range(n))
+
+
+def find(u):
+    # 如果父节点不是自己，就继续向上找根节点
+    if u != father[u]:
+        # 路径压缩：找到根后，让 u 直接指向根，下次查找更快
+        father[u] = find(father[u])
+    return father[u]
+
+
+def join(u, v):
+    # 先找到两个节点所在集合的根
+    u = find(u)
+    v = find(v)
+
+    # 两个集合不同，就把 v 的根挂到 u 的根下面
+    if u != v:
+        father[v] = u
+
+
+def kruskal(v, edges):
+    # 按边权 val 从小到大排序
+    edges.sort(key=lambda edge: edge.val)
+    init()
+    result_val = 0  # 已选边的权重之和
+
+    for edge in edges:
+        # 查找这条边两个端点所在集合的根
+        x = find(edge.l)
+        y = find(edge.r)
+
+        # 根不同：两个端点还不连通，可以选这条边
+        # 根相同：两个端点已经连通，再加这条边会成环，跳过
+        if x != y:
+            result_val += edge.val
+            join(x, y)  # 选了这条边，两个集合现在连通了
+
+    return result_val
+
+
+def main():
+    v, e = map(int, input().split())  # v 是节点数，e 是边数
+    edges = []
+
+    for _ in range(e):
+        v1, v2, val = map(int, input().split())  # 两个端点和边权
+        edges.append(Edge(v1, v2, val))
+
+    result_val = kruskal(v, edges)
+    print(result_val)
+
+
+if __name__ == "__main__":
+    main()
+```
