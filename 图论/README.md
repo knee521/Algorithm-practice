@@ -718,3 +718,45 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+#### 最小生成树之prim
+
+[最小生成树之prim](https://kamacoder.com/problempage.php?pid=1053)
+
+![最小生成树 Prim 算法学习截图](assets/prim-minimum-spanning-tree.png)
+
+```python
+# 接收输入
+v, e = list(map(int, input().split()))
+# 按照常规的邻接矩阵存储图信息，不可达的初始化为10001
+graph = [[10001] * (v+1) for _ in range(v+1)]#下标从1开始，为了和节点编号对齐
+for _ in range(e):#无向有权值图
+    x, y, w = list(map(int, input().split()))
+    graph[x][y] = w
+    graph[y][x] = w
+
+# 定义加入生成树的标记数组和未加入生成树的最近距离
+visited = [False] * (v + 1)
+minDist = [10001] * (v + 1)#因为val小于10000，所以初始化数组为10001
+
+# 循环 n - 1 次，建立 n - 1 条边
+# 从节点视角来看：每次选中一个节点加入树，更新剩余的节点到树的最短距离，
+# 这一步其实蕴含了确定下一条选取的边，计入总路程 ans 的计算
+#外层循环每轮选一个节点；第一个内层循环决定选谁；第二个内层循环用新节点更新剩余节点的连接成本
+for _ in range(1, v + 1):
+    min_val = 10002
+    cur = -1
+    for j in range(1, v + 1):
+        if visited[j] == False and minDist[j] < min_val:#扫描所有未加入的节点，找 minDist[j] 最小的那个，记为 cur
+            cur = j
+            min_val = minDist[j]
+    visited[cur] = True
+    for j in range(1, v + 1):#	检查新加入的 cur 到每个未加入节点 j 的边。如果 graph[cur][j] 更便宜，就更新 minDist[j]
+        if visited[j] == False and minDist[j] > graph[cur][j]:#
+            minDist[j] = graph[cur][j]
+
+ans = 0
+for i in range(2, v + 1):#把选中的边权加起来
+    ans += minDist[i]
+print(ans)
+```
