@@ -1087,7 +1087,6 @@ if __name__ == "__main__":
     result = bellman_ford(n, edges, start, end)
     print(result)
 ```
-
 ##### Bellman_ford之队列优化
 
 ```python
@@ -1137,5 +1136,57 @@ if __name__ == "__main__":
     start = 1
     end = n
     result = spfa(n, grid, start, end)
+    print(result)
+```
+
+#### Bellman_ford之队列优化
+
+[Bellman_ford之队列优化](https://kamacoder.com/problempage.php?pid=1153)
+
+![image-20261123170200275](C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20261123170200275.png)
+
+```python
+def bellman_ford(n, edges, start, end):
+    inf = float('inf')
+    minDist = [inf] * (n + 1)
+    minDist[start] = 0
+
+    # 前 n - 1 轮更新最短距离，第 n 轮检查负权回路
+    for i in range(1, n + 1):
+        updated = False
+        for p1, p2, val in edges:
+            # 目前还无法到达 p1，跳过这条边
+            if minDist[p1] == inf:
+                continue
+
+            newDist = minDist[p1] + val
+            if newDist < minDist[p2]:
+                # 第 n 轮还能缩短距离，说明起点能到达负权回路
+                if i == n:
+                    return "circle"
+
+                minDist[p2] = newDist
+                updated = True
+
+        # 整轮没有更新，后续距离也不会变化
+        if not updated:
+            break
+
+    if minDist[end] == inf:
+        return "unconnected"
+    return minDist[end]
+
+
+if __name__ == "__main__":
+    n, m = map(int, input().split())
+
+    edges = []
+    for _ in range(m):
+        p1, p2, val = map(int, input().split())
+        edges.append((p1, p2, val))
+
+    start = 1
+    end = n
+    result = bellman_ford(n, edges, start, end)
     print(result)
 ```
