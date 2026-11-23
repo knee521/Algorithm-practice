@@ -1190,3 +1190,53 @@ if __name__ == "__main__":
     result = bellman_ford(n, edges, start, end)
     print(result)
 ```
+
+#### Bellman_ford之单源有限最短路径
+
+[Bellman_ford之单源有限最短路径](https://kamacoder.com/problempage.php?pid=1154)
+
+![Bellman–Ford 单源有限最短路径学习截图](assets/bellman-ford-limited-shortest-path.png)
+
+```python
+def bellman_ford(n, edges, start, end, k):
+    inf = float('inf')
+    minDist = [inf] * (n + 1)
+    minDist[start] = 0
+
+    # 最多经过 k 个中间城市，也就是最多走 k + 1 条边
+    for _ in range(k + 1):
+        updated = False
+        minDistCopy = minDist.copy()#用来记录上一次遍历的结果
+
+        for p1, p2, val in edges:
+            # 上一轮还无法到达 p1，跳过这条边
+            if minDistCopy[p1] == inf:
+                continue
+
+            # 用上一轮到 p1 的距离，加上一条边到达 p2
+            newDist = minDistCopy[p1] + val
+            if newDist < minDist[p2]:
+                minDist[p2] = newDist
+                updated = True
+
+        # 整轮没有更新，可以提前结束
+        if not updated:
+            break
+
+    if minDist[end] == inf:
+        return "unreachable"
+    return minDist[end]
+
+
+if __name__ == "__main__":
+    n, m = map(int, input().split())
+
+    edges = []
+    for _ in range(m):
+        p1, p2, val = map(int, input().split())
+        edges.append((p1, p2, val))
+
+    start, end, k = map(int, input().split())
+    result = bellman_ford(n, edges, start, end, k)
+    print(result)
+```
