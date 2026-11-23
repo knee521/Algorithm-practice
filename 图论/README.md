@@ -1240,3 +1240,49 @@ if __name__ == "__main__":
     result = bellman_ford(n, edges, start, end, k)
     print(result)
 ```
+
+#### Floyd算法
+
+[Floyd算法](https://kamacoder.com/problempage.php?pid=1155)
+
+![Floyd 最短路径学习截图](assets/floyd-shortest-path.png)
+
+```python
+def floyd(n, grid):
+    # k 表示本轮允许作为中转点的节点
+    for k in range(1, n + 1):
+        for i in range(1, n + 1):
+            for j in range(1, n + 1):
+                # 尝试从 i 经过 k 到达 j
+                newDist = grid[i][k] + grid[k][j]
+                if newDist < grid[i][j]:
+                    grid[i][j] = newDist
+
+
+if __name__ == "__main__":
+    n, m = map(int, input().split())
+    inf = float('inf')
+
+    # grid[i][j] 表示目前找到的从 i 到 j 的最短距离
+    grid = [[inf] * (n + 1) for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        grid[i][i] = 0
+
+    for _ in range(m):
+        p1, p2, val = map(int, input().split())
+
+        # 无向边要更新两个方向，有重边时保留较小的边权
+        if val < grid[p1][p2]:
+            grid[p1][p2] = val
+            grid[p2][p1] = val
+
+    floyd(n, grid)
+
+    z = int(input())
+    for _ in range(z):
+        start, end = map(int, input().split())
+        if grid[start][end] == inf:
+            print(-1)
+        else:
+            print(grid[start][end])
+```
