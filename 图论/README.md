@@ -895,3 +895,147 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+#### dijkstra朴素版
+
+[dijkstra朴素版](https://kamacoder.com/problempage.php?pid=1047)
+
+![Dijkstra 最短路径学习截图](assets/dijkstra-shortest-path.png)
+
+```python
+import sys
+
+
+def dijkstra(n, edges, start, end):
+    inf = float('inf')
+
+    # 初始化邻接矩阵，grid[p1][p2] 表示有向边 p1 -> p2 的权值
+    grid = [[inf] * (n + 1) for _ in range(n + 1)]
+    for p1, p2, val in edges:
+        # 两个节点之间有多条同向边时，保留权值最小的一条
+        grid[p1][p2] = min(grid[p1][p2], val)
+
+    # minDist[v] 表示目前找到的从起点到节点 v 的最短距离
+    minDist = [inf] * (n + 1)
+    # visited[v] 为 True，表示节点 v 的最短距离已经确定
+    visited = [False] * (n + 1)
+    minDist[start] = 0
+
+    for _ in range(n):
+        minVal = inf
+        cur = -1
+
+        # 在最短距离尚未确定的节点中，选出当前距离起点最近的节点
+        for v in range(1, n + 1):
+            if not visited[v] and minDist[v] < minVal:
+                minVal = minDist[v]
+                cur = v
+
+        # 剩余节点的距离都是无穷大，说明它们从起点不可达
+        if cur == -1:
+            break
+
+        visited[cur] = True
+
+        # 终点被选中时，最短距离已经确定，可以直接返回
+        if cur == end:
+            return minDist[cur]
+
+        # 尝试经过 cur 到达其他节点，看看距离能否缩短
+        for v in range(1, n + 1):
+            if visited[v] or grid[cur][v] == inf:
+                continue
+
+            newDist = minDist[cur] + grid[cur][v]
+            if newDist < minDist[v]:
+                minDist[v] = newDist
+
+    # 搜索结束时仍未选中终点，说明终点不可达
+    return -1
+
+
+if __name__ == "__main__":
+    data = sys.stdin.read().split()
+    n, m = int(data[0]), int(data[1])
+
+    edges = []
+    for index in range(2, 2 + 3 * m, 3):
+        p1 = int(data[index])
+        p2 = int(data[index + 1])
+        val = int(data[index + 2])
+        edges.append((p1, p2, val))
+
+    start = 1
+    end = n
+    print(dijkstra(n, edges, start, end))
+```
+
+#### dijkstra堆优化版
+
+```python
+import heapq
+
+
+class Edge:
+    def __init__(self, to, val):
+        self.to = to
+        self.val = val
+
+
+def dijkstra(n, edges, start, end):
+    # 建立邻接表，grid[p1] 保存从 p1 出发的所有有向边
+    grid = [[] for _ in range(n + 1)]
+    for p1, p2, val in edges:
+        grid[p1].append(Edge(p2, val))
+
+    # minDist[v] 表示目前找到的从起点到 v 的最短距离
+    minDist = [float('inf')] * (n + 1)
+    # visited[v] 为 True，表示 v 的最短距离已经确定
+    visited = [False] * (n + 1)
+
+    minDist[start] = 0
+
+    # 小顶堆中存放 (距离, 节点)，距离最小的元素先出堆
+    pq = [(0, start)]
+
+    while pq:
+        curDist, cur = heapq.heappop(pq)
+
+        # 同一个节点可能多次入堆，最短距离已确定就跳过
+        if visited[cur]:
+            continue
+
+        visited[cur] = True
+
+        # 边权非负时，终点第一次出堆就可以确定最短距离
+        if cur == end:
+            return curDist
+
+        # 只遍历从 cur 出发的边，尝试更新相邻节点的距离
+        for edge in grid[cur]:
+            v = edge.to
+            if visited[v]:
+                continue
+
+            newDist = curDist + edge.val
+            if newDist < minDist[v]:
+                minDist[v] = newDist
+                heapq.heappush(pq, (newDist, v))
+
+    # 堆为空时仍未到达终点，说明终点不可达
+    return -1
+
+
+if __name__ == "__main__":
+    n, m = map(int, input().split())
+
+    edges = []
+    for _ in range(m):
+        p1, p2, val = map(int, input().split())
+        edges.append((p1, p2, val))
+
+    start = 1
+    end = n
+    result = dijkstra(n, edges, start, end)
+    print(result)
+```
