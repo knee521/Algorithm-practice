@@ -1039,3 +1039,103 @@ if __name__ == "__main__":
     result = dijkstra(n, edges, start, end)
     print(result)
 ```
+
+#### Bellman_ford算法
+
+[Bellman_ford算法](https://kamacoder.com/problempage.php?pid=1152)
+
+（与前一道题不同的是这道题出现负数了）
+
+![Bellman–Ford 最短路径学习截图](assets/bellman-ford-shortest-path.png)
+
+```python
+def bellman_ford(n, edges, start, end):
+    #对所有节点松弛n-1次，就能得到起点到终点的最短距离
+    inf = float('inf')
+    # minDist[v] 表示目前找到的从起点到节点 v 的最短距离
+    minDist = [inf] * (n + 1)
+    minDist[start] = 0
+    # 最多进行 n - 1 轮松弛，每轮遍历所有边
+    for _ in range(n - 1):
+        updated = False
+        for p1, p2, val in edges:
+            # 目前还没找到到达 p1 的路径，先跳过这条边
+            if minDist[p1] == inf:
+                continue
+            # 尝试经过 p1 到达 p2，看看距离能否缩短
+            newDist = minDist[p1] + val
+            if newDist < minDist[p2]:
+                minDist[p2] = newDist
+                updated = True
+        # 整轮遍历都没有更新，可以提前结束
+        if not updated:
+            break
+    if minDist[end] == inf:
+        return "unconnected"
+    return minDist[end]
+
+if __name__ == "__main__":
+    n, m = map(int, input().split())
+
+    edges = []
+    for _ in range(m):
+        p1, p2, val = map(int, input().split())
+        edges.append((p1, p2, val))
+
+    start = 1
+    end = n
+    result = bellman_ford(n, edges, start, end)
+    print(result)
+```
+
+##### Bellman_ford之队列优化
+
+```python
+from collections import deque
+
+
+def spfa(n, grid, start, end):
+    inf = float('inf')
+    minDist = [inf] * (n + 1)
+    minDist[start] = 0
+
+    # inQueue[v] 表示节点 v 当前是否在队列中
+    inQueue = [False] * (n + 1)
+    que = deque([start])
+    inQueue[start] = True
+
+    while que:
+        cur = que.popleft()
+        inQueue[cur] = False
+        curDist = minDist[cur]
+
+        # 尝试经过 cur 到达 v，看看距离能否缩短
+        for v, val in grid[cur]:
+            newDist = curDist + val
+            if newDist < minDist[v]:
+                minDist[v] = newDist
+
+                # v 已在队列中时，出队后会直接读取最新距离
+                if not inQueue[v]:
+                    que.append(v)
+                    inQueue[v] = True
+
+    if minDist[end] == inf:
+        return "unconnected"
+    return minDist[end]
+
+
+if __name__ == "__main__":
+    n, m = map(int, input().split())
+
+    # grid[p1] 保存从 p1 出发的所有有向边
+    grid = [[] for _ in range(n + 1)]
+    for _ in range(m):
+        p1, p2, val = map(int, input().split())
+        grid[p1].append((p2, val))
+
+    start = 1
+    end = n
+    result = spfa(n, grid, start, end)
+    print(result)
+```
